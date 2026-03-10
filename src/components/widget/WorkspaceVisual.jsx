@@ -28,7 +28,7 @@ export default function WorkspaceVisual() {
                 initial={{ x: -50, opacity: 0 }}
                 whileInView={{ x: 0, opacity: 1 }}
                 transition={{ duration: 0.8 }}
-                className="w-16 h-full border-r border-stone-100 flex flex-col items-center py-6 gap-4 bg-stone-50/50"
+                className="w-16 h-full border-r border-stone-100 flex-col items-center py-6 gap-4 bg-stone-50/50 hidden md:flex"
             >
                 {[1, 2, 3].map(i => (
                     <div key={i} className="w-8 h-8 rounded-sm bg-stone-200 opacity-50" />
@@ -50,11 +50,11 @@ export default function WorkspaceVisual() {
                 </motion.div>
 
                 {/* Translation Grid */}
-                <div className="grid grid-cols-2 gap-12 h-full">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 h-full">
 
                     {/* SOURCE COLUMN */}
                     <div className="flex flex-col gap-3">
-                        <div className="text-xs font-mono text-stone-400 mb-2 uppercase tracking-widest">Source</div>
+                        <div className="text-xs font-mono text-stone-500 mb-2 uppercase tracking-widest">Source</div>
                         {/* Abstract Text Lines */}
                         <motion.div className="h-2 w-full bg-stone-200 rounded-full" initial={{ width: 0 }} whileInView={{ width: "100%" }} transition={{ duration: 1, delay: 0.5 }} />
                         <motion.div className="h-2 w-[90%] bg-stone-200 rounded-full" initial={{ width: 0 }} whileInView={{ width: "90%" }} transition={{ duration: 1, delay: 0.7 }} />
@@ -89,7 +89,7 @@ export default function WorkspaceVisual() {
 
                     {/* TARGET COLUMN */}
                     <div className="flex flex-col gap-3">
-                        <div className="text-xs font-mono text-orange-700/60 mb-2 uppercase tracking-widest">Target</div>
+                        <div className="text-xs font-mono text-orange-700 mb-2 uppercase tracking-widest">Target</div>
                         {/* Simulation of Typing */}
                         <motion.div className="h-2 w-full bg-stone-200 rounded-full" initial={{ width: 0 }} whileInView={{ width: "100%" }} transition={{ duration: 1, delay: 3.5 }} />
                         <motion.div className="h-2 w-[85%] bg-stone-200 rounded-full" initial={{ width: 0 }} whileInView={{ width: "85%" }} transition={{ duration: 1, delay: 3.7 }} />

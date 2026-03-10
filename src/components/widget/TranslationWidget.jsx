@@ -119,7 +119,7 @@ export default function TranslationWidget({ t }) {
                                     initial={{ opacity: 0, y: 5 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: 5 }}
-                                    className="absolute top-full right-0 mt-2 w-64 bg-white border border-stone-200 shadow-xl rounded-sm py-2 z-50"
+                                    className="absolute top-full right-0 mt-2 w-64 max-w-[calc(100vw-3rem)] bg-white border border-stone-200 shadow-xl rounded-sm py-2 z-50"
                                 >
                                     {MODES.map((mode) => (
                                         <button
@@ -170,7 +170,7 @@ export default function TranslationWidget({ t }) {
                                     initial={{ opacity: 0, y: 5 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: 5 }}
-                                    className="absolute top-full left-0 mt-2 w-64 max-h-[400px] flex flex-col bg-white border border-stone-200 shadow-xl rounded-sm z-50"
+                                    className="absolute top-full left-0 mt-2 w-64 max-w-[calc(100vw-3rem)] max-h-[400px] flex flex-col bg-white border border-stone-200 shadow-xl rounded-sm z-50"
                                 >
                                     {/* Search Header */}
                                     <div className="p-3 border-b border-stone-100 flex items-center gap-2 sticky top-0 bg-white z-10">

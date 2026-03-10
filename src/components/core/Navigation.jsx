@@ -240,6 +240,7 @@ export default function Navigation({ data }) {
             <button
                 className="md:hidden text-stone-900"
                 onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open menu"
             >
                 <Menu size={24} />
             </button>
@@ -284,7 +285,7 @@ function MobileOverlay({ data, onClose }) {
             {/* Mobile Header */}
             <div className="h-20 flex items-center justify-between px-6 border-b border-stone-200">
                 <Logo />
-                <button onClick={onClose} className="text-stone-900">
+                <button onClick={onClose} className="text-stone-900" aria-label="Close menu">
                     <X size={24} />
                 </button>
             </div>
