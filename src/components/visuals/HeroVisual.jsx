@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 
 export default function HeroVisual() {
     const c = {
@@ -18,7 +18,7 @@ export default function HeroVisual() {
 
     return (
         <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-[#FDFCF8] relative overflow-hidden pointer-events-none">
-            <motion.svg
+            <m.svg
                 width="100%"
                 height="100%"
                 viewBox="0 0 400 300"
@@ -28,7 +28,7 @@ export default function HeroVisual() {
                 className="w-full max-w-[500px]"
             >
                 {/* Main Viewfinder Frame */}
-                <motion.rect
+                <m.rect
                     x="40" y="40" width="320" height="220"
                     fill="none" stroke={c.ink} strokeWidth="1.5"
                     initial={{ pathLength: 0 }}
@@ -37,17 +37,17 @@ export default function HeroVisual() {
                 />
 
                 {/* Crosshair Center */}
-                <motion.line x1="190" y1="150" x2="210" y2="150" stroke={c.sketch} strokeWidth="1" />
-                <motion.line x1="200" y1="140" x2="200" y2="160" stroke={c.sketch} strokeWidth="1" />
+                <m.line x1="190" y1="150" x2="210" y2="150" stroke={c.sketch} strokeWidth="1" />
+                <m.line x1="200" y1="140" x2="200" y2="160" stroke={c.sketch} strokeWidth="1" />
 
                 {/* Corner Markers */}
-                <motion.path d="M 50 70 L 50 50 L 70 50" fill="none" stroke={c.sketch} strokeWidth="1" />
-                <motion.path d="M 350 220 L 350 250 L 320 250" fill="none" stroke={c.sketch} strokeWidth="1" />
+                <m.path d="M 50 70 L 50 50 L 70 50" fill="none" stroke={c.sketch} strokeWidth="1" />
+                <m.path d="M 350 220 L 350 250 L 320 250" fill="none" stroke={c.sketch} strokeWidth="1" />
 
                 {/* Detected Objects (Bounding Boxes) */}
                 {objects.map((obj, i) => (
-                    <motion.g key={i}>
-                        <motion.rect
+                    <m.g key={i}>
+                        <m.rect
                             x={obj.x} y={obj.y} width={obj.w} height={obj.h}
                             fill="none" stroke={c.accent} strokeWidth="1"
                             initial={{ opacity: 0, scale: 1.1 }}
@@ -60,7 +60,7 @@ export default function HeroVisual() {
                             }}
                         />
                         {/* Label Tag */}
-                        <motion.rect
+                        <m.rect
                             x={obj.x} y={obj.y - 15} width="40" height="10"
                             fill={c.accent}
                             initial={{ opacity: 0 }}
@@ -72,10 +72,10 @@ export default function HeroVisual() {
                                 repeatDelay: 4
                             }}
                         />
-                    </motion.g>
+                    </m.g>
                 ))}
 
-            </motion.svg>
+            </m.svg>
         </div>
     );
 }

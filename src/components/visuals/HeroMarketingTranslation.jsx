@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 
 export default function HeroMarketingTranslation() {
   const c = {
@@ -11,9 +11,9 @@ export default function HeroMarketingTranslation() {
 
   return (
     <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-[#FDFCF8] relative overflow-hidden pointer-events-none">
-      <motion.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
+      <m.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
         {/* Source Marketing Asset (e.g., an Ad Banner) */}
-        <motion.g
+        <m.g
           initial={{ y: 0 }}
           animate={{ y: [0, 5, 0] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -27,22 +27,22 @@ export default function HeroMarketingTranslation() {
           <line x1="50" y1="190" x2="100" y2="190" stroke={c.sketch} strokeWidth="1" strokeLinecap="round" />
           {/* CTA Button */}
           <rect x="50" y="205" width="60" height="10" rx="2" fill={c.ink} opacity="0.8" />
-        </motion.g>
+        </m.g>
 
         {/* Transcreation Engine (Cultual Adaptation) */}
-        <motion.path 
+        <m.path 
           d="M 160 150 L 240 150" stroke={c.accent} strokeWidth="1" strokeDasharray="4 4" 
           animate={{ strokeDashoffset: -20 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
         />
         
         <circle cx="200" cy="150" r="16" fill={c.paper} stroke={c.accent} strokeWidth="1" />
-        <motion.circle 
+        <m.circle 
           cx="200" cy="150" r="16" fill="transparent" stroke={c.accent} strokeWidth="1"
           animate={{ r: [16, 40], opacity: [1, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
         />
         {/* Sparkles indicating "creative" adaptation rather than literal translation */}
-        <motion.polygon 
+        <m.polygon 
           points="200,140 202,148 210,150 202,152 200,160 198,152 190,150 198,148" 
           fill={c.accent}
           animate={{ rotate: 90, scale: [0.8, 1.2, 0.8] }}
@@ -51,7 +51,7 @@ export default function HeroMarketingTranslation() {
         />
 
         {/* Target Marketing Asset (Culturally Adapted, Different Layout/Length) */}
-        <motion.g
+        <m.g
           initial={{ y: 0, opacity: 0 }}
           animate={{ y: [0, -5, 0], opacity: 1 }}
           transition={{ duration: 4, delay: 0.5, repeat: Infinity, ease: "easeInOut" }}
@@ -66,9 +66,9 @@ export default function HeroMarketingTranslation() {
           
           {/* Adapted Hero Image Block (Bottom instead of top) */}
           <rect x="270" y="165" width="80" height="45" rx="4" fill={c.accent} opacity="0.2" />
-        </motion.g>
+        </m.g>
 
-      </motion.svg>
+      </m.svg>
     </div>
   );
 }

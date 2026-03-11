@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 
 export default function HeroLegal() {
   const c = {
@@ -11,7 +11,7 @@ export default function HeroLegal() {
 
   return (
     <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-[#FDFCF8] relative overflow-hidden pointer-events-none">
-      <motion.svg
+      <m.svg
         width="100%"
         height="100%"
         viewBox="0 0 400 300"
@@ -22,7 +22,7 @@ export default function HeroLegal() {
         <line x1="200" y1="240" x2="200" y2="100" stroke={c.sketch} strokeWidth="1.5" />
 
         {/* Balancing Beam Group */}
-        <motion.g
+        <m.g
           initial={{ rotate: -10 }}
           animate={{ rotate: [10, -5, 5, -2, 0, 0] }}
           transition={{ duration: 4, ease: "easeInOut", repeat: Infinity, repeatDelay: 2 }}
@@ -43,28 +43,28 @@ export default function HeroLegal() {
           <line x1="320" y1="100" x2="340" y2="160" stroke={c.sketch} strokeWidth="1" />
           <path d="M 290 160 Q 320 180 350 160 Z" fill={c.paper} stroke={c.ink} strokeWidth="1" />
           {/* Right Block (Translated Term) - Appears slightly later */}
-          <motion.rect 
+          <m.rect 
             x="310" y="145" width="20" height="15" 
             fill={c.accent} 
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: [0, 0, 1, 1], scale: [0, 0, 1, 1] }}
             transition={{ duration: 4, ease: "easeInOut", repeat: Infinity, repeatDelay: 2 }}
           />
-        </motion.g>
+        </m.g>
 
         {/* The Central "Lock" Core (Domain Awareness Lock) */}
-        <motion.circle 
+        <m.circle 
           cx="200" cy="100" r="8" 
           fill={c.paper} stroke={c.ink} strokeWidth="1.5" 
         />
-        <motion.circle 
+        <m.circle 
           cx="200" cy="100" r="4" 
           fill={c.accent}
           initial={{ scale: 0 }}
           animate={{ scale: [0, 0, 1, 1, 0, 0] }}
           transition={{ duration: 4, ease: "easeInOut", repeat: Infinity, repeatDelay: 2 }}
         />
-      </motion.svg>
+      </m.svg>
     </div>
   );
 }

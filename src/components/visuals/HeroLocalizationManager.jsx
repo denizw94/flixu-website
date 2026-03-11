@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 
 export default function HeroLocalizationManager() {
   const c = {
@@ -13,7 +13,7 @@ export default function HeroLocalizationManager() {
 
   return (
     <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-[#FDFCF8] relative overflow-hidden pointer-events-none">
-      <motion.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
+      <m.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
         {/* Main Dashboard Panel */}
         <rect x="50" y="40" width="300" height="220" rx="8" fill={c.paper} stroke={c.sketch} strokeWidth="1" />
         
@@ -23,7 +23,7 @@ export default function HeroLocalizationManager() {
         
         {/* Progress Overview Ring */}
         <circle cx="310" cy="60" r="12" fill="transparent" stroke={c.sketch} strokeWidth="1.5" />
-        <motion.circle 
+        <m.circle 
           cx="310" cy="60" r="12" fill="transparent" stroke={c.accent} strokeWidth="1.5" 
           strokeDasharray="75"
           initial={{ strokeDashoffset: 75 }}
@@ -45,7 +45,7 @@ export default function HeroLocalizationManager() {
             <rect x="35" y="-4" width="180" height="4" rx="2" fill={c.sketch} opacity="0.5" />
             
             {/* Animated Progress Fill */}
-            <motion.rect 
+            <m.rect 
               x="35" y="-4" height="4" rx="2" fill={c.accent}
               initial={{ width: 0 }}
               animate={{ width: [0, 180, 180] }}
@@ -53,13 +53,13 @@ export default function HeroLocalizationManager() {
             />
 
             {/* Status Indicator (Starts empty, turns into a checkmark when full) */}
-            <motion.circle 
+            <m.circle 
               cx="235" cy="-2" r="6" fill="transparent" stroke={c.sketch} strokeWidth="1.5"
               animate={{ fill: ["transparent", "transparent", c.accent], stroke: [c.sketch, c.sketch, c.accent] }}
               transition={{ duration: 4, delay: i * 0.4, times: [0, 0.69, 0.7], repeat: Infinity, ease: "easeInOut" }}
             />
             {/* Checkmark drawing */}
-            <motion.path 
+            <m.path 
               d="M 232 -2 L 234 1 L 238 -4" fill="transparent" stroke={c.paper} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
               initial={{ pathLength: 0 }}
               animate={{ pathLength: [0, 0, 1] }}
@@ -69,7 +69,7 @@ export default function HeroLocalizationManager() {
         ))}
 
         {/* Floating cursor representing the Manager overseeing the process */}
-         <motion.g
+         <m.g
             initial={{ x: 300, y: 220 }}
             animate={{ 
               x: [300, 240, 240, 310, 310], 
@@ -78,9 +78,9 @@ export default function HeroLocalizationManager() {
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           >
             <path d="M 0 0 L 12 18 L 8 18 L 12 28 L 8 30 L 4 20 L -2 20 Z" fill={c.ink} stroke={c.paper} strokeWidth="1.5" />
-          </motion.g>
+          </m.g>
 
-      </motion.svg>
+      </m.svg>
     </div>
   );
 }

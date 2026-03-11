@@ -11,7 +11,7 @@ import "@fontsource-variable/inter";
 import "@fontsource/geist-mono";
 import "@fontsource/la-belle-aurore";
 
-import { ClientRouter } from "astro:transitions";
+
 
 import {
   useTranslations,
@@ -80,7 +80,7 @@ const ogImageUrl = ogImage.startsWith("http") ? ogImage : `${SITE}${ogImage}`;
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalUrl} />
-    <ClientRouter />
+
     <link
       rel="preload"
       href={instrumentSerifUrl}

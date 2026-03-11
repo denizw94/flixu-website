@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 
 export default function HeroTranslationMemory() {
   const c = {
@@ -11,7 +11,7 @@ export default function HeroTranslationMemory() {
 
   return (
     <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-[#FDFCF8] relative overflow-hidden pointer-events-none">
-      <motion.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
+      <m.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
         
         {/* Memory Bank Container (Bottom) */}
         <rect x="50" y="110" width="300" height="140" rx="6" fill={c.paper} stroke={c.sketch} strokeWidth="1" />
@@ -37,7 +37,7 @@ export default function HeroTranslationMemory() {
         <line x1="230" y1="195" x2="320" y2="195" stroke={c.sketch} strokeWidth="1" strokeLinecap="round" />
 
         {/* Row 3 (The Exact Match) */}
-        <motion.line 
+        <m.line 
           x1="70" y1="225" x2="150" y2="225" strokeWidth="1" strokeLinecap="round"
           stroke={c.sketch}
           animate={{ stroke: [c.sketch, c.ink, c.sketch] }}
@@ -46,7 +46,7 @@ export default function HeroTranslationMemory() {
         <line x1="190" y1="225" x2="210" y2="225" stroke={c.sketch} strokeWidth="1" />
         <polygon points="210,222 215,225 210,228" fill={c.sketch} />
         
-        <motion.line 
+        <m.line 
           x1="230" y1="225" x2="310" y2="225" strokeWidth="1" strokeLinecap="round"
           stroke={c.sketch}
           animate={{ stroke: [c.sketch, c.accent, c.sketch] }}
@@ -54,7 +54,7 @@ export default function HeroTranslationMemory() {
         />
 
         {/* Scanning Highlight Box */}
-        <motion.rect 
+        <m.rect 
           x="60" y="152" width="280" height="26" rx="4" fill="transparent" stroke={c.accent} strokeWidth="1" strokeDasharray="4 4"
           animate={{ 
             y: [152, 182, 212, 212, 152],
@@ -70,7 +70,7 @@ export default function HeroTranslationMemory() {
         <line x1="70" y1="60" x2="150" y2="60" stroke={c.ink} strokeWidth="1" strokeLinecap="round" />
         
         {/* Search Beam pointing down */}
-        <motion.path 
+        <m.path 
           d="M 110 80 L 110 152"
           stroke={c.accent} strokeWidth="1" strokeDasharray="4 4" fill="transparent"
           initial={{ pathLength: 0 }}
@@ -79,7 +79,7 @@ export default function HeroTranslationMemory() {
         />
 
         {/* Retrieval Beam pointing up from Target to Output */}
-        <motion.path 
+        <m.path 
           d="M 270 212 L 270 80"
           stroke={c.accent} strokeWidth="1" strokeDasharray="4 4" fill="transparent"
           initial={{ pathLength: 0 }}
@@ -89,14 +89,14 @@ export default function HeroTranslationMemory() {
 
         {/* Translated Output Box */}
         <rect x="230" y="40" width="120" height="40" rx="4" fill={c.paper} stroke={c.accent} strokeWidth="1" />
-        <motion.line 
+        <m.line 
           x1="250" y1="60" x2="330" y2="60" stroke={c.accent} strokeWidth="1" strokeLinecap="round"
           initial={{ pathLength: 0 }}
           animate={{ pathLength: [0, 0, 1, 1] }}
           transition={{ duration: 4, times: [0, 0.7, 0.8, 1], repeat: Infinity, ease: "easeOut" }}
         />
 
-      </motion.svg>
+      </m.svg>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 
 export default function HeroText() {
     const c = {
@@ -23,7 +23,7 @@ export default function HeroText() {
 
     return (
         <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-[#FDFCF8] relative overflow-hidden pointer-events-none">
-            <motion.svg
+            <m.svg
                 width="100%"
                 height="100%"
                 viewBox="0 0 400 300"
@@ -33,25 +33,25 @@ export default function HeroText() {
                 className="w-full max-w-[500px]"
             >
                 {/* Abstract Text Lines */}
-                <motion.line
+                <m.line
                     x1="50" y1="100" x2="350" y2="100"
                     stroke={c.sketch} strokeWidth="1"
                     strokeLinecap="round"
                     variants={draw} custom={1}
                 />
-                <motion.line
+                <m.line
                     x1="50" y1="140" x2="200" y2="140"
                     stroke={c.sketch} strokeWidth="1"
                     strokeLinecap="round"
                     variants={draw} custom={3}
                 />
-                <motion.line
+                <m.line
                     x1="280" y1="140" x2="350" y2="140"
                     stroke={c.sketch} strokeWidth="1"
                     strokeLinecap="round"
                     variants={draw} custom={5}
                 />
-                <motion.line
+                <m.line
                     x1="50" y1="180" x2="300" y2="180"
                     stroke={c.sketch} strokeWidth="1"
                     strokeLinecap="round"
@@ -59,7 +59,7 @@ export default function HeroText() {
                 />
 
                 {/* The "Found" Word - Highlights in Orange */}
-                <motion.line
+                <m.line
                     x1="210" y1="140" x2="270" y2="140"
                     stroke={c.ink} strokeWidth="1.5"
                     strokeLinecap="round"
@@ -69,7 +69,7 @@ export default function HeroText() {
                 />
 
                 {/* Cursor */}
-                <motion.line
+                <m.line
                     x1="275" y1="130" x2="275" y2="150"
                     stroke={c.accent} strokeWidth="1"
                     animate={{ opacity: [0, 0, 1, 1, 0] }}
@@ -77,7 +77,7 @@ export default function HeroText() {
                 />
 
                 {/* Tooltip "Context Found" */}
-                <motion.g
+                <m.g
                     initial={{ opacity: 0, scale: 0.8, y: 10 }}
                     animate={{ opacity: [0, 1, 1, 1, 0], scale: [0.8, 1, 1, 1, 0.8], y: [10, 0, 0, 0, 10] }}
                     transition={{ duration: 4, repeat: Infinity, delay: 2, times: [0, 0.1, 0.8, 0.9, 1] }}
@@ -87,9 +87,9 @@ export default function HeroText() {
                     <path d="M 240 114 L 245 119 L 250 114" fill={c.ink} />
                     {/* Text lines inside tooltip */}
                     <line x1="205" y1="102" x2="275" y2="102" stroke="white" strokeWidth="1" strokeLinecap="round" />
-                </motion.g>
+                </m.g>
 
-            </motion.svg>
+            </m.svg>
         </div>
     );
 }

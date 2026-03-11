@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 
 export default function DetailDoc() {
     const c = {
@@ -11,7 +11,7 @@ export default function DetailDoc() {
 
     return (
         <div className="w-full h-full flex items-center justify-center relative overflow-hidden pointer-events-none bg-[#FDFCF8]">
-            <motion.svg
+            <m.svg
                 width="100%"
                 height="100%"
                 viewBox="0 0 300 300"
@@ -42,7 +42,7 @@ export default function DetailDoc() {
                 </g>
 
                 {/* Scan Bar Animation */}
-                <motion.line
+                <m.line
                     x1="40" y1="40" x2="260" y2="40"
                     stroke={c.accent} strokeWidth="2"
                     initial={{ y1: 40, y2: 40, opacity: 0 }}
@@ -60,15 +60,15 @@ export default function DetailDoc() {
                 />
 
                 {/* Content Change Simulation (Opacity pulse on lines) */}
-                <motion.g
+                <m.g
                     animate={{ opacity: [0.1, 0.4, 0.1] }}
                     transition={{ duration: 3, repeat: Infinity, ease: "linear", repeatDelay: 1 }}
                 >
                     <rect x="70" y="190" width="70" height="6" rx="3" fill={c.ink} />
                     <rect x="160" y="205" width="70" height="6" rx="3" fill={c.ink} />
-                </motion.g>
+                </m.g>
 
-            </motion.svg>
+            </m.svg>
         </div>
     );
 }

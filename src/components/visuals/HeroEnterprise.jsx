@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 
 export default function HeroEnterprise() {
   const c = {
@@ -11,9 +11,9 @@ export default function HeroEnterprise() {
 
   return (
     <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-[#FDFCF8] relative overflow-hidden pointer-events-none">
-      <motion.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
+      <m.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
         {/* Secure VPC Boundary (Enterprise Intranet) */}
-        <motion.rect 
+        <m.rect 
           x="50" y="50" width="220" height="200" rx="16" fill="#F5F5F4" stroke={c.accent} strokeWidth="1" strokeDasharray="8 6"
           animate={{ strokeDashoffset: -28 }} transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
         />
@@ -36,17 +36,17 @@ export default function HeroEnterprise() {
         {/* Flixu Internal Enterprise Node */}
         <rect x="180" y="170" width="60" height="40" rx="6" fill={c.paper} stroke={c.accent} strokeWidth="1" />
         <circle cx="210" cy="190" r="6" fill={c.accent} />
-        <motion.circle cx="210" cy="190" r="14" fill="transparent" stroke={c.accent} strokeWidth="1"
+        <m.circle cx="210" cy="190" r="14" fill="transparent" stroke={c.accent} strokeWidth="1"
            initial={{ scale: 0.5, opacity: 1 }} animate={{ scale: 1.5, opacity: 0 }} transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
         />
         <text x="210" y="225" textAnchor="middle" fontSize="10" fontFamily="sans-serif" fill={c.accent} fontWeight="500">Flixu Instance</text>
 
         {/* Data processing only occurring internally */}
-        <motion.path 
+        <m.path 
           d="M 130 190 L 180 190" stroke={c.sketch} strokeWidth="1" strokeDasharray="4 4"
           animate={{ strokeDashoffset: -20 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
         />
-        <motion.circle 
+        <m.circle 
           cx="130" cy="190" r="3" fill={c.ink}
           animate={{ cx: [130, 180] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
         />
@@ -57,23 +57,23 @@ export default function HeroEnterprise() {
 
         {/* Blocked Connection Attempt from inside out (Zero Data Retention representation) */}
         <path d="M 240 150 L 260 150" fill="transparent" stroke={c.sketch} strokeWidth="1" />
-        <motion.line 
+        <m.line 
           x1="260" y1="150" x2="300" y2="150" stroke={c.accent} strokeWidth="1" strokeDasharray="4 4" opacity="0.5"
           animate={{ strokeDashoffset: -20 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
         />
-        <motion.circle 
+        <m.circle 
           cx="240" cy="150" r="3" fill={c.accent} opacity="0.5"
           animate={{ cx: [240, 275] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
         />
         
         {/* The firewall block symbol */}
-        <motion.g transform="translate(280, 150)" 
+        <m.g transform="translate(280, 150)" 
           animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}>
              <line x1="-10" y1="-10" x2="10" y2="10" stroke={c.accent} strokeWidth="1.5" />
              <line x1="10" y1="-10" x2="-10" y2="10" stroke={c.accent} strokeWidth="1.5" />
-        </motion.g>
+        </m.g>
 
-      </motion.svg>
+      </m.svg>
     </div>
   );
 }

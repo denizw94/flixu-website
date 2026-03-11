@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 
 export default function HeroEcommerce() {
   const c = {
@@ -26,7 +26,7 @@ export default function HeroEcommerce() {
 
   return (
     <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-[#FDFCF8] relative overflow-hidden pointer-events-none">
-      <motion.svg
+      <m.svg
         width="100%"
         height="100%"
         viewBox="0 0 400 300"
@@ -34,7 +34,7 @@ export default function HeroEcommerce() {
       >
         {/* Background Grid Elements */}
         {boxes.map((box, i) => (
-          <motion.rect
+          <m.rect
             key={box.id}
             x={box.x}
             y={box.y}
@@ -52,7 +52,7 @@ export default function HeroEcommerce() {
 
         {/* Translation Pass Effect */}
         {boxes.map((box, i) => (
-          <motion.rect
+          <m.rect
             key={`overlay-${box.id}`}
             x={box.x}
             y={box.y}
@@ -74,7 +74,7 @@ export default function HeroEcommerce() {
         ))}
 
         {/* Scanning Bar */}
-        <motion.line
+        <m.line
           initial={{ y1: startY - 20, y2: startY - 20, opacity: 0 }}
           animate={{ 
             y1: [startY - 20, startY + rows * (boxSize + gap) + 10, startY + rows * (boxSize + gap) + 10], 
@@ -88,7 +88,7 @@ export default function HeroEcommerce() {
           strokeWidth={3}
           strokeLinecap="round"
         />
-      </motion.svg>
+      </m.svg>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getCalApi } from "@calcom/embed-react";
-import { motion } from 'framer-motion';
+import * as m from "framer-motion/m";
 import { Check, ArrowRight } from 'lucide-react';
 
 const PRICE_MAP = {
@@ -33,7 +33,7 @@ export default function PricingGrid({ plans, enterprise }) {
                     onClick={() => setIsYearly(!isYearly)}
                     className="w-12 h-6 bg-stone-200 rounded-full relative p-1 transition-colors hover:bg-stone-300"
                 >
-                    <motion.div animate={{ x: isYearly ? 24 : 0 }} className="w-4 h-4 bg-white rounded-full shadow-sm" />
+                    <m.div animate={{ x: isYearly ? 24 : 0 }} className="w-4 h-4 bg-white rounded-full shadow-sm" />
                 </button>
                 <span className={`text-sm ${isYearly ? 'text-stone-900 font-medium' : 'text-stone-400'}`}>
                     Yearly <span className="text-orange-700 text-xs font-mono ml-1">(Save ~17%)</span>

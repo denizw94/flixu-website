@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 
 export default function HeroDoc() {
     const c = {
@@ -11,7 +11,7 @@ export default function HeroDoc() {
 
     return (
         <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-[#FDFCF8] relative overflow-hidden pointer-events-none">
-            <motion.svg
+            <m.svg
                 width="100%"
                 height="100%"
                 viewBox="0 0 400 300"
@@ -22,7 +22,7 @@ export default function HeroDoc() {
             >
                 <g transform="translate(125, 50)">
                     {/* Layer 1: Base (Wireframe) */}
-                    <motion.rect
+                    <m.rect
                         x="0" y="0" width="150" height="200" rx="2"
                         fill="none" stroke={c.sketch} strokeWidth="1"
                         initial={{ rotate: 0, x: 0, y: 0, opacity: 0 }}
@@ -36,7 +36,7 @@ export default function HeroDoc() {
                     />
 
                     {/* Layer 2: Format (Structure) */}
-                    <motion.rect
+                    <m.rect
                         x="0" y="0" width="150" height="200" rx="2"
                         fill="#FDFCF8" stroke={c.sketch} strokeWidth="1"
                         initial={{ rotate: 0, x: 0, y: 0, opacity: 0 }}
@@ -50,7 +50,7 @@ export default function HeroDoc() {
                     />
 
                     {/* Layer 3: Content (Final) */}
-                    <motion.rect
+                    <m.rect
                         x="0" y="0" width="150" height="200" rx="2"
                         fill="#FDFCF8" stroke={c.ink} strokeWidth="1.5"
                         initial={{ opacity: 0 }}
@@ -59,13 +59,13 @@ export default function HeroDoc() {
                     />
 
                     {/* Content Lines */}
-                    <motion.line x1="20" y1="40" x2="130" y2="40" stroke={c.ink} strokeWidth="1" strokeLinecap="round" />
-                    <motion.line x1="20" y1="70" x2="130" y2="70" stroke={c.sketch} strokeWidth="1" strokeLinecap="round" />
-                    <motion.line x1="20" y1="90" x2="100" y2="90" stroke={c.sketch} strokeWidth="1" strokeLinecap="round" />
-                    <motion.line x1="20" y1="120" x2="130" y2="120" stroke={c.sketch} strokeWidth="1" strokeLinecap="round" />
+                    <m.line x1="20" y1="40" x2="130" y2="40" stroke={c.ink} strokeWidth="1" strokeLinecap="round" />
+                    <m.line x1="20" y1="70" x2="130" y2="70" stroke={c.sketch} strokeWidth="1" strokeLinecap="round" />
+                    <m.line x1="20" y1="90" x2="100" y2="90" stroke={c.sketch} strokeWidth="1" strokeLinecap="round" />
+                    <m.line x1="20" y1="120" x2="130" y2="120" stroke={c.sketch} strokeWidth="1" strokeLinecap="round" />
 
                     {/* Scan Line */}
-                    <motion.line
+                    <m.line
                         x1="-10" y1="0" x2="160" y2="0"
                         stroke={c.accent} strokeWidth="1"
                         initial={{ y1: -10, y2: -10, opacity: 0 }}
@@ -73,7 +73,7 @@ export default function HeroDoc() {
                         transition={{ duration: 2, repeat: Infinity, repeatDelay: 3, ease: "linear", delay: 1 }}
                     />
                 </g>
-            </motion.svg>
+            </m.svg>
         </div>
     );
 }

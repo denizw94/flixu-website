@@ -1,0 +1,59 @@
+---
+// Pure CSS replacement for React + Framer Motion HeroAmbient.
+// Two decorative blurred orbs with slow infinite animations.
+// Zero JavaScript — no React island needed.
+---
+
+<div class="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+  <div class="absolute inset-0 [mask-image:linear-gradient(to_bottom,transparent_0%,black_20%,black_100%)]">
+
+    <!-- Warm Light Orb -->
+    <div class="hero-orb hero-orb--warm"></div>
+
+    <!-- Cool Balance Orb -->
+    <div class="hero-orb hero-orb--cool"></div>
+
+  </div>
+</div>
+
+<style>
+  .hero-orb {
+    position: absolute;
+    border-radius: 9999px;
+    mix-blend-mode: multiply;
+  }
+
+  .hero-orb--warm {
+    top: -30%;
+    left: 10%;
+    width: 600px;
+    height: 600px;
+    background: rgb(253 186 116 / 0.5); /* orange-200/50 */
+    filter: blur(120px);
+    animation: orb-warm 20s ease-in-out infinite;
+  }
+
+  .hero-orb--cool {
+    top: -20%;
+    right: 10%;
+    width: 500px;
+    height: 500px;
+    background: rgb(231 229 228 / 0.6); /* stone-200/60 */
+    filter: blur(100px);
+    animation: orb-cool 25s ease-in-out 2s infinite;
+  }
+
+  @keyframes orb-warm {
+    0%   { transform: translate(0, 0) scale(1);     opacity: 0.4; }
+    25%  { transform: translate(50px, -40px) scale(1.1); opacity: 0.6; }
+    50%  { transform: translate(-30px, 20px) scale(0.9); opacity: 0.4; }
+    100% { transform: translate(0, 0) scale(1);     opacity: 0.4; }
+  }
+
+  @keyframes orb-cool {
+    0%   { transform: translate(0, 0); }
+    25%  { transform: translate(-60px, 50px); }
+    50%  { transform: translate(40px, -30px); }
+    100% { transform: translate(0, 0); }
+  }
+</style>

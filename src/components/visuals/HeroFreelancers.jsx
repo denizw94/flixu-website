@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import * as m from "framer-motion/m";
 
 export default function HeroFreelancers() {
   const c = {
@@ -11,7 +11,7 @@ export default function HeroFreelancers() {
 
   return (
     <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-[#FDFCF8] relative overflow-hidden pointer-events-none">
-      <motion.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
+      <m.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
         {/* The Solo Freelancer Node (Center) */}
         <circle cx="200" cy="180" r="20" fill={c.paper} stroke={c.ink} strokeWidth="1.5" />
         {/* Laptop/Desktop shape */}
@@ -19,15 +19,15 @@ export default function HeroFreelancers() {
         <line x1="180" y1="185" x2="220" y2="185" stroke={c.ink} strokeWidth="1" strokeLinecap="round" />
         
         {/* Copilot Engine hovering above providing leverage */}
-        <motion.circle cx="200" cy="110" r="14" fill={c.paper} stroke={c.accent} strokeWidth="1"
+        <m.circle cx="200" cy="110" r="14" fill={c.paper} stroke={c.accent} strokeWidth="1"
             animate={{ y: [-5, 5, -5] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         />
-        <motion.polygon points="196,106 204,110 196,114" fill={c.accent} 
+        <m.polygon points="196,106 204,110 196,114" fill={c.accent} 
             animate={{ y: [-5, 5, -5] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         />
         {/* Data processing beam between Freelancer and Engine */}
         <line x1="200" y1="124" x2="200" y2="160" stroke={c.accent} strokeWidth="1" strokeDasharray="4 4" />
-        <motion.circle cx="200" cy="140" r="3" fill={c.accent}
+        <m.circle cx="200" cy="140" r="3" fill={c.accent}
             animate={{ cy: [160, 124, 160] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
         />
 
@@ -36,7 +36,7 @@ export default function HeroFreelancers() {
         <text x="60" y="140" fontSize="10" fontFamily="sans-serif" fill={c.ink} fontWeight="500">Raw Projects</text>
         
         {[0, 1, 2].map((i) => (
-          <motion.g 
+          <m.g 
             key={`rawbox-${i}`}
             initial={{ x: 0, opacity: 0, rotate: -15 + i * 10 }}
             animate={{ x: [0, 80, 140, 140], opacity: [0, 1, 1, 0] }}
@@ -46,7 +46,7 @@ export default function HeroFreelancers() {
              <rect x="50" y="160" width="30" height="40" rx="2" fill={c.paper} stroke={c.sketch} strokeWidth="1" />
              <line x1="55" y1="170" x2="75" y2="175" stroke={c.sketch} strokeWidth="1" />
              <line x1="55" y1="180" x2="70" y2="182" stroke={c.sketch} strokeWidth="1" />
-          </motion.g>
+          </m.g>
         ))}
 
         {/* Outgoing Organized Localized Workload (Right) */}
@@ -54,7 +54,7 @@ export default function HeroFreelancers() {
         <text x="280" y="140" fontSize="10" fontFamily="sans-serif" fill={c.accent} fontWeight="500">Finished Work</text>
 
         {[0, 1, 2].map((i) => (
-          <motion.g 
+          <m.g 
             key={`donebox-${i}`}
             initial={{ x: 220, opacity: 0, rotate: 0 }}
             animate={{ x: [220, 220, 300, 360], opacity: [0, 0, 1, 0] }}
@@ -65,10 +65,10 @@ export default function HeroFreelancers() {
              <rect x="20" y="160" width="10" height="40" fill={c.accent} opacity="0.1" />
              <line x1="5" y1="170" x2="25" y2="170" stroke={c.accent} strokeWidth="1" strokeLinecap="round" />
              <line x1="5" y1="180" x2="20" y2="180" stroke={c.accent} strokeWidth="1" strokeLinecap="round" />
-          </motion.g>
+          </m.g>
         ))}
 
-      </motion.svg>
+      </m.svg>
     </div>
   );
 }

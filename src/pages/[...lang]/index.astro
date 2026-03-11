@@ -2,7 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Section from "../../components/ui/Section.astro";
 import OutlineCard from "../../components/ui/OutlineCard.astro";
-import HeroAmbient from "../../components/homepage/HeroAmbient.jsx";
+import HeroAmbient from "../../components/homepage/HeroAmbient.astro";
 import TranslationWidget from "../../components/widget/TranslationWidget.jsx";
 import WorkspaceVisual from "../../components/widget/WorkspaceVisual.jsx";
 import SchemaOrg from "../../components/seo/SchemaOrg.astro";
@@ -96,7 +96,7 @@ const homepageSchema = [
     data-chapter={`01 — ${t.rail.intro.toUpperCase()}`}
     class="min-h-screen flex flex-col justify-center border-b border-stone-200 relative overflow-hidden"
   >
-    <HeroAmbient client:idle />
+    <HeroAmbient />
     <div class="relative z-10 max-w-3xl pt-0">
       <div
         class="inline-block px-3 py-1 mb-8 rounded-full border border-stone-200 bg-stone-50 text-[10px] font-mono tracking-widest uppercase text-stone-500"
