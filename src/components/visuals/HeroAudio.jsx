@@ -1,5 +1,5 @@
 import React from "react";
-import * as m from "framer-motion/m";
+import { motion } from "framer-motion";
 
 export default function HeroAudio() {
     const c = {
@@ -14,7 +14,7 @@ export default function HeroAudio() {
 
     return (
         <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-[#FDFCF8] relative overflow-hidden pointer-events-none">
-            <m.svg
+            <motion.svg
                 width="100%"
                 height="100%"
                 viewBox="0 0 400 300"
@@ -27,7 +27,7 @@ export default function HeroAudio() {
                 {/* WAVE 1: Main (Splits Up) */}
                 <g>
                     {bars.map((_, i) => (
-                        <m.line
+                        <motion.line
                             key={`w1-${i}`}
                             x1={50 + i * 10} y1={130} x2={50 + i * 10} y2={170}
                             stroke={c.ink} strokeWidth="1" strokeLinecap="round"
@@ -49,7 +49,7 @@ export default function HeroAudio() {
                 {/* WAVE 2: Accent (Splits Down) */}
                 <g>
                     {bars.map((_, i) => (
-                        <m.line
+                        <motion.line
                             key={`w2-${i}`}
                             x1={50 + i * 10} y1={130} x2={50 + i * 10} y2={170}
                             stroke={c.accent} strokeWidth="1" strokeLinecap="round"
@@ -70,12 +70,12 @@ export default function HeroAudio() {
                 </g>
 
                 {/* Center Line visual helper */}
-                <m.line
+                <motion.line
                     x1="40" y1="150" x2="360" y2="150"
                     stroke={c.sketch} strokeWidth="1" strokeDasharray="4 4"
                 />
 
-            </m.svg>
+            </motion.svg>
         </div>
     );
 }

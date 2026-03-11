@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as m from "framer-motion/m";
+import { motion } from "framer-motion";
 
 export default function CodeTabs({ tabs, children }) {
     const [activeTab, setActiveTab] = useState(tabs[0]);
@@ -22,7 +22,7 @@ export default function CodeTabs({ tabs, children }) {
                     >
                         {tab}
                         {activeTab === tab && (
-                            <m.div
+                            <motion.div
                                 layoutId="activeTabIndicator"
                                 className="absolute bottom-0 left-0 right-0 h-[2px] bg-orange-700"
                             />

@@ -1,5 +1,5 @@
 import React from "react";
-import * as m from "framer-motion/m";
+import { motion } from "framer-motion";
 
 export default function HeroClientManagement() {
   const c = {
@@ -11,7 +11,7 @@ export default function HeroClientManagement() {
 
   return (
     <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-[#FDFCF8] relative overflow-hidden pointer-events-none">
-      <m.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
+      <motion.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
         {/* Central Hub (Agency) */}
         <circle cx="200" cy="150" r="30" fill={c.paper} stroke={c.ink} strokeWidth="1.5" />
         <rect x="190" y="140" width="20" height="20" rx="4" fill={c.sketch} />
@@ -25,22 +25,22 @@ export default function HeroClientManagement() {
         ].map((node, i) => (
           <g key={`client-${i}`}>
             {/* The Secure Connection Line */}
-            <m.line
+            <motion.line
               x1="200" y1="150" x2={node.cx} y2={node.cy}
               stroke={c.sketch} strokeWidth="1" strokeDasharray="4 4"
             />
             {/* Isolated Workspace Bubble */}
-            <m.circle 
+            <motion.circle 
               cx={node.cx} cy={node.cy} r="20" 
               fill={c.paper} stroke={c.accent} strokeWidth="1"
               initial={{ scale: 0.8, opacity: 0.5 }}
               animate={{ scale: [0.8, 1, 0.8], opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 3, delay: node.delay, repeat: Infinity, ease: "easeInOut" }}
             />
-            <m.circle cx={node.cx} cy={node.cy} r="8" fill={c.accent} opacity="0.8" />
+            <motion.circle cx={node.cx} cy={node.cy} r="8" fill={c.accent} opacity="0.8" />
             
             {/* Data transfer isolated to just that client */}
-            <m.circle
+            <motion.circle
               cx="200" cy="150" r="4" fill={c.ink}
               animate={{ cx: node.cx, cy: node.cy, opacity: [0, 1, 0] }}
               transition={{ duration: 2, delay: node.delay, repeat: Infinity, ease: "easeInOut" }}
@@ -49,13 +49,13 @@ export default function HeroClientManagement() {
         ))}
 
         {/* Overall Security Perimeter */}
-        <m.circle
+        <motion.circle
           cx="200" cy="150" r="140" fill="transparent" stroke={c.sketch} strokeWidth="1" strokeDasharray="10 10"
           animate={{ rotate: 360 }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           style={{ originX: "200px", originY: "150px" }}
         />
-      </m.svg>
+      </motion.svg>
     </div>
   );
 }

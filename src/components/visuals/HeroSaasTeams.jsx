@@ -1,5 +1,5 @@
 import React from "react";
-import * as m from "framer-motion/m";
+import { motion } from "framer-motion";
 
 export default function HeroSaasTeams() {
   const c = {
@@ -11,16 +11,16 @@ export default function HeroSaasTeams() {
 
   return (
     <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-[#FDFCF8] relative overflow-hidden pointer-events-none">
-      <m.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
+      <motion.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
         
         {/* The Central Synchronization Hub (Flixu) */}
-        <m.rect 
+        <motion.rect 
             x="160" y="110" width="80" height="80" rx="16" fill={c.paper} stroke={c.accent} strokeWidth="1"
             animate={{ strokeDasharray: ["4 4", "8 8", "4 4"] }}
             transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
         />
         <text x="200" y="153" textAnchor="middle" fontSize="10" fontFamily="sans-serif" fill={c.accent} fontWeight="500" letterSpacing="1">SYNC</text>
-        <m.circle cx="200" cy="150" r="28" fill="transparent" stroke={c.accent} strokeWidth="0.5"
+        <motion.circle cx="200" cy="150" r="28" fill="transparent" stroke={c.accent} strokeWidth="0.5"
             animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             style={{ originX: "200px", originY: "150px" }}
@@ -35,7 +35,7 @@ export default function HeroSaasTeams() {
         
         <path d="M 200 56 L 200 110" fill="transparent" stroke={c.sketch} strokeWidth="1" strokeDasharray="3 3" />
         {/* Designer Asset moving to Hub */}
-        <m.rect x="196" y="56" width="8" height="8" rx="2" fill={c.ink} 
+        <motion.rect x="196" y="56" width="8" height="8" rx="2" fill={c.ink} 
            animate={{ y: [56, 100, 100], opacity: [0, 1, 0] }} transition={{ duration: 4, times: [0, 0.4, 0.5], repeat: Infinity }}
         />
 
@@ -45,7 +45,7 @@ export default function HeroSaasTeams() {
         
         <path d="M 103 210 Q 130 180 160 180" fill="transparent" stroke={c.sketch} strokeWidth="1" strokeDasharray="3 3" />
         {/* Dev Asset moving to Hub */}
-        <m.circle cx="103" cy="210" r="4" fill={c.ink}
+        <motion.circle cx="103" cy="210" r="4" fill={c.ink}
             animate={{ cx: [103, 160], cy: [210, 180], opacity: [0, 1, 0] }} transition={{ duration: 4, delay: 1.3, times: [0, 0.4, 0.5], repeat: Infinity }}
         />
 
@@ -57,29 +57,29 @@ export default function HeroSaasTeams() {
 
         <path d="M 297 210 Q 270 180 240 180" fill="transparent" stroke={c.sketch} strokeWidth="1" strokeDasharray="3 3" />
         {/* Marketing Asset moving to Hub */}
-        <m.polygon points="-4,-4 4,-4 0,4" fill={c.ink}
+        <motion.polygon points="-4,-4 4,-4 0,4" fill={c.ink}
             animate={{ x: [297, 240], y: [210, 180], opacity: [0, 1, 0] }} transition={{ duration: 4, delay: 2.6, times: [0, 0.4, 0.5], repeat: Infinity }}
         />
 
         {/* Distributed Unified Output (Radiating Outwards) */}
-        <m.circle 
+        <motion.circle 
             cx="200" cy="150" r="80" fill="transparent" stroke={c.accent} strokeWidth="0.5" opacity="0.5"
             animate={{ scale: [1, 1.5, 1.5], opacity: [0.5, 0, 0] }} transition={{ duration: 4, delay: 0.5, repeat: Infinity, ease: "easeOut" }}
             style={{ originX: "200px", originY: "150px" }}
         />
         
         {/* Badges indicating real-time statuses on all sides */}
-        <m.g animate={{ y: [-2, 2, -2] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
+        <motion.g animate={{ y: [-2, 2, -2] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>
              <rect x="230" y="80" width="50" height="16" rx="8" fill="#FFF7ED" stroke={c.accent} strokeWidth="1" />
              <text x="255" y="91" textAnchor="middle" fontSize="8" fontFamily="sans-serif" fill={c.accent} fontWeight="500">LIVE</text>
-        </m.g>
+        </motion.g>
 
-        <m.g animate={{ y: [2, -2, 2] }} transition={{ duration: 4, delay: 1, repeat: Infinity, ease: "easeInOut" }}>
+        <motion.g animate={{ y: [2, -2, 2] }} transition={{ duration: 4, delay: 1, repeat: Infinity, ease: "easeInOut" }}>
              <rect x="120" y="200" width="50" height="16" rx="8" fill="#FFF7ED" stroke={c.accent} strokeWidth="1" />
              <text x="145" y="211" textAnchor="middle" fontSize="8" fontFamily="sans-serif" fill={c.accent} fontWeight="500">MERGED</text>
-        </m.g>
+        </motion.g>
 
-      </m.svg>
+      </motion.svg>
     </div>
   );
 }

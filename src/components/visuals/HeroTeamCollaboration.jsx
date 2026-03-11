@@ -1,5 +1,5 @@
 import React from "react";
-import * as m from "framer-motion/m";
+import { motion } from "framer-motion";
 
 export default function HeroTeamCollaboration() {
   const c = {
@@ -11,7 +11,7 @@ export default function HeroTeamCollaboration() {
 
   return (
     <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-[#FDFCF8] relative overflow-hidden pointer-events-none">
-      <m.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
+      <motion.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
         {/* The Central Document / Project */}
         <rect x="150" y="100" width="100" height="120" rx="4" fill={c.paper} stroke={c.sketch} strokeWidth="1" />
         <line x1="170" y1="130" x2="230" y2="130" stroke={c.ink} strokeWidth="1.5" strokeLinecap="round" />
@@ -24,7 +24,7 @@ export default function HeroTeamCollaboration() {
           { color: c.ink, start: {x: 300, y: 80}, target: {x: 220, y: 155}, delay: 0.5 },
           { color: c.sketch, start: {x: 200, y: 240}, target: {x: 185, y: 175}, delay: 1 },
         ].map((cursor, i) => (
-          <m.g
+          <motion.g
             key={`cursor-${i}`}
             initial={{ x: cursor.start.x, y: cursor.start.y, opacity: 0 }}
             animate={{ 
@@ -36,16 +36,16 @@ export default function HeroTeamCollaboration() {
           >
             {/* Minimalist SVG arrow cursor cursor */}
             <path d="M 0 0 L 12 18 L 8 18 L 12 28 L 8 30 L 4 20 L -2 20 Z" fill={cursor.color} stroke={c.paper} strokeWidth="1.5" />
-            <m.circle 
+            <motion.circle 
               cx="-2" cy="-2" r="8" fill="transparent" stroke={cursor.color} strokeWidth="1"
               animate={{ scale: [1, 2, 1], opacity: [1, 0, 1] }}
               transition={{ duration: 1, repeat: Infinity }}
             />
-          </m.g>
+          </motion.g>
         ))}
 
         {/* Real-time sync pulses */}
-        <m.rect 
+        <motion.rect 
           x="150" y="100" width="100" height="120" rx="4" fill="transparent" stroke={c.accent} strokeWidth="1"
           initial={{ scale: 1, opacity: 0 }}
           animate={{ scale: [1, 1.05, 1], opacity: [0, 0.5, 0] }}
@@ -53,7 +53,7 @@ export default function HeroTeamCollaboration() {
           style={{ originX: "200px", originY: "160px" }}
         />
 
-      </m.svg>
+      </motion.svg>
     </div>
   );
 }

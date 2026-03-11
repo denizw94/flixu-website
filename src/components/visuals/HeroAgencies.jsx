@@ -1,5 +1,5 @@
 import React from "react";
-import * as m from "framer-motion/m";
+import { motion } from "framer-motion";
 
 export default function HeroAgencies() {
   const c = {
@@ -11,7 +11,7 @@ export default function HeroAgencies() {
 
   return (
     <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-[#FDFCF8] relative overflow-hidden pointer-events-none">
-      <m.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
+      <motion.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
         {/* Central Agency Hub */}
         <rect x="160" y="60" width="80" height="180" rx="8" fill={c.paper} stroke={c.ink} strokeWidth="1.5" />
         <text x="200" y="155" textAnchor="middle" fontSize="14" fontFamily="serif" fill={c.ink} fontWeight="500" transform="rotate(-90 200 150)">
@@ -26,11 +26,11 @@ export default function HeroAgencies() {
         ].map((client, i) => (
           <g key={`in-${i}`}>
             {/* Path */}
-            <m.line x1="60" y1={client.y} x2="160" y2={client.y} stroke={c.sketch} strokeWidth="1" strokeDasharray="4 4" 
+            <motion.line x1="60" y1={client.y} x2="160" y2={client.y} stroke={c.sketch} strokeWidth="1" strokeDasharray="4 4" 
                animate={{ strokeDashoffset: 20 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
             />
             {/* Raw Messy Folder */}
-            <m.g
+            <motion.g
               initial={{ x: 0, opacity: 0 }}
               animate={{ x: [0, 80, 80], opacity: [0, 1, 0] }}
               transition={{ duration: 5, delay: client.delay, times: [0, 0.4, 0.45, 1], repeat: Infinity, ease: "linear" }}
@@ -41,13 +41,13 @@ export default function HeroAgencies() {
                <text x="60" y={client.y - 20} textAnchor="middle" fontSize="10" fontFamily="sans-serif" fill={c.sketch} fontWeight="500">
                   {client.tag}
               </text>
-            </m.g>
+            </motion.g>
           </g>
         ))}
 
         {/* Perfect Isolated Workspaces Processing inside Hub */}
         {[80, 150, 220].map((y, i) => (
-           <m.circle 
+           <motion.circle 
             key={`hub-${i}`}
             cx="200" cy={y} r="8" fill="transparent" stroke={c.accent} strokeWidth="1"
             initial={{ scale: 0.5, opacity: 0 }}
@@ -65,11 +65,11 @@ export default function HeroAgencies() {
         ].map((client, i) => (
           <g key={`out-${i}`}>
             {/* Path */}
-             <m.line x1="240" y1={client.y} x2="340" y2={client.y} stroke={c.accent} strokeWidth="1" strokeDasharray="4 4" 
+             <motion.line x1="240" y1={client.y} x2="340" y2={client.y} stroke={c.accent} strokeWidth="1" strokeDasharray="4 4" 
                animate={{ strokeDashoffset: -20 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
             />
             {/* Perfect Translated Folder */}
-            <m.g
+            <motion.g
               initial={{ x: 240, opacity: 0 }}
               animate={{ x: [240, 240, 320, 320], opacity: [0, 0, 1, 0] }}
               transition={{ duration: 5, delay: client.delay, times: [0, 0.6, 0.9, 1], repeat: Infinity, ease: "linear" }}
@@ -79,11 +79,11 @@ export default function HeroAgencies() {
               {/* Translared Document inside */}
               <line x1="10" y1={client.y - 2} x2="30" y2={client.y - 2} stroke={c.accent} strokeWidth="1.5" strokeLinecap="round" />
               <line x1="10" y1={client.y + 6} x2="25" y2={client.y + 6} stroke={c.accent} strokeWidth="1.5" strokeLinecap="round" />
-            </m.g>
+            </motion.g>
           </g>
         ))}
 
-      </m.svg>
+      </motion.svg>
     </div>
   );
 }

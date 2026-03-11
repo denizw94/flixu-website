@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import * as m from "framer-motion/m";
+import { motion } from "framer-motion";
 
 export default function HeroContext() {
     const [activeNode, setActiveNode] = useState(0);
@@ -34,7 +34,7 @@ export default function HeroContext() {
                 <line x1="200" y1="50" x2="125" y2="150" stroke="#E7E5E4" strokeWidth="1" />
 
                 {/* Active Connection Animation */}
-                <m.line
+                <motion.line
                     x1={nodes[0].x} y1={nodes[0].y}
                     x2={nodes[1].x} y2={nodes[1].y}
                     stroke="#EA580C" strokeWidth="1.5"
@@ -42,7 +42,7 @@ export default function HeroContext() {
                     animate={{ pathLength: activeNode === 1 ? 1 : 0, opacity: activeNode === 1 ? 1 : 0 }}
                     transition={{ duration: 1 }}
                 />
-                <m.line
+                <motion.line
                     x1={nodes[1].x} y1={nodes[1].y}
                     x2={nodes[2].x} y2={nodes[2].y}
                     stroke="#EA580C" strokeWidth="1.5"
@@ -55,7 +55,7 @@ export default function HeroContext() {
                 {/* Nodes */}
                 {nodes.map((node, i) => (
                     <g key={i}>
-                        <m.circle
+                        <motion.circle
                             cx={node.x} cy={node.y} r="6"
                             fill={activeNode === i ? "#FFF7ED" : "#FAFAF9"}
                             stroke={activeNode === i ? "#EA580C" : "#D6D3D1"}
@@ -63,7 +63,7 @@ export default function HeroContext() {
                             animate={{ scale: activeNode === i ? 1.2 : 1 }}
                         />
                         {activeNode === i && (
-                            <m.text
+                            <motion.text
                                 x={node.x} y={node.y - 15}
                                 textAnchor="middle"
                                 className="text-[10px] font-mono fill-orange-700 uppercase tracking-wider"
@@ -71,7 +71,7 @@ export default function HeroContext() {
                                 animate={{ opacity: 1, y: 0 }}
                             >
                                 {node.label}
-                            </m.text>
+                            </motion.text>
                         )}
                     </g>
                 ))}

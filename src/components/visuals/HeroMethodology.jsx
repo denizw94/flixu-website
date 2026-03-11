@@ -1,5 +1,5 @@
 import React from "react";
-import * as m from "framer-motion/m";
+import { motion } from "framer-motion";
 
 export default function HeroMethodology() {
   const c = {
@@ -11,11 +11,11 @@ export default function HeroMethodology() {
 
   return (
     <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-[#FDFCF8] relative overflow-hidden pointer-events-none">
-      <m.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
+      <motion.svg width="100%" height="100%" viewBox="0 0 400 300" className="w-full max-w-[500px]">
         
         {/* 7-Layer Context Stack (Represented by 4 conceptual plates for visual balance) */}
         {[0, 1, 2, 3].map((layer) => (
-          <m.g 
+          <motion.g 
             key={`plate-${layer}`} 
             transform={`translate(120, ${150 + layer * 25})`}
           >
@@ -25,7 +25,7 @@ export default function HeroMethodology() {
             <path d="M 160 15 L 80 30 L 80 35 L 160 20 Z" fill={c.sketch} opacity="0.3" strokeLinejoin="round" />
             
             {/* Scanning Laser traversing each plate */}
-            <m.line 
+            <motion.line 
               x1="20" y1="18" x2="140" y2="18" stroke={c.accent} strokeWidth="1" opacity="0.5"
               animate={{ 
                 x1: [20, 40, 20], y1: [18, 10, 18],
@@ -33,7 +33,7 @@ export default function HeroMethodology() {
                }}
               transition={{ duration: 2, delay: layer * 0.5, repeat: Infinity, ease: "easeInOut" }}
             />
-          </m.g>
+          </motion.g>
         ))}
 
         <text x="80" y="165" fontSize="10" fontFamily="monospace" fill={c.sketch} fontWeight="500">Glossary</text>
@@ -42,7 +42,7 @@ export default function HeroMethodology() {
         <text x="80" y="240" fontSize="10" fontFamily="monospace" fill={c.accent} fontWeight="500">Review</text>
 
         {/* Raw Text Box dropping in from top */}
-        <m.g
+        <motion.g
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: [50, 150, 150, 150], opacity: [0, 1, 0, 0] }}
           transition={{ duration: 6, repeat: Infinity, times: [0, 0.2, 0.4, 1], ease: "easeIn" }}
@@ -52,10 +52,10 @@ export default function HeroMethodology() {
           <line x1="185" y1="15" x2="215" y2="15" stroke={c.ink} strokeWidth="1" strokeLinecap="round" />
           <line x1="185" y1="25" x2="205" y2="25" stroke={c.ink} strokeWidth="1" strokeLinecap="round" />
           <line x1="185" y1="35" x2="210" y2="35" stroke={c.ink} strokeWidth="1" strokeLinecap="round" />
-        </m.g>
+        </motion.g>
 
         {/* Polished Translated Box emerging from the bottom */}
-        <m.g
+        <motion.g
           initial={{ y: 250, opacity: 0 }}
           animate={{ y: [220, 220, 280, 280], opacity: [0, 0, 1, 0] }}
           transition={{ duration: 6, repeat: Infinity, times: [0, 0.4, 0.8, 1], ease: "easeOut" }}
@@ -64,15 +64,15 @@ export default function HeroMethodology() {
           <line x1="185" y1="15" x2="215" y2="15" stroke={c.accent} strokeWidth="1" strokeLinecap="round" />
           <line x1="185" y1="25" x2="210" y2="25" stroke={c.accent} strokeWidth="1" strokeLinecap="round" />
           <line x1="185" y1="35" x2="200" y2="35" stroke={c.accent} strokeWidth="1" strokeLinecap="round" />
-        </m.g>
+        </motion.g>
 
         {/* Connection pipeline passing through the plates */}
-        <m.line 
+        <motion.line 
           x1="200" y1="120" x2="200" y2="270" stroke={c.accent} strokeWidth="1" strokeDasharray="4 4"
           animate={{ strokeDashoffset: -20 }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
         />
 
-      </m.svg>
+      </motion.svg>
     </div>
   );
 }

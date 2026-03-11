@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import * as m from "framer-motion/m";
+import { motion } from "framer-motion";
 import { CheckCircle2, Activity, Server, Database, Globe } from 'lucide-react';
 
 export default function StatusDashboard() {
