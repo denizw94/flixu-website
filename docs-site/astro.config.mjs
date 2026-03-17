@@ -8,8 +8,13 @@ export default defineConfig({
     starlight({
       title: 'Flixu Docs',
       customCss: ['./src/styles/custom.css'],
+      components: {
+        Header: './src/components/Header.astro',
+        PageTitle: './src/components/PageTitle.astro',
+        ThemeSelect: './src/components/ThemeSelect.astro',
+      },
       social: [
-        { icon: 'linkedin', label: 'LinkedIn', href: 'https://linkedin.com/company/flixu-ai' },
+        { icon: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/company/flixuai' },
         { icon: 'external', label: 'Website', href: 'https://flixu.ai' },
       ],
       sidebar: [

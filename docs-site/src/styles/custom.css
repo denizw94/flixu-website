@@ -27,10 +27,10 @@
   --sl-color-text: #44403c;           /* stone-700 — body */
   --sl-color-text-accent: #C2410C;    /* orange-700 */
 
-  /* Background — Paper */
+  /* Background — Sand everywhere */
   --sl-color-bg-nav: #FDFCF8;
   --sl-color-bg-sidebar: #FDFCF8;
-  --sl-color-bg-content: #ffffff;
+  --sl-color-bg-content: #FDFCF8;
   --sl-color-black: #1c1917;          /* stone-900 */
   --sl-color-gray-1: #f5f5f4;         /* stone-100 */
   --sl-color-gray-2: #e7e5e4;         /* stone-200 */
@@ -69,7 +69,7 @@
   --sl-color-text-accent: #C2410C;
   --sl-color-bg-nav: #FDFCF8;
   --sl-color-bg-sidebar: #FDFCF8;
-  --sl-color-bg-content: #ffffff;
+  --sl-color-bg-content: #FDFCF8;
   --sl-color-black: #1c1917;
   --sl-color-gray-1: #f5f5f4;
   --sl-color-gray-2: #e7e5e4;
@@ -94,7 +94,7 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-weight: 300;
   color: #44403c;
-  background: #ffffff;
+  background: #FDFCF8;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -473,16 +473,16 @@ site-search button,
 starlight-search-dialog,
 [data-search-toggle],
 button[aria-label='Search'] {
-  background: #ffffff !important;
+  background: #FDFCF8 !important;
   color: #78716c !important;
   border: 1px solid #e7e5e4 !important;
 }
 
-/* ── Ensure content background is white ─────────────────────────── */
+/* ── Ensure content background is sand ─────────────────────────── */
 .main-pane,
 .content-panel,
 main {
-  background: #ffffff;
+  background: #FDFCF8;
 }
 
 /* ── Force all Starlight badges/labels to be visible ────────────── */
