@@ -500,12 +500,6 @@ header.header {
   border-bottom: 1px solid #e7e5e4;
 }
 
-/* Remove duplicate/double borders from nav */
-.header ~ nav,
-nav.top-tabs {
-  display: none !important;
-}
-
 /* Remove social icon separator line */
 .social-icons::after {
   display: none !important;
