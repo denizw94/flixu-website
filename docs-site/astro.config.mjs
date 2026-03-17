@@ -12,6 +12,7 @@ export default defineConfig({
         Header: './src/components/Header.astro',
         PageTitle: './src/components/PageTitle.astro',
         ThemeSelect: './src/components/ThemeSelect.astro',
+        Sidebar: './src/components/Sidebar.astro',
       },
       social: [
         { icon: 'linkedin', label: 'LinkedIn', href: 'https://www.linkedin.com/company/flixuai' },
