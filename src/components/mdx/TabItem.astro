@@ -1,0 +1,12 @@
+---
+export interface Props {
+  label: string;
+}
+const { label } = Astro.props;
+---
+
+<docs-tab-item data-label={label} class="block">
+  <div class="border border-stone-200 bg-stone-900 rounded-lg overflow-hidden [&_.astro-code]:!bg-transparent [&_.astro-code]:!m-0 [&_.astro-code]:!p-4 md:[&_.astro-code]:!p-6">
+    <slot />
+  </div>
+</docs-tab-item>

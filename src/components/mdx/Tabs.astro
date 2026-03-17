@@ -1,0 +1,76 @@
+---
+---
+
+<docs-tabs class="block my-8">
+  <div class="flex items-center gap-2 mb-4" role="tablist">
+    {/* Buttons injected here via client-side JS */}
+  </div>
+  <div class="tabs-content-area relative">
+    <slot />
+  </div>
+</docs-tabs>
+
+<script>
+  class DocsTabs extends HTMLElement {
+    constructor() {
+      super();
+      const tabItems = Array.from(this.querySelectorAll('docs-tab-item'));
+      const tablist = this.querySelector('[role="tablist"]');
+
+      if (!tablist || tabItems.length === 0) return;
+
+      tabItems.forEach((item, index) => {
+        const label = item.getAttribute('data-label') || `Tab ${index + 1}`;
+        const button = document.createElement('button');
+        
+        // Vercel / Flixu pill styling
+        const baseClasses = ['px-3', 'py-1.5', 'text-sm', 'font-medium', 'rounded-md', 'transition-colors'];
+        const activeClasses = ['bg-orange-50', 'text-orange-700'];
+        const inactiveClasses = ['text-stone-500', 'hover:text-stone-900', 'hover:bg-stone-100'];
+
+        button.classList.add(...baseClasses);
+        if (index === 0) {
+          button.classList.add(...activeClasses);
+        } else {
+          button.classList.add(...inactiveClasses);
+        }
+
+        button.textContent = label;
+        button.setAttribute('role', 'tab');
+        button.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+        
+        button.addEventListener('click', () => {
+          // Reset all buttons
+          Array.from(tablist.children).forEach(btn => {
+            btn.classList.remove(...activeClasses);
+            btn.classList.add(...inactiveClasses);
+            btn.setAttribute('aria-selected', 'false');
+          });
+          
+          // Activate clicked button
+          button.classList.remove(...inactiveClasses);
+          button.classList.add(...activeClasses);
+          button.setAttribute('aria-selected', 'true');
+
+          // Toggle visibility of panels
+          tabItems.forEach(panel => {
+            panel.classList.add('hidden');
+          });
+          item.classList.remove('hidden');
+        });
+
+        tablist.appendChild(button);
+
+        // Hide all panels except the first one initially
+        if (index !== 0) {
+          item.classList.add('hidden');
+        }
+      });
+    }
+  }
+
+  // Register the custom element once
+  if (!customElements.get('docs-tabs')) {
+    customElements.define('docs-tabs', DocsTabs);
+  }
+</script>

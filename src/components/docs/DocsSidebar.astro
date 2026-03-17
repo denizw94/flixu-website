@@ -1,0 +1,109 @@
+---
+import { docsSidebar } from '../../config/docsSidebar';
+import type { SidebarItem } from '../../config/docsSidebar';
+
+export interface Props {
+  activeSlug: string;
+}
+
+const { activeSlug } = Astro.props;
+
+// Normalizing activeSlug by stripping `en/` if present so it matches the config slugs
+const normalizedActiveSlug = activeSlug.replace(/^en\//, '');
+
+// Determine which top-level section is active by checking if any of its children match the activeSlug
+function isItemActive(item: SidebarItem, slug: string): boolean {
+  if (item.slug === slug) return true;
+  if (item.items) return item.items.some(child => isItemActive(child, slug));
+  return false;
+}
+
+let activeTopLevelLabel = '';
+for (const topLevel of docsSidebar) {
+  if (isItemActive(topLevel, normalizedActiveSlug)) {
+    activeTopLevelLabel = topLevel.label;
+    break;
+  }
+}
+
+// Fallback to first if nothing matches (e.g. index page)
+if (!activeTopLevelLabel && docsSidebar.length > 0) {
+  activeTopLevelLabel = docsSidebar[0].label;
+}
+
+const activeTopLevelGroup = docsSidebar.find(g => g.label === activeTopLevelLabel);
+const contextualItems = activeTopLevelGroup?.items || [];
+
+// Helper to get the first valid slug for a top-level category so its global link works
+function getFirstSlug(item: SidebarItem): string | undefined {
+  if (item.slug) return item.slug;
+  if (item.items && item.items.length > 0) return getFirstSlug(item.items[0]);
+  return undefined;
+}
+---
+
+<aside class="w-64 flex-shrink-0 border-r border-stone-200 bg-sand-50 h-[calc(100vh-64px)] overflow-y-auto sticky top-16 hidden md:block">
+  <div class="px-5 py-6">
+    {/* Global Top-Level Navigation */}
+    <nav class="mb-6">
+      <ul class="space-y-1">
+        {docsSidebar.map(group => {
+          const isActive = group.label === activeTopLevelLabel;
+          const hrefSlug = getFirstSlug(group);
+          const href = hrefSlug ? `/docs/${hrefSlug}/` : '#';
+          
+          return (
+            <li>
+              <a 
+                href={href}
+                class={`block px-3 py-1.5 text-sm rounded-md transition-colors ${
+                  isActive 
+                    ? 'font-semibold bg-orange-50 text-orange-700' 
+                    : 'font-medium text-stone-600 hover:text-stone-900 hover:bg-stone-100'
+                }`}
+              >
+                {group.label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+
+    {/* Separator */}
+    <hr class="border-t border-stone-200 mb-6" />
+
+    {/* Contextual Navigation */}
+    <nav>
+      {contextualItems.map(group => (
+        <div class="mb-6">
+          <h3 class="px-3 mb-2 text-sm font-semibold text-stone-900">
+            {group.label}
+          </h3>
+          {group.items && (
+            <ul class="space-y-1">
+              {group.items.map(link => {
+                const isActive = link.slug === normalizedActiveSlug;
+                const href = link.slug ? `/docs/${link.slug}/` : '#';
+                return (
+                  <li>
+                    <a 
+                      href={href}
+                      class={`block px-3 py-1.5 text-sm rounded-md transition-colors ${
+                        isActive 
+                          ? 'font-medium text-orange-700 bg-orange-50' 
+                          : 'text-stone-500 hover:text-stone-900 hover:bg-stone-50'
+                      }`}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+      ))}
+    </nav>
+  </div>
+</aside>

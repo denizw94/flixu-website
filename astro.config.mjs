@@ -27,6 +27,10 @@ export default defineConfig({
       prefixDefaultLocale: false // flixu.ai = English, flixu.ai/de = German
     }
   },
+  redirects: {
+    '/sitemap.xml': '/sitemap-index.xml',
+    '/docs': '/docs/developer-guide/introduction/'
+  },
   integrations: [react(), mdx(), sitemap()],
 
   vite: {

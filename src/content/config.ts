@@ -39,8 +39,7 @@ const docs = defineCollection({
     type: "content",
     schema: z.object({
         title: z.string(),
-        section: z.string(),
-        order: z.number(),
+        description: z.string().optional(),
     }),
 });
 

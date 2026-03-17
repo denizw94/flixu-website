@@ -1,8 +1,8 @@
 {
   "hero": {
-    "h1": "Your Voice. <br/> In Every Language.",
-    "sub": "Go beyond raw AI translation without the complexity of a heavy TMS. Flixu provides the context, glossaries, and brand consistency teams need — minus the enterprise bloat.",
-    "btnPrimary": "Start free trial",
+    "h1": "Translate Your Brand Voice <br/> Across 100+ Languages <br/><span class=\"text-stone-400\">in over 300 locales.</span>",
+    "sub": "Flixu provides the context, glossaries, and brand consistency teams need to scale globally. Go beyond raw AI translation with a platform built for speed and precision.",
+    "btnPrimary": "Sign Up",
     "btnSecondary": "See how it works",
     "badge": "No setup required. Ready in seconds.",
     "metaTitle": "Flixu - AI Translation",

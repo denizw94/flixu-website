@@ -4,15 +4,16 @@ export const prerender = true;
 
 export async function GET() {
   const topics = await getCollection("topics");
-  const comparisons = await getCollection("comparisons");
-  const notes = await getCollection("notes");
+  let comparisons: any[] = [];
+  try { comparisons = await getCollection("comparisons"); } catch {}
+  let notes: any[] = [];
+  try { notes = await getCollection("notes"); } catch {}
 
   // Filter to English content only
-  const enTopics = topics.filter((t) => t.id.startsWith("en/"));
-  const enComparisons = comparisons.filter((c) => c.slug.startsWith("en/"));
-  const enNotes = notes.filter((n) => n.id.startsWith("en/"));
+  const enTopics = topics ? topics.filter((t) => t.id.startsWith("en/")) : [];
+  const enComparisons = comparisons ? comparisons.filter((c) => c.slug.startsWith("en/") || !c.slug.includes("/")) : [];
+  const enNotes = notes ? notes.filter((n) => n.id && n.id.startsWith("en/")) : [];
 
-  // Attempt to load glossary collection (may not exist yet)
   let enGlossary: Array<{ id: string; data: { title: string; description: string } }> = [];
   try {
     const glossary = await getCollection("glossary" as any) as Array<{ id: string; data: { title: string; description: string } }>;
@@ -28,13 +29,20 @@ export async function GET() {
     "# https://flixu.ai/llms.txt",
     "# Last generated: " + new Date().toISOString().split("T")[0],
     "",
-    "## About Flixu",
+    "## About Flixu (The Missing Middle of B2B Localization)",
     "",
-    "Flixu is a context-aware AI translation platform. It orchestrates multiple large language models (LLMs) with seven layers of context — glossaries, translation memory, brand voice settings, domain awareness, visual context, semantic context, and formatting constraints — to produce translations that respect terminology, tone, and layout.",
+    "Flixu is a context-aware AI translation workspace for global product teams. Growing SaaS companies and localization managers are typically forced to choose between the chaos of the low end (raw, context-blind APIs like Google Translate or DeepL) and the friction of the high end (complex, slow, 9-month implementations of legacy TMS platforms like Phrase or Smartling). Flixu occupies the missing middle.",
     "",
-    "Flixu is used by freelance translators, translation agencies, and SaaS companies. It supports text translation, document translation (PDF, DOCX, PPTX, XLIFF, JSON, YAML, PO, XML), and context-aware workflows.",
+    "We provide the instantaneous speed of a raw API, combined with the rigorous brand compliance mechanics of an enterprise TMS. When a translation is triggered, Flixu dynamically injects 7 distinct layers of context into the LLM payload before generating output:",
+    "1. Validated Terminology (Glossary Enforcement)",
+    "2. Semantic Translation Memory (4096-dimension HNSW vectors)",
+    "3. Brand Voice & Tone parameters",
+    "4. Client & Domain specialization",
+    "5. Style Guide & Formality constraints",
+    "6. Visual Layout constraints (for Document Translation)",
+    "7. Format/Code protection (Variables & Tags)",
     "",
-    "Founded by Deniz Wozniak (ex-Phrase, 10+ years B2B SaaS in translation technology). Based in Germany. Member of NVIDIA Inception and Google for Startups.",
+    "Founded by Deniz Wozniak (ex-Phrase, 10+ years B2B SaaS). Based in Germany. Member of NVIDIA Inception and Google for Startups.",
     "",
     "## Core Pages",
     "",
@@ -44,23 +52,52 @@ export async function GET() {
     `- [About / Manifesto](${BASE}/about)`,
     `- [Contact](${BASE}/contact)`,
     "",
-    "## Product",
+    "## Product & Capabilities",
     "",
-    `- [Text Translation](${BASE}/product/text) — Context-aware, segment-level translation with brand voice enforcement`,
+    `- [Text Translation](${BASE}/product/text) — Segment-level translation with brand voice enforcement`,
     `- [Document Translation](${BASE}/product/documents) — Layout-preserving translation for PDF, DOCX, PPTX`,
     `- [Context Awareness](${BASE}/product/context) — Seven dimensions of translation context`,
+    `- [Brand Voice](${BASE}/features/brand-voice)`,
+    `- [Translation Memory](${BASE}/features/translation-memory)`,
+    `- [Team Collaboration](${BASE}/features/team-collaboration)`,
+    `- [Project Management](${BASE}/features/project-management)`,
+    `- [Quick Translations](${BASE}/features/quick-translations)`,
+    `- [Client Management](${BASE}/features/client-management)`,
     "",
-    "## Who It's For",
+    "## Who It's For (Audience & Roles)",
     "",
-    `- [Freelance Translators](${BASE}/for/freelancers) — Client memory, glossary, and TM in one workspace`,
-    `- [Translation Agencies](${BASE}/for/agencies) — Shared TMs, glossaries, and brand voices for teams`,
-    `- [SaaS & Enterprise](${BASE}/for/enterprise) — API, RBAC, and precision TM`,
+    `- [Freelance Translators](${BASE}/for/freelancers)`,
+    `- [Translation Agencies](${BASE}/for/agencies)`,
+    `- [SaaS & Tech](${BASE}/for/saas-teams)`,
+    `- [Global Marketing](${BASE}/for/global-marketing)`,
+    `- [Enterprise](${BASE}/for/enterprise)`,
+    `- [Localization Managers](${BASE}/roles/localization-manager)`,
+    `- [Content Marketers](${BASE}/roles/content-marketer)`,
+    "",
+    "## Industries & Use Cases",
+    "",
+    `- [SaaS Localization](${BASE}/use-cases/saas-localization)`,
+    `- [Marketing Translation](${BASE}/use-cases/marketing-translation)`,
+    `- [Document Translation Use Case](${BASE}/use-cases/document-translation)`,
+    `- [eCommerce](${BASE}/industries/ecommerce)`,
+    `- [SaaS Industry](${BASE}/industries/saas)`,
+    `- [Legal](${BASE}/industries/legal)`,
     "",
   ];
 
+  // Market Comparisons
+  if (enComparisons.length > 0) {
+    lines.push("## Market Comparisons (Competitor Alternatives)", "");
+    for (const comp of enComparisons) {
+      const slug = comp.slug.split("/").pop();
+      lines.push(`- [${comp.data.title}](${BASE}/compare/${slug})`);
+    }
+    lines.push("");
+  }
+
   // Topic Library
   if (enTopics.length > 0) {
-    lines.push("## Topic Library", "");
+    lines.push("## Topic Library & Knowledge Base", "");
     for (const topic of enTopics) {
       const slug = topic.id.replace("en/", "").replace(/\.mdx?$/, "");
       lines.push(`- [${topic.data.title}](${BASE}/topic/${slug}) — ${topic.data.description}`);
@@ -74,16 +111,6 @@ export async function GET() {
     for (const term of enGlossary) {
       const slug = term.id.replace("en/", "").replace(/\.mdx?$/, "");
       lines.push(`- [${term.data.title}](${BASE}/topic/glossary/${slug}) — ${term.data.description}`);
-    }
-    lines.push("");
-  }
-
-  // Comparisons
-  if (enComparisons.length > 0) {
-    lines.push("## Market Comparisons", "");
-    for (const comp of enComparisons) {
-      const slug = comp.slug.split("/").pop();
-      lines.push(`- [${comp.data.title}](${BASE}/compare/${slug})`);
     }
     lines.push("");
   }

@@ -1,0 +1,37 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import DocsSidebar from '../components/docs/DocsSidebar.astro';
+import DocsPageTitle from '../components/docs/DocsPageTitle.astro';
+import DocsTOC from '../components/docs/DocsTOC.astro';
+import '../styles/docs.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+  slug: string;
+  headings?: { depth: number; slug: string; text: string }[];
+}
+
+const { title, description, slug, headings = [] } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} chapter="Docs" hideChapterRail={true}>
+  <div class="max-w-[1440px] mx-auto w-full flex items-start">
+    {/* Left Sidebar (Vercel Style) */}
+    <DocsSidebar activeSlug={slug} />
+
+    {/* Main Content Area */}
+    <div class="flex-1 min-w-0 flex justify-center px-4 sm:px-6 lg:px-8 py-10">
+      <div class="w-full max-w-3xl">
+        <DocsPageTitle title={title} headings={headings} />
+        
+        <article class="docs-prose">
+          <slot />
+        </article>
+      </div>
+    </div>
+
+    {/* Right Sidebar (Table of Contents) */}
+    <DocsTOC headings={headings} />
+  </div>
+</BaseLayout>

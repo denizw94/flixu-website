@@ -45,4 +45,5 @@ User-agent: DotBot
 Disallow: /
 
 # Sitemap
+Sitemap: https://flixu.ai/sitemap.xml
 Sitemap: https://flixu.ai/sitemap-index.xml

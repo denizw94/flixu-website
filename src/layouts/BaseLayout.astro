@@ -28,6 +28,7 @@ interface Props {
   lang?: string;
   ogImage?: string;
   ogType?: string;
+  hideChapterRail?: boolean;
 }
 
 const {
@@ -37,6 +38,7 @@ const {
   lang = "en",
   ogImage = "/og-default.png",
   ogType = "website",
+  hideChapterRail = false,
 } = Astro.props;
 
 const t = await useTranslations(lang);
@@ -46,12 +48,14 @@ const dir = isRtl ? "rtl" : "ltr";
 const SITE = "https://flixu.ai";
 const currentPath = Astro.url.pathname;
 
-// Build canonical URL — strip trailing slash except for root
+// Build canonical URL — strip trailing slash except for root, and clean /beta
+const cleanedPath = currentPath.replace(/\/beta\/?/, "/").replace(/\/+$/, "");
 const pathWithoutLang =
   lang === defaultLang
-    ? currentPath
-    : currentPath.replace(`/${lang}`, "") || "/";
-const canonicalUrl = `${SITE}${currentPath}`.replace(/\/+$/, "") || SITE;
+    ? cleanedPath
+    : cleanedPath.replace(`/${lang}`, "") || "/";
+
+const canonicalUrl = `${SITE}${cleanedPath === '/' ? '' : cleanedPath}` || SITE;
 
 // Build hreflang alternate URLs
 const hreflangs = locales.map((locale) => {
@@ -124,7 +128,7 @@ const ogImageUrl = ogImage.startsWith("http") ? ogImage : `${SITE}${ogImage}`;
   <body
     class="bg-paper text-stone-900 font-sans selection:bg-orange-100 selection:text-orange-900 overflow-x-hidden pt-20"
   >
-    <ChapterRail staticLabel={chapter} introLabel={t.rail?.intro} />
+    {!hideChapterRail && <ChapterRail staticLabel={chapter} introLabel={t.rail?.intro} />}
 
     <Header />
 

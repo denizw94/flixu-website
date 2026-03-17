@@ -1,0 +1,89 @@
+---
+export interface Props {
+  headings?: { depth: number; slug: string; text: string }[];
+}
+
+const { headings = [] } = Astro.props;
+
+// Only show H2 and H3 in TOC
+const filteredHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
+---
+
+{filteredHeadings.length > 0 && (
+  <aside class="w-64 flex-shrink-0 hidden xl:block sticky top-16 h-[calc(100vh-64px)] overflow-y-auto pl-8">
+    <div class="py-10">
+      <h3 class="text-sm font-semibold text-stone-900 mb-4">On this page</h3>
+      <ul class="space-y-2.5">
+        {filteredHeadings.map(heading => (
+          <li class={heading.depth === 3 ? "pl-4" : ""}>
+            <a 
+              href={`#${heading.slug}`}
+              class="toc-link text-sm text-stone-500 hover:text-stone-900 transition-colors line-clamp-2"
+            >
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </aside>
+)}
+
+<script>
+  function initScrollSpy() {
+    const tocLinks = document.querySelectorAll('.toc-link');
+    if (tocLinks.length === 0) return;
+
+    const headings = Array.from(tocLinks).map(link => {
+      const slug = link.getAttribute('href')?.substring(1);
+      return document.getElementById(slug || '');
+    }).filter(Boolean) as HTMLElement[];
+
+    let isTicking = false;
+
+    function onScroll() {
+      if (!isTicking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          let activeHeading: HTMLElement | null = null;
+
+          for (const heading of headings) {
+            // 150px offset to trigger when heading is near the top
+            if (heading.offsetTop - 150 <= scrollY) {
+              activeHeading = heading;
+            }
+          }
+
+          if (!activeHeading && headings.length > 0) {
+            activeHeading = headings[0];
+          }
+
+          tocLinks.forEach(link => {
+            link.classList.remove('text-orange-700', 'font-medium');
+            link.classList.add('text-stone-500');
+            
+            if (activeHeading && link.getAttribute('href') === `#${activeHeading.id}`) {
+              link.classList.remove('text-stone-500');
+              link.classList.add('text-orange-700', 'font-medium');
+            }
+          });
+          isTicking = false;
+        });
+        isTicking = true;
+      }
+    }
+
+    if (headings.length > 0) {
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
+  }
+
+  // Setup on page load and Astro view transitions
+  document.addEventListener('astro:page-load', initScrollSpy);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScrollSpy);
+  } else {
+    initScrollSpy();
+  }
+</script>

@@ -1,0 +1,38 @@
+---
+---
+<div class="docs-steps border-l-2 border-stone-200 pl-6 ml-3 my-8 space-y-8">
+  <slot />
+</div>
+<style is:global>
+  .docs-steps > ol {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .docs-steps > ol > li {
+    position: relative;
+    padding-left: 0;
+    margin-bottom: 2rem;
+  }
+  .docs-steps > ol > li::before {
+    content: counter(list-item);
+    counter-increment: list-item;
+    position: absolute;
+    left: -2.35rem; /* center on the line */
+    top: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #4b5563;
+  }
+  .docs-steps > ol > li:last-child {
+    margin-bottom: 0;
+  }
+</style>

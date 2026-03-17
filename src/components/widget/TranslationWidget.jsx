@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowRight, Sparkles, Check, ChevronDown, Search, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 // --- DATA ---
 
@@ -113,13 +112,9 @@ export default function TranslationWidget({ t }) {
                             <ChevronDown className={`w-3 h-3 text-stone-400 transition-transform ${isModeOpen ? 'rotate-180' : ''}`} />
                         </button>
 
-                        <AnimatePresence>
-                            {isModeOpen && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 5 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: 5 }}
-                                    className="absolute top-full right-0 mt-2 w-64 max-w-[calc(100vw-3rem)] bg-white border border-stone-200 shadow-xl rounded-sm py-2 z-50"
+                        {isModeOpen && (
+                                <div
+                                    className="absolute top-full right-0 mt-2 w-64 max-w-[calc(100vw-3rem)] bg-white border border-stone-200 shadow-xl rounded-sm py-2 z-50 shadow-sm transition-all origin-top"
                                 >
                                     {MODES.map((mode) => (
                                         <button
@@ -141,9 +136,8 @@ export default function TranslationWidget({ t }) {
                                             </span>
                                         </button>
                                     ))}
-                                </motion.div>
+                                </div>
                             )}
-                        </AnimatePresence>
                     </div>
                 </div>
 
@@ -164,13 +158,9 @@ export default function TranslationWidget({ t }) {
                             <ChevronDown className={`w-3 h-3 transition-transform ${isLangOpen ? 'rotate-180' : ''}`} />
                         </button>
 
-                        <AnimatePresence>
-                            {isLangOpen && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: 5 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: 5 }}
-                                    className="absolute top-full left-0 mt-2 w-64 max-w-[calc(100vw-3rem)] max-h-[400px] flex flex-col bg-white border border-stone-200 shadow-xl rounded-sm z-50"
+                        {isLangOpen && (
+                                <div
+                                    className="absolute top-full left-0 mt-2 w-64 max-w-[calc(100vw-3rem)] max-h-[400px] flex flex-col bg-white border border-stone-200 shadow-xl rounded-sm z-50 transition-all origin-top"
                                 >
                                     {/* Search Header */}
                                     <div className="p-3 border-b border-stone-100 flex items-center gap-2 sticky top-0 bg-white z-10">
@@ -223,9 +213,8 @@ export default function TranslationWidget({ t }) {
                                             </div>
                                         )}
                                     </div>
-                                </motion.div>
+                                </div>
                             )}
-                        </AnimatePresence>
                     </div>
 
                     {/* Status Dot */}
