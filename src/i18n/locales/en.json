@@ -1,12 +1,13 @@
 {
   "hero": {
-    "h1": "Translate Your Brand Voice <br/> Across 100+ Languages <br/><span class=\"text-stone-400\">in over 300 locales.</span>",
-    "sub": "Flixu provides the context, glossaries, and brand consistency teams need to scale globally. Go beyond raw AI translation with a platform built for speed and precision.",
-    "btnPrimary": "Sign Up",
+    "h1": "Your translation pipeline is choosing between \"fast but wrong\" and \"correct but slow.\" There's a third path.",
+    "sub": "Flixu analyzes your document, enforces your glossary, and applies your brand voice — before translating a single word. Your German product page sounds like you wrote it in German. At the speed of an API call.",
+    "btnPrimary": "Start translating for free",
     "btnSecondary": "See how it works",
-    "badge": "No setup required. Ready in seconds.",
-    "metaTitle": "Flixu - AI Translation",
-    "badgeLabel": "New: Version 1.0"
+    "badge": "Active · 22+ languages · Format-preserving export",
+    "metaTitle": "Context-Aware Translation Workspace for Teams — Flixu",
+    "metaDescription": "Flixu analyzes your document, enforces your glossary, and applies your brand voice before translating. Fast as an API. Precise as a human linguist.",
+    "badgeLabel": "The Missing Middle of B2B Localization — Solved"
   },
   "widget": {
     "label": "LIVE DEMONSTRATION",
@@ -76,20 +77,106 @@
     "btn": "Start for free"
   },
   "about": {
-    "title": "The Golden Mean.",
-    "subtitle": "Why I left the corporate TMS world to build a workspace that sells itself.",
-    "bgLabel": "The Origin",
-    "p1": "For years, I lived a double life. By day, I was an Account Executive for a market-leading Translation Management System. By night, I lived in my campervan, analyzing the gap between what I sold and what the world actually needed.",
-    "p2": "Every day, I spoke with international teams. Their frustration was identical. The raw AI engines were fast but lacked control. The enterprise platforms were bloated, confusing, and overpriced—packed with features nobody used but everyone paid for.",
-    "quote": "They didn't want a 12-month project. They just wanted to work.",
-    "p3": "Clients were begging for the golden mean. A solution that focused on the essentials: Translation Memory, Glossaries, and strict Brand Voice control—without the heavy enterprise bureaucracy.",
-    "p4": "I left the corporate track to build exactly that. Flixu is the answer to hundreds of customer conversations. It is a product built to convince through quality, not through aggressive sales. It is the tool I wished I could have sold them.",
+    "metaTitle": "About Flixu — The Story Behind the Platform",
+    "metaDescription": "Deniz Wozniak built Flixu after years of watching translation pipelines fail in the same way. This is the story — and the problem it's built to fix.",
+    "title": "Every bad translation has a human decision somewhere behind it.",
+    "subtitle": "Deniz Wozniak built Flixu after a decade of watching those decisions compound — in startups, client projects, and one very specific Friday night at an airport terminal that made the problem impossible to ignore any longer.",
+    "bgLabel": "The Story Behind Flixu",
+    "p1": "The departures board said 23:40. The gate was already half-empty, and the laptop battery was at eleven percent. A development team had pushed a UI update four hours earlier — a minor release, five changed strings in the German localization file. Somewhere in the handoff between the TMS export and the agency's delivery, a single curly bracket had been dropped. The JSON was malformed. The entire deployment was failing. The fix was manual: 500 lines of raw code, on a throttled airport hotspot, with the screen brightness turned all the way down to save battery. Somewhere around line 340, sitting cross-legged on a terminal floor next to a charging station shared with a stranger watching football on his phone, the same thought surfaced that had surfaced a dozen times before: this process made no sense. The tools were either fast and wrong, or careful and completely unscalable.",
+    "p2": "A few months later, a wave of generative AI tools made it seem like the problem had been solved. Product teams started feeding application strings directly into large language models — no agencies, no TMS, near-instant output. The speed was real. So were the failures. \"Dashboard\" appeared as three different translations in the same manual. A compliance clause got rewritten because the model decided a friendlier tone would score higher. Technical placeholders disappeared from .strings files because the AI didn't know what to preserve. The bottleneck had shifted — from waiting for translations to auditing them. The pipeline was faster and less trustworthy at the same time.",
+    "quote": "The industry didn't need a faster translator. It needed a system that understood what you were translating — before it translated anything.",
+    "p3pre": "That's the idea behind ",
+    "p3linkContext": "the Context Engine",
+    "p3mid": ". Before Flixu translates a single word, it reads the document. It detects the domain, the formality register, and the target audience. It loads the corporate glossary. It injects the brand voice rules. By the time the first string is processed, the model already knows that \"Dashboard\" stays \"Dashboard\" in German — and that your tone in French is warm and direct, not formal and stiff. The translation doesn't need to be fixed after. It arrives correctly the first time. That distinction — analysis before translation — is what ",
+    "p3linkMethod": "the methodology",
+    "p3post": " is built around, and why it produces different results than running strings through an API directly.",
+    "p4pre": "Flixu was built for the teams stuck in the same pattern: too sophisticated for generic machine translation, not large enough for a full enterprise TMS and the six-month integration project that comes with it. The developers who need localization out of their critical path. The marketing leads whose German landing page keeps coming back sounding like a corporate brochure from 2005. The localization managers approving hundreds of strings manually because no tool they've tried enforces the glossary consistently. There's a more detailed record of ",
+    "p4linkProblems": "how those problems compound",
+    "p4mid": " — and ",
+    "p4linkContext2": "why context is the variable most tools skip",
+    "p4post": ". Those are probably worth reading before this page makes complete sense.",
     "sign": "Deniz",
-    "role": "Founder"
+    "role": "Founder, Flixu AI",
+    "bio": "Deniz Wozniak is the founder of Flixu AI. He spent over a decade working on localization workflows across B2B SaaS products and client projects before building Flixu to address the gap between raw machine translation and legacy enterprise TMS platforms. He writes occasionally at Flixu Notes about building the product and the problems it tries to solve.",
+    "bioLinkText": "Flixu Notes",
+    "lastUpdated": "March 2026"
   },
   "contact": {
-    "title": "Concierge Support.",
-    "sub": "Choose a channel. Our AI agents will guide you to the fastest resolution."
+    "metaTitle": "Contact Flixu — Talk to the Team",
+    "metaDescription": "Questions about integration, pricing, or enterprise requirements? Reach the Flixu team directly — no ticket queues, no scripted responses.",
+    "badge": "Get in Touch",
+    "h1": "Questions get answered by the people who built this.",
+    "sub": "Whether you're evaluating Flixu for a team rollout, working through an API integration, or have a billing question — you'll reach someone who can actually help. No support ticket queues. No scripted responses.",
+    "cards": [
+      {
+        "badge": "Sales & Architecture",
+        "h3": "Evaluating Flixu for your team?",
+        "p": "If you're looking at a multi-language rollout, need to discuss a custom volume requirement, or want to understand how Flixu fits into an existing localization stack before committing — reach out directly. We'll walk through your setup and give you an honest answer on whether it's a fit.",
+        "note": "Not sure which plan covers your volume?",
+        "noteLinkText": "Compare plans first.",
+        "noteLinkHref": "/pricing",
+        "ctaText": "Email the founding team →",
+        "ctaHref": "mailto:founders@flixu.ai"
+      },
+      {
+        "badge": "Developer Support",
+        "h3": "Integration or API issue?",
+        "p": "Running into something with file parsing, Translation Memory behavior, the GitHub App, or an API response? Join the developer Discord and bring the logs. We debug together — not through a ticket system.",
+        "ctaText": "Join the Developer Discord →",
+        "ctaHref": "https://discord.gg/flixu"
+      },
+      {
+        "badge": "Administration",
+        "h3": "Billing, invoices & partnerships",
+        "p": "For invoice requests, vendor enrollment, agency partnership inquiries, or anything administrative. Standard response time is within one business day (EU hours).",
+        "ctaText": "Email the team →",
+        "ctaHref": "mailto:hello@flixu.ai"
+      }
+    ],
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "items": [
+        {
+          "question": "What's the typical response time?",
+          "answer": "Developer support via Discord is monitored during EU and US East Coast business hours — most technical questions get a response within a few hours. For email inquiries to hello@flixu.ai, expect a reply within one business day. Enterprise and sales conversations via founders@flixu.ai are typically answered the same day."
+        },
+        {
+          "question": "Do you offer product demos?",
+          "answer": "Yes. If you're evaluating Flixu for a team of three or more, contact the founders' inbox to schedule a walkthrough. We'll go through how the Context Engine handles your specific file types and workflow, not a slide deck.",
+          "linkText": "how the Context Engine handles your specific file types and workflow",
+          "linkHref": "/method"
+        },
+        {
+          "question": "Can I try Flixu before speaking to anyone?",
+          "answer": "Yes — there's a free tier available immediately. You can run your first projects without a sales conversation or a credit card. If you hit a question during the trial, the developer Discord is the fastest path to an answer.",
+          "linkText": "Pricing & Plans",
+          "linkHref": "/pricing"
+        },
+        {
+          "question": "I'm an agency evaluating Flixu for client work. Is this the right contact?",
+          "answer": "For agency and LSP inquiries — multi-client workspaces, client management features, or volume pricing — hello@flixu.ai is the right starting point. You can also read more about how Flixu works for agencies before reaching out.",
+          "linkText": "how Flixu works for agencies",
+          "linkHref": "/for/agencies"
+        },
+        {
+          "question": "I have a GDPR or data privacy question.",
+          "answer": "Data processing, GDPR compliance, and privacy questions are handled by the core team. The fastest path is hello@flixu.ai with the subject line \"Privacy Inquiry.\" For the full framework, the Privacy Policy covers data handling, retention, and your rights in detail.",
+          "linkText": "Privacy Policy",
+          "linkHref": "/legal/privacy"
+        },
+        {
+          "question": "I'm a developer and want to report a bug or suggest a feature.",
+          "answer": "The developer Discord is the right place — both for bugs and for product feedback. If you've found a security vulnerability, please email founders@flixu.ai directly with a short description before disclosing it publicly."
+        }
+      ]
+    },
+    "hq": {
+      "h2": "Where we operate",
+      "p": "Flixu AI, LLC is incorporated in the State of Delaware, USA, and operates under GDPR compliance frameworks for clients in the EU and UK. We're a small, distributed team — no physical walk-in office, but genuinely reachable.",
+      "aboutLinkText": "More about who we are and why we built this.",
+      "aboutLinkHref": "/about"
+    },
+    "lastUpdated": "March 2026"
   },
   "status": {
     "title": "System Status.",
@@ -328,40 +415,158 @@
     }
   },
   "methodPage": {
+    "metaTitle": "How Flixu Works — The 5-Dimension Translation Method",
+    "metaDescription": "Flixu analyzes domain, formality, cultural context, brand voice, and situational context before translating. Here's how the full pipeline works, step by step.",
     "hero": {
-      "badge": "HOW WE BUILD FLIXU",
-      "title": "The Method Behind the Magic",
-      "description": "Flixu isn't a string-based translation prompt. It is a technical translation workspace built on a deep context architecture, rigorous vector search, and a relentless pursuit of quality."
+      "badge": "How Flixu Works",
+      "title": "Most translation tools process your strings. Flixu reads your document first.",
+      "description": "Before a single word is translated, Flixu runs a five-dimension analysis — detecting your domain, formality register, target audience, brand voice rules, and cultural context. That analysis changes everything that follows."
     },
-    "whatIsFlixu": {
-      "title": "What is Flixu?",
-      "copy1": "Traditional tools like Google Translate or DeepL operate on a 'string-in, string-out' basis. They are stateless. Every sentence they translate is effectively the first time they have ever translated anything. They do not know who your client is, what tone of voice your brand uses, or what the previous paragraph was about.",
-      "copy2": "Flixu is built differently. It operates as a stateful agent. Before a single word is translated, the engine queries an intricate network of Translation Memories, verified Glossaries, and Document Context. It remembers your preferences, establishing continuity across millions of segments."
+    "tldr": {
+      "label": "What is the Flixu Method?",
+      "text": "Generic machine translation processes text sentence by sentence, without knowledge of what came before or what the overall document means. Flixu's approach is different: it reads the whole document first, assembles your glossary rules and brand voice configuration, and only then begins translating — producing output that is consistent across the entire document, not just each isolated string."
+    },
+    "concept": {
+      "h2": "Why sentence-by-sentence translation breaks at scale.",
+      "p1": "When a generic API processes your product interface string by string, it has no memory of what it translated ten segments ago. \"Dashboard\" in your navigation header becomes \"Tableau de bord.\" The same term in your settings panel becomes \"Panneau de contrôle.\" Both are technically correct French words. Neither is what your team approved. By the time the inconsistency surfaces — usually when a customer notices it, or when a developer merges a broken JSON file — the release is already delayed.",
+      "p2": "This is the core problem the Flixu Method addresses. It isn't about using a different AI model. It's about changing the order of operations: analysis first, translation second. According to CSA Research, 76% of software buyers prefer to use products in their native language — but preference turns to frustration when the translation is inconsistent. The quality gap between \"technically translated\" and \"actually correct for this product\" is where most localization pipelines fail.",
+      "linkText": "See the technical comparison: Context-Aware vs. Traditional Machine Translation",
+      "linkHref": "/topic/context-vs-traditional-mt"
     },
     "architecture": {
-      "title": "Our Technology",
-      "subtitle": "The 7-Layer Context Architecture",
-      "intro": "When a document enters Flixu, it isn't simply handed off to an LLM. It is processed through a pipeline that extracts and binds seven distinct layers of metadata to the text.",
-      "points": [
-        "Document Context: The entire flow and narrative of the text are maintained.",
-        "Structural Flow: HTML/Markdown tags and layout fidelity are preserved perfectly.",
-        "Visual Cues: Image context ensures UI labels and diagrams are translated accurately.",
-        "Formality: Strict adherence to 'Sie' vs. 'du' or 'usted' algorithms.",
-        "Cultural Nuance: Dialect adaptation for specific locales (e.g., Swiss German).",
-        "Brand Voice: Custom instructions that dictate the tone—from corporate to playful.",
-        "Memory & Glossary: Forced hard-matching of corporate terminology."
+      "h2": "How the analysis-first pipeline works.",
+      "badge": "Step by Step",
+      "intro": "Every translation request in Flixu passes through the same sequence before the language model generates a single word. The steps below are not optional layers — they run on every request, in order, for every language pair.",
+      "steps": [
+        {
+          "num": "01",
+          "title": "Document Ingestion & Format Parsing",
+          "body": "Flixu accepts your file as-is: .docx, XLIFF, .po, .yaml, .strings, Markdown, or subtitle files. The parser extracts only the translatable text, preserving all structural elements — tags, placeholders, code keys, formatting anchors — exactly as they appear in the source. The file that comes back out is structurally identical to the file that went in. Your developers don't fix broken tags. Your layout doesn't shift.",
+          "linkText": "How format preservation works in practice: Document Translation",
+          "linkHref": "/product/documents"
+        },
+        {
+          "num": "02",
+          "title": "Whole-Document Context Scan",
+          "body": "Rather than queuing individual strings for translation, Flixu reads the entire document before processing any of it. This matters because meaning is distributed: a term introduced in paragraph one has consequences for paragraph twelve. A subject established in your app's onboarding flow affects how a support article should be phrased. Whole-document reading gives the model the structural narrative it needs before individual strings are touched."
+        },
+        {
+          "num": "03",
+          "title": "Pre-Translation Analysis (The 5 Dimensions)",
+          "body": "This is the analytical core of the Flixu Method. Before translation begins, the engine runs a five-dimension classification across your document. The output of this step is a structured analysis profile that governs every subsequent decision in the pipeline.",
+          "linkText": "Deep dive into the five dimensions: The Context Engine",
+          "linkHref": "/product/context"
+        },
+        {
+          "num": "04",
+          "title": "Translation Memory Retrieval & Glossary Injection",
+          "body": "Before the language model receives the text, two things are assembled and loaded. First, the Translation Memory — a Semantic Reranker identifies past translations that are structurally and conceptually similar to the current string, even when the exact words differ. These matches are used as style references, not as blind substitutions. Second, the glossary — every corporate term you've defined is injected as a hard constraint before the model begins. Teams using enforced glossary workflows typically see terminology inconsistency drop from 15–25% of reviewed strings to under 2%.",
+          "linkText": "Glossary enforcement in detail: Glossary Enforcement",
+          "linkHref": "/features/glossary-enforcement",
+          "linkText2": "How Translation Memory works: Translation Memory",
+          "linkHref2": "/features/translation-memory"
+        },
+        {
+          "num": "05",
+          "title": "Deterministic Translation",
+          "body": "The assembled payload — document context, analysis profile, TM references, glossary constraints, brand voice rules — is routed to the language model. Flixu uses Qwen and DeepInfra model routing, optimized for translation-specific tasks rather than general generation. The model operates within the constraints assembled in the previous steps. It cannot produce a synonym for a term that your glossary has explicitly defined. It cannot adopt a tone that contradicts your brand voice configuration.",
+          "linkText": "How brand voice configuration works: Brand Voice Manager",
+          "linkHref": "/features/brand-voice"
+        },
+        {
+          "num": "06",
+          "title": "Automated Quality Scoring (LQA)",
+          "body": "Every translated segment receives an automated Linguistic Quality Assurance score across five dimensions: grammar, accuracy, terminology consistency, formatting, and fluency. Segments that score above the threshold, or that match your Translation Memory at 99% or higher, are automatically approved and deployed without requiring human review. Segments that fall below are routed to a human reviewer with the specific dimension flagged.",
+          "linkText": "Full LQA workflow: LQA & Quality Assurance",
+          "linkHref": "/features/lqa",
+          "linkText2": "How auto-approval works: Auto-Approval Workflows",
+          "linkHref2": "/features/auto-approval"
+        }
+      ],
+      "dimensions": {
+        "headers": ["Dimension", "What it detects", "Why it matters"],
+        "rows": [
+          ["Domain", "Legal, SaaS UI, medical, marketing, technical", "Vocabulary register changes entirely by domain"],
+          ["Formality", "Formal (Sie) vs. casual (du); register calibration", "Wrong formality alienates users in DACH, Japan, Brazil"],
+          ["Cultural Context", "Date formats, currency, measurements, regional idioms", "\"Baseball analogy\" in a DACH campaign lands as foreign content"],
+          ["Brand Voice", "Tone definition, phrasing constraints, stylistic preferences", "Prevents the \"corporate brochure\" problem"],
+          ["Situational Context", "UI string vs. long-form copy vs. legal clause vs. ad headline", "Each context type requires different translation behavior"]
+        ]
+      }
+    },
+    "learning": {
+      "h2": "What happens after a human reviewer makes a correction?",
+      "p1": "Every edit a reviewer makes in the Flixu workspace feeds back into the Translation Memory and the Post-Edit Learning Loop. The system registers the correction, updates the style reference, and adjusts future behavior — so the same pattern is handled correctly the next time it appears, across all language pairs. Teams that start with a limited Translation Memory accumulate stylistic precision over time rather than repeating the same review cycles indefinitely.",
+      "p2": "This is the compounding return of a context-first approach: each approved correction makes subsequent translations more accurate, not just within the current project but across every future one that shares the same workspace."
+    },
+    "comparison": {
+      "h2": "How this compares to the alternatives.",
+      "headers": ["", "Raw MT (e.g. DeepL API)", "Legacy TMS (e.g. Phrase)", "Flixu Method"],
+      "rows": [
+        ["Translation unit", "Sentence by sentence", "String by string", "Whole document first"],
+        ["Brand voice", "Not configurable", "Manual prompting, agent-dependent", "Programmatic, injected per request"],
+        ["Glossary enforcement", "None", "Optional, post-hoc QA", "Mandatory, pre-translation constraint"],
+        ["Translation Memory", "None", "Fuzzy-match substitution", "Semantic reranking as style reference"],
+        ["Quality scoring", "None", "Manual or third-party", "Automated LQA on every segment"],
+        ["Developer workflow", "API call, no TM", "File upload + manual merge", "Git-native, branch-safe"],
+        ["Learning loop", "None", "Manual TM updates", "Automatic post-edit feedback"],
+        ["Setup time", "Minutes", "6–9 months", "Days"]
+      ],
+      "note": "Raw MT is appropriate for informal, high-volume, low-stakes content where consistency isn't a requirement. A legacy TMS is appropriate for large enterprise workflows with dedicated localization teams and established agency relationships. Flixu is built for the gap between those two: teams that need consistency and control, without the infrastructure weight.",
+      "linkText": "See specific comparison: Flixu vs. DeepL",
+      "linkHref": "/compare/deepl-alternative"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "items": [
+        {
+          "question": "Does the five-dimension analysis run on every translation, or only the first time?",
+          "answer": "It runs on every request. The analysis isn't a one-time profile that gets cached — it responds to the specific document each time. A marketing email and a technical changelog from the same client will receive different analysis profiles, and therefore different translation behavior, because they are genuinely different content types."
+        },
+        {
+          "question": "What happens if my Translation Memory is empty or very small?",
+          "answer": "Flixu works without an established TM — the Semantic Reranker identifies structurally similar past translations even from limited history. For brand-new workspaces, the brand voice configuration and glossary carry more of the consistency load. Quality improves as the TM grows, but the pipeline is functional from day one. Teams typically see the biggest improvement jump after 50–100 approved segments."
+        },
+        {
+          "question": "Does this work inside a CI/CD pipeline without a human triggering each translation?",
+          "answer": "Yes. The GitHub App detects new or changed strings when a developer pushes to the repository, runs the full analysis-and-translation pipeline automatically, and commits the translated files back into a separate branch. A developer can go from English commit to translated output across 22+ languages without touching the localization workflow manually. Teams that move from manual file uploads to Git-native workflows typically reduce localization coordination time from several hours per sprint to under 30 minutes.",
+          "linkText": "GitHub integration details: GitHub Integration",
+          "linkHref": "/features/github-integration"
+        },
+        {
+          "question": "How does Flixu handle languages with complex formality rules — like German Sie/du or Japanese keigo?",
+          "answer": "Formality calibration is handled by the Pre-Translation Analysis layer as one of the five dimensions. You define the target formality level once in your brand voice configuration (or the engine infers it from document context). That setting is injected as a constraint before translation begins — the model cannot produce mixed formality output because the instruction is part of the payload, not a post-hoc check."
+        },
+        {
+          "question": "What about data privacy? Are my documents used to train shared models?",
+          "answer": "No. Your documents, strings, and Translation Memory data are processed within your workspace and are not used to train public or shared AI models. Input data is processed ephemerally and not retained beyond the active session.",
+          "linkText": "Full data handling details: Privacy Policy",
+          "linkHref": "/legal/privacy"
+        },
+        {
+          "question": "Is Flixu appropriate for regulated industries like legal or healthcare?",
+          "answer": "The core features — enforced glossary, terminology consistency, LQA scoring, deterministic output — are directly relevant for regulated content where specific terminology cannot drift. Teams working with compliance documents, contracts, or medical content should also review the LQA documentation and Legal industry page for specifics.",
+          "linkText": "Legal industry details",
+          "linkHref": "/industries/legal"
+        },
+        {
+          "question": "How does the learning loop affect existing Translation Memory entries?",
+          "answer": "Post-edit corrections update the TM going forward — they don't overwrite historical approved segments. The system treats each correction as a new signal about your stylistic preferences, not as a retroactive correction of past work. If a correction produces an apparent conflict with an existing TM entry, the entry is flagged for human review rather than automatically updated."
+        }
       ]
     },
-    "quality": {
-      "title": "Standard of Quality",
-      "subtitle": "Precision Translation Memory",
-      "copy1": "To achieve absolute consistency, Flixu utilizes a heavy Retrieval-Augmented Generation (RAG) architecture. We don't just prompt a model; we execute high-dimensional Vector Searches against your private Translation Memories.",
-      "copy2": "Our Enterprise tier utilizes a 4096-dimension embedding model paired with a fine-tuned Qwen 8B Secondary Reranker. This system assesses up to 20 candidate matches for every single segment simultaneously, guaranteeing that previous human translations take precedent over raw AI generation."
-    },
     "cta": {
-      "title": "Ready to test the method?",
-      "primary": "Start Free Trial",
-      "secondary": "Contact for Enterprise"
+      "h2": "See what the pipeline produces with your own files.",
+      "primary": "Try it with your own text",
+      "secondary": "Talk to the engineering team"
+    },
+    "author": {
+      "name": "Deniz Wozniak",
+      "role": "Founder, Flixu AI",
+      "bio": "Deniz built Flixu after a decade in B2B SaaS localization workflows. He writes about the technical decisions behind the platform at",
+      "bioLinkText": "Flixu Notes",
+      "bioLinkHref": "/notes",
+      "lastUpdated": "March 2026"
     }
   },
   "navigation": {
@@ -694,16 +899,167 @@
   },
   "home": {
     "accelerated": "Accelerated by & Member of",
-    "discover": "Discover your workflow.",
-    "freelancerTitle": "You translate alone. Flixu remembers for you.",
-    "freelancerDesc": "Client profiles, TM, glossary — applied automatically on every project.",
-    "freelancerLink": "For Freelancers →",
-    "agencyTitle": "Your team. One voice.",
-    "agencyDesc": "Shared TMs, glossaries, brand voices — consistency becomes structural.",
-    "agencyLink": "For Agencies →",
-    "enterpriseTitle": "Your brand voice. In every language.",
-    "enterpriseDesc": "API, RBAC, precision TM — without the 12-month implementation project.",
-    "enterpriseLink": "For SaaS & Tech →"
+    "nvidiaInception": "NVIDIA INCEPTION",
+    "googleStartups": "Google for Startups",
+    "tldr": {
+      "label": "What is Flixu?",
+      "text": "Flixu is a context-aware AI translation workspace. Before translating a single word, it scans your document to detect domain, formality, and target audience — then applies your corporate glossary and brand voice rules. The result: consistent, terminology-correct translations across 22+ languages, without manual review cycles."
+    },
+    "missingMiddle": {
+      "preTitle": "The Problem",
+      "h2": "The B2B localization market has left a gap that neither extreme fills.",
+      "intro": "For the last decade, growing SaaS companies have been forced into the same difficult choice. Route your strings through generic AI APIs that ignore your corporate vocabulary — or integrate a legacy enterprise platform that blocks your CI/CD pipeline for months. Both cost more than they return. According to CSA Research, 76% of software buyers prefer to use products in their native language, yet most mid-market teams can't afford the tools that would actually deliver that experience correctly.",
+      "lowEnd": {
+        "label": "The Low End",
+        "h3": "Raw AI APIs",
+        "p": "Fast and cheap, but completely context-blind. They don't know your product, your terminology, or your tone.",
+        "specs": [
+          "Glossary rules ignored on every string",
+          "Output tone is generic and unpredictable",
+          "No memory of what was approved before"
+        ]
+      },
+      "flixu": {
+        "label": "Flixu Context Engine",
+        "h3": "Stateful Intelligence",
+        "p": "The speed of an API call, combined with the precision of a trained linguist who actually knows your product.",
+        "specs": [
+          "5-dimension context analysis before translation",
+          "Programmable brand voice, enforced automatically",
+          "Git-native: translates and commits within your existing workflow"
+        ]
+      },
+      "highEnd": {
+        "label": "The High End",
+        "h3": "Legacy Enterprise TMS",
+        "p": "Precise quality control — but buried under agency onboarding, bureaucratic review cycles, and opaque per-word pricing.",
+        "specs": [
+          "6–9 month integration projects",
+          "Blocks CI/CD release velocity",
+          "Priced for procurement teams, not product teams"
+        ]
+      }
+    },
+    "trust": {
+      "preTitle": "Beta Tester Voices",
+      "h2": "What teams say after the first project.",
+      "cards": [
+        {
+          "quote": "Awaiting real beta tester feedback on glossary enforcement...",
+          "name": "Name Pending",
+          "role": "Localization Manager, B2B SaaS"
+        },
+        {
+          "quote": "Awaiting real beta tester feedback on translation memory and sprint velocity...",
+          "name": "Name Pending",
+          "role": "Head of Product, Expansion Stage"
+        },
+        {
+          "quote": "Awaiting real beta tester feedback on brand voice consistency...",
+          "name": "Name Pending",
+          "role": "Content Lead, Global Marketing Team"
+        }
+      ]
+    },
+    "comparator": {
+      "preTitle": "Before & After",
+      "h2": "See what context-aware translation actually looks like.",
+      "p": "Toggle between a raw, context-blind API output and the same text translated with Flixu's 5-dimension context analysis — same source string, different results."
+    },
+    "manifesto": {
+      "label": "A note on craft.",
+      "quote": "It wasn't built in a boardroom. I started Flixu somewhere between client calls and a spotty WiFi signal in a van on the road. I spent months switching between AI tools that were fast but completely blind to context, and human workflows that were precise but couldn't scale past three languages. The frustration was the same every time: if a translation doesn't feel like it was written for this person, in this market, it doesn't work. We built Flixu to close that gap — a quiet, precise workspace that treats language with the complexity it deserves.",
+      "signoff": "— Deniz, Founder of Flixu"
+    },
+    "platform": {
+      "preTitle": "Platform Overview",
+      "h2": "How context-aware translation actually works.",
+      "capabilities": [
+        {
+          "h3": "What happens before the first word is translated?",
+          "p": "Every translation in Flixu starts with a Pre-Translation Analysis. The engine reads your entire document — not sentence by sentence, but as a whole — to detect the domain (SaaS UI, legal, marketing), the intended formality level, and the target audience. Only after that analysis does it begin translating. This is what separates context-aware output from generic machine translation: the model isn't guessing. It knows where each string lives in the document.",
+          "linkText": "See how the analysis layer works in detail: The Flixu Context Engine",
+          "linkHref": "/product/context"
+        },
+        {
+          "h3": "Why does brand voice drift happen — and how does Flixu prevent it?",
+          "p": "Generic APIs don't know what \"your brand sounds like.\" They produce statistically probable translations — which is fine for informal chat, and consistently wrong for marketing copy. The Flixu Brand Voice Manager lets you define your tone once: formal or casual, warm or direct, with specific phrasing rules. That definition is injected into every translation request automatically. No briefing documents. No agency handovers. No brand voice that changes when the translator changes.",
+          "linkText": "More on brand voice consistency in translation: Brand Voice in Translation",
+          "linkHref": "/topic/brand-voice-in-translation"
+        },
+        {
+          "h3": "How does terminology stay consistent across 22 languages?",
+          "p": "Glossary Enforcement in Flixu is not an option you turn on — it's the foundation of every translation. Your corporate terms (product names, UI labels, legal vocabulary) are loaded before the LLM processes a single string. The result: \"Dashboard\" stays \"Dashboard.\" \"Cancellation\" doesn't appear as three different words across your app in the same language. Teams report that automated glossary enforcement eliminates the majority of their post-translation review cycles entirely.",
+          "linkText": "Learn how glossary management works at scale: Glossary Enforcement",
+          "linkHref": "/features/glossary-enforcement"
+        },
+        {
+          "h3": "How does Flixu fit into a developer workflow?",
+          "p": "Connect Flixu to your GitHub repository. When a developer pushes new English strings, Flixu detects them, translates using your configured Translation Memory and glossaries, and commits the translated files back into a separate branch — without touching your main branch. The German, French, or Japanese version of your feature goes live when the feature does, not three weeks later. Teams who've moved from manual file uploads to Git-native workflows report their localization coordination time drops from multiple hours per sprint to under 30 minutes.",
+          "linkText": "GitHub App and CI/CD workflow details: GitHub Integration",
+          "linkHref": "/features/github-integration"
+        },
+        {
+          "h3": "What happens when Flixu isn't sure about a translation?",
+          "p": "Every translated segment receives an automated LQA score across five dimensions: grammar, accuracy, terminology consistency, formatting (tags and placeholders), and fluency. If the score clears the threshold — either a 99% Translation Memory match or an LQA score above 90 — the translation is auto-approved without human review. Segments that fall below the threshold are flagged for a human reviewer with the specific reason marked. You only read the things that actually need your attention.",
+          "linkText": "Full quality assurance workflow: LQA & Quality Assurance",
+          "linkHref": "/features/lqa"
+        }
+      ]
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "items": [
+        {
+          "question": "Does Flixu break my JSON, XLIFF, or .strings files?",
+          "answer": "No. Flixu preserves your exact file structure and formatting on export. You can upload Markdown, JSON, XLIFF, iOS .strings, .po, .yaml, .docx, and subtitle files. The downloaded output is structurally identical to the import — every tag, every placeholder, every line break stays where it was. Your developers won't spend time fixing broken layout files."
+        },
+        {
+          "question": "How does Flixu know my internal product terminology?",
+          "answer": "You upload your glossary once — product names, UI labels, legal terms, brand-specific vocabulary. From that point forward, Flixu enforces those terms on every translation request, across all 22+ supported languages. Terminology that isn't in your glossary is handled by the context analysis layer, which infers the correct register and domain from the document itself."
+        },
+        {
+          "question": "What's the difference between Flixu and using DeepL or Google Translate directly?",
+          "answer": "DeepL is excellent at fast, raw translation for informal content — and if that's what you need, it's hard to beat. Flixu takes a different approach: the Context Engine runs a 5-dimension analysis before translating, which matters when glossary adherence, brand voice consistency, and terminology precision are requirements, not nice-to-haves. Flixu also retains Translation Memory across projects, so the output improves over time.",
+          "linkText": "Full comparison: Flixu vs. DeepL",
+          "linkHref": "/compare/deepl-alternative"
+        },
+        {
+          "question": "Can my human translators still review and edit the output?",
+          "answer": "Yes. Flixu is designed as a collaborative workspace. You can invite your translators, agency contacts, or in-house reviewers at specific roles (Translator, Project Manager, Admin). When a reviewer edits a segment, the correction feeds back into the Translation Memory — so the system learns your preferences and doesn't repeat the same stylistic mistakes.",
+          "linkText": "Team collaboration and roles: Team Collaboration",
+          "linkHref": "/features/team-collaboration"
+        },
+        {
+          "question": "Is there a free tier?",
+          "answer": "Yes. Flixu offers a free tier for independent translators and small teams to run their first projects. Paid plans are structured around word volume, with transparent credit-based pricing and an automated top-up option to keep pipelines running without manual intervention.",
+          "linkText": "Full pricing details: Pricing",
+          "linkHref": "/pricing"
+        },
+        {
+          "question": "How does Flixu handle data privacy and GDPR?",
+          "answer": "Flixu processes translation inputs ephemerally. Your documents and strings are not stored beyond the active session and are never used to train shared or public AI models. Your Translation Memory and glossary data belong to your workspace and remain private. For detailed compliance information, see the Privacy Policy.",
+          "linkText": "Privacy Policy",
+          "linkHref": "/legal/privacy"
+        },
+        {
+          "question": "Does Flixu adapt currencies, date formats, and measurements automatically?",
+          "answer": "Yes. The Cultural Adaptation Engine handles non-linguistic localization automatically alongside translation — converting date formats (DD.MM.YYYY vs. MM/DD/YYYY), adapting currency symbols, switching between metric and imperial measurements, and adjusting timezone references to the target region. This is included in every translation, not an add-on.",
+          "linkText": "More on cultural adaptation: Cultural Adaptation",
+          "linkHref": "/features/cultural-adaptation"
+        },
+        {
+          "question": "Can Flixu connect directly to our CI/CD pipeline?",
+          "answer": "Yes. The GitHub App handles the integration without manual file management — developers push English, translated strings come back in a separate branch. For teams with custom deployment pipelines, the Developer API supports direct integration with GitHub Actions or your existing deployment infrastructure.",
+          "linkText": "Developer API and pipeline documentation: Developer API",
+          "linkHref": "/product/developer-api"
+        }
+      ]
+    },
+    "footerCta": {
+      "text": "Your glossary. Your brand voice. Your release schedule.",
+      "cta": "Start translating for free →"
+    }
   },
   "forFreelancers": {
     "hero": {

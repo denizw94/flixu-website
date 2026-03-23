@@ -21,6 +21,8 @@ export const navConfig = {
                             { title: "Project Management", href: "/features/project-management", desc: "Track translation progress.", icon: "CheckSquare" },
                             { title: "Translation Memory", href: "/features/translation-memory", desc: "Inject matches as holistic context.", icon: "Database" },
                             { title: "Brand Voice", href: "/features/brand-voice", desc: "Enforce tone and style.", icon: "Mic" },
+                            { title: "LQA", href: "/features/lqa", desc: "Five-dimension quality assurance.", icon: "Shield" },
+                            { title: "Cultural Adaptation", href: "/features/cultural-adaptation", desc: "Locale-native formatting.", icon: "Globe" },
                             { title: "Team Collaboration", href: "/features/team-collaboration", desc: "Work together seamlessly.", icon: "Users" },
                             { title: "Quick Translations", href: "/features/quick-translations", desc: "Instant text translation.", icon: "Zap" }
                         ]
@@ -121,6 +123,8 @@ export const navConfig = {
                             { title: "Project Management", href: "/de/features/project-management", desc: "Fortschritt & Aufgaben.", icon: "CheckSquare" },
                             { title: "Translation Memory", href: "/de/features/translation-memory", desc: "Matches als ganzheitlichen Kontext nutzen.", icon: "Database" },
                             { title: "Brand Voice", href: "/de/features/brand-voice", desc: "Tonalität strict einhalten.", icon: "Mic" },
+                            { title: "LQA", href: "/de/features/lqa", desc: "Fünf-Dimensionen Qualitätssicherung.", icon: "Shield" },
+                            { title: "Kulturelle Adaption", href: "/de/features/cultural-adaptation", desc: "Lokal-native Formatierung.", icon: "Globe" },
                             { title: "Team Collaboration", href: "/de/features/team-collaboration", desc: "Nahtlose Zusammenarbeit.", icon: "Users" },
                             { title: "Quick Translations", href: "/de/features/quick-translations", desc: "Einfach Text übersetzen.", icon: "Zap" }
                         ]

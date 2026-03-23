@@ -1,5 +1,6 @@
 export interface Hero {
     metaTitle: string;
+    metaDescription: string;
     badgeLabel: string;
     h1: string;
     sub: string;
@@ -53,21 +54,58 @@ export interface CTA {
 }
 
 export interface About {
+    metaTitle: string;
+    metaDescription: string;
     title: string;
     subtitle: string;
     bgLabel: string;
     p1: string;
     p2: string;
     quote: string;
-    p3: string;
-    p4: string;
+    p3pre: string;
+    p3linkContext: string;
+    p3mid: string;
+    p3linkMethod: string;
+    p3post: string;
+    p4pre: string;
+    p4linkProblems: string;
+    p4mid: string;
+    p4linkContext2: string;
+    p4post: string;
     sign: string;
     role: string;
+    bio: string;
+    bioLinkText: string;
+    lastUpdated: string;
 }
 
 export interface Contact {
-    title: string;
+    metaTitle: string;
+    metaDescription: string;
+    badge: string;
+    h1: string;
     sub: string;
+    cards: {
+        badge: string;
+        h3: string;
+        p: string;
+        note?: string;
+        noteLinkText?: string;
+        noteLinkHref?: string;
+        ctaText: string;
+        ctaHref: string;
+    }[];
+    faq: {
+        title: string;
+        items: { question: string; answer: string; linkText?: string; linkHref?: string }[];
+    };
+    hq: {
+        h2: string;
+        p: string;
+        aboutLinkText: string;
+        aboutLinkHref: string;
+    };
+    lastUpdated: string;
 }
 
 export interface Status {
@@ -222,16 +260,34 @@ export interface UI {
     status: Status;
     home: {
         accelerated: string;
-        discover: string;
-        freelancerTitle: string;
-        freelancerDesc: string;
-        freelancerLink: string;
-        agencyTitle: string;
-        agencyDesc: string;
-        agencyLink: string;
-        enterpriseTitle: string;
-        enterpriseDesc: string;
-        enterpriseLink: string;
+        nvidiaInception: string;
+        googleStartups: string;
+        tldr: { label: string; text: string };
+        missingMiddle: {
+            preTitle: string;
+            h2: string;
+            intro: string;
+            lowEnd: { label: string; h3: string; p: string; specs: string[] };
+            flixu: { label: string; h3: string; p: string; specs: string[] };
+            highEnd: { label: string; h3: string; p: string; specs: string[] };
+        };
+        trust: {
+            preTitle: string;
+            h2: string;
+            cards: { quote: string; name: string; role: string }[];
+        };
+        comparator: { preTitle: string; h2: string; p: string };
+        manifesto: { label: string; quote: string; signoff: string };
+        platform: {
+            preTitle: string;
+            h2: string;
+            capabilities: { h3: string; p: string; linkText: string; linkHref: string }[];
+        };
+        faq: {
+            title: string;
+            items: { question: string; answer: string; linkText?: string; linkHref?: string }[];
+        };
+        footerCta: { text: string; cta: string };
     };
     pricing: {
         title: string;
@@ -290,31 +346,70 @@ export interface UI {
 }
 
 export interface MethodPage {
+    metaTitle: string;
+    metaDescription: string;
     hero: {
         badge: string;
         title: string;
         description: string;
     };
-    whatIsFlixu: {
-        title: string;
-        copy1: string;
-        copy2: string;
+    tldr: {
+        label: string;
+        text: string;
+    };
+    concept: {
+        h2: string;
+        p1: string;
+        p2: string;
+        linkText: string;
+        linkHref: string;
     };
     architecture: {
-        title: string;
-        subtitle: string;
+        h2: string;
+        badge: string;
         intro: string;
-        points: string[];
+        steps: {
+            num: string;
+            title: string;
+            body: string;
+            linkText?: string;
+            linkHref?: string;
+            linkText2?: string;
+            linkHref2?: string;
+        }[];
+        dimensions: {
+            headers: string[];
+            rows: string[][];
+        };
     };
-    quality: {
+    learning: {
+        h2: string;
+        p1: string;
+        p2: string;
+    };
+    comparison: {
+        h2: string;
+        headers: string[];
+        rows: string[][];
+        note: string;
+        linkText: string;
+        linkHref: string;
+    };
+    faq: {
         title: string;
-        subtitle: string;
-        copy1: string;
-        copy2: string;
+        items: { question: string; answer: string; linkText?: string; linkHref?: string }[];
     };
     cta: {
-        title: string;
+        h2: string;
         primary: string;
         secondary: string;
+    };
+    author: {
+        name: string;
+        role: string;
+        bio: string;
+        bioLinkText: string;
+        bioLinkHref: string;
+        lastUpdated: string;
     };
 }

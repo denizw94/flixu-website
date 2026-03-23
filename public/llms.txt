@@ -1,24 +1,133 @@
-# Flixu Translate
-> Context-Aware AI Translation for teams that care about voice, terminology, and precision.
+# Flixu AI
 
-Flixu is an AI-native translation infrastructure. It merges the capabilities of a modern Translation Management System (TMS) with a dynamic LLM pipeline.
+> Context-aware AI translation workspace. Analyzes five dimensions before
+> translating: domain, formality, cultural context, brand voice, and
+> situational context. Enforces corporate glossaries and translation memory
+> across 22+ languages. Built for B2B SaaS teams, agencies, and localization
+> professionals who need consistency beyond generic machine translation.
+
+## Core Product
+
+- [Method](https://flixu.ai/method): How the 5-dimension pre-translation analysis works — domain detection, formality calibration, brand voice injection
+- [Context Engine](https://flixu.ai/product/context): The analysis layer that reads the full document before translating any string
+- [Text Translation](https://flixu.ai/product/text): Real-time context-aware translation for UI strings, marketing copy, and general text
+- [Document Translation](https://flixu.ai/product/documents): Format-preserving translation for .docx, XLIFF, .po, .yaml, .strings, Markdown, and subtitle files
+- [Developer API](https://flixu.ai/product/developer-api): API for CI/CD pipeline integration and automated localization workflows
+- [Pricing](https://flixu.ai/pricing): Credit-based plans for individuals, teams, and enterprise
 
 ## Features
-- Semantic Translation Memory (Precision TM with 4096-dimensional vectors and 8B-parameter reranking)
-- Algorithmic Brand Voice Constraints
-- Output-Only Billing
-- Multi-LLM Routing (6 distinct LLMs)
-- Visual Quality Scoring
-- Document Parsing (DOCX, SRT, PO, XLIFF)
 
-## Quick Links
-- [Sign Up](https://app.flixu.ai/sign-up)
-- [Pricing](https://flixu.ai/pricing)
-- [API Documentation](https://flixu.ai/api)
+- [Brand Voice Manager](https://flixu.ai/features/brand-voice): Define tone once; AI enforces it across all languages automatically
+- [Translation Memory](https://flixu.ai/features/translation-memory): Semantic retrieval of past approved translations; style reference, not blind replacement
+- [LQA / Quality Assurance](https://flixu.ai/features/lqa): Automated linguistic quality scoring across grammar, accuracy, terminology, formatting, and fluency
+- [Glossary Enforcement](https://flixu.ai/features/glossary-enforcement): Corporate terminology enforced on every translation request across 22+ languages
+- [GitHub Integration](https://flixu.ai/features/github-integration): Git-native localization — auto-detects new strings, translates, and commits without touching the main branch
+- [Team Collaboration](https://flixu.ai/features/team-collaboration): Multi-tenant workspaces with Project Manager, Translator, and Admin roles
+- [Auto-Approval Workflows](https://flixu.ai/features/auto-approval): Rule-based zero-touch approval for 99% TM matches or LQA scores above 90
+- [AI Agents](https://flixu.ai/features/ai-agents): Claude-integrated agent skills for vibe coding and dashboard-free localization
+- [Project Management](https://flixu.ai/features/project-management): Workflow and project tracking for agencies and enterprise teams
+- [Client Management](https://flixu.ai/features/client-management): Multi-client workspace management for language service providers
+- [Quick Translations](https://flixu.ai/features/quick-translations): Fast single-string and snippet translation for freelancers and small teams
 
-## Pricing
-- **Free**: $0 (30k characters/mo)
-- **Individual**: $39/mo (300k characters/mo, Semantic TM)
-- **Team**: $149/mo (1M characters/mo, Shared Resources, 5 Seats)
-- **Business**: $449/mo (3M characters/mo, API, 10 Seats)
-- **Enterprise**: Custom (Unlimited)
+## Who It's For
+
+- [B2B SaaS Teams](https://flixu.ai/for/saas-teams): Git-native localization for engineering-led teams shipping to international markets
+- [Agencies & LSPs](https://flixu.ai/for/agencies): Multi-client workspace, glossary enforcement, and LQA for language service providers
+- [Enterprise](https://flixu.ai/for/enterprise): Compliance-grade localization with team roles, audit trails, and CI/CD integration
+- [Global Marketing Teams](https://flixu.ai/for/global-marketing): Brand voice consistency and cultural adaptation for campaign localization
+- [Developers](https://flixu.ai/for/developers): API-first and GitHub-native workflows; translations stay out of the main branch
+- [Freelance Translators](https://flixu.ai/for/freelancers): Context-aware workspace for human linguists working with AI-assisted output
+
+## Industries
+
+- [SaaS](https://flixu.ai/industries/saas): Localization for software products expanding into international markets
+- [E-Commerce](https://flixu.ai/industries/ecommerce): Product listing, storefront, and campaign localization for global retail
+- [Legal](https://flixu.ai/industries/legal): Terminology-precise document translation for legal tech and compliance workflows
+
+## Use Cases
+
+- [Use Cases Hub](https://flixu.ai/use-cases/): Index of all supported localization scenarios
+- [SaaS Localization](https://flixu.ai/use-cases/saas-localization): Localizing SaaS UI strings, changelogs, and in-app content
+- [Software String Translation](https://flixu.ai/use-cases/software-string-translation): JSON, XLIFF, .po, .yaml, and .strings file translation with format preservation
+- [Document Translation](https://flixu.ai/use-cases/document-translation): .docx and structured file translation for agencies and enterprise
+- [Marketing Translation](https://flixu.ai/use-cases/marketing-translation): Campaigns, landing pages, and email sequences with brand voice consistency
+- [Website Localization](https://flixu.ai/use-cases/website-localization): Full-site localization for e-commerce and SaaS marketing sites
+- [Legal Compliance](https://flixu.ai/use-cases/legal-compliance): Contract and compliance document translation with enforced terminology
+
+## Comparisons
+
+- [Flixu vs. DeepL](https://flixu.ai/compare/deepl-alternative): Context engine, brand voice, and glossary enforcement vs. raw speed
+- [Flixu vs. Crowdin](https://flixu.ai/compare/crowdin-alternative): Git-native workflow without JSON merge conflicts vs. TMS bot conflicts
+- [Flixu vs. Lokalise](https://flixu.ai/compare/lokalise-alternative): Context-aware AI depth vs. design-tool integration focus
+- [Flixu vs. Phrase](https://flixu.ai/compare/phrase-alternative): Mid-market self-service vs. enterprise TMS complexity and pricing
+- [Flixu vs. Smartling](https://flixu.ai/compare/smartling-alternative): Transparent self-service pricing vs. high-touch enterprise service dependency
+- [Flixu vs. Memsource](https://flixu.ai/compare/memsource-alternative): Modern AI context layer vs. legacy CAT tool architecture
+- [Flixu vs. Google Translate](https://flixu.ai/compare/google-translate-alternative): Brand voice and glossary enforcement vs. generic free-tier output
+- [Flixu vs. ChatGPT](https://flixu.ai/compare/chatgpt): Translation memory, consistency, and glossary enforcement vs. stateless generation
+
+## Topic Guides
+
+### Context-Aware Translation
+- [What Is Context-Aware Translation?](https://flixu.ai/topic/context-aware-translation): Definition, how it works, and when it matters
+- [Context-Aware vs. Traditional Machine Translation](https://flixu.ai/topic/context-vs-traditional-mt): Technical comparison of approaches
+- [Domain-Aware Translation](https://flixu.ai/topic/domain-aware-translation): How domain detection changes translation output
+- [Document Parsing & Translation](https://flixu.ai/topic/document-parsing-translation): Format preservation in file-based translation workflows
+- [Translation Memory Guide](https://flixu.ai/topic/translation-memory-guide): How TM works, semantic retrieval, and RAG-based approaches
+
+### Brand Voice in Translation
+- [Brand Voice in Translation](https://flixu.ai/topic/brand-voice-in-translation): Why brand voice survives or breaks during localization
+- [How to Preserve Brand Voice Across Languages](https://flixu.ai/topic/how-to-preserve-brand-voice): Practical framework for tone consistency
+- [Cultural Adaptation in Translation](https://flixu.ai/topic/cultural-adaptation): Beyond word-for-word: currencies, dates, measurement, and cultural markers
+- [Glossary & Terminology Management](https://flixu.ai/topic/glossary-terminology-management): Enforcing corporate vocabulary at scale
+
+### Localization for Mid-Market
+- [Localization for Mid-Market Teams](https://flixu.ai/topic/localization-for-midmarket): Workflows, tooling, and ROI for growing companies
+- [ROI of Localization](https://flixu.ai/topic/roi-localization): How to measure the business impact of going multilingual
+- [Freelance Translation Workflows](https://flixu.ai/topic/freelance-translation-workflow): Efficiency frameworks for independent translators
+
+### AI in Translation
+- [AI in Translation](https://flixu.ai/topic/ai-in-translation): How large language models changed the localization industry
+
+## Glossary
+
+- [Glossary Hub](https://flixu.ai/topic/glossary): Full index of translation and localization terminology
+- [Context-Aware Translation](https://flixu.ai/topic/glossary/context-aware-translation)
+- [Translation Memory (TM)](https://flixu.ai/topic/glossary/translation-memory)
+- [Machine Translation (MT)](https://flixu.ai/topic/glossary/machine-translation)
+- [Localization (L10n)](https://flixu.ai/topic/glossary/localization)
+- [Brand Voice (Translation)](https://flixu.ai/topic/glossary/brand-voice-translation)
+- [Glossary Management](https://flixu.ai/topic/glossary/glossary-management)
+- [BLEU Score](https://flixu.ai/topic/glossary/bleu-score)
+- [CAT Tool](https://flixu.ai/topic/glossary/cat-tool)
+- [Fuzzy Match](https://flixu.ai/topic/glossary/fuzzy-match)
+- [Exact Match](https://flixu.ai/topic/glossary/exact-match)
+- [TMS (Translation Management System)](https://flixu.ai/topic/glossary/tms)
+- [MTPE (Machine Translation Post-Editing)](https://flixu.ai/topic/glossary/mtpe)
+- [Internationalization (i18n)](https://flixu.ai/topic/glossary/internationalization)
+- [Cultural Localization](https://flixu.ai/topic/glossary/cultural-localization)
+- [XLIFF](https://flixu.ai/topic/glossary/xliff)
+- [Transcreation](https://flixu.ai/topic/glossary/transcreation)
+- [LLM Routing](https://flixu.ai/topic/glossary/llm-routing)
+- [Language Service Provider (LSP)](https://flixu.ai/topic/glossary/language-service-provider)
+- [Formality Levels](https://flixu.ai/topic/glossary/formality-levels)
+- [Domain-Aware Translation](https://flixu.ai/topic/glossary/domain-aware-translation)
+- [Total Cost of Ownership (TCO)](https://flixu.ai/topic/glossary/total-cost-of-ownership)
+
+## Notes (Founder Journal)
+
+- [Notes Hub](https://flixu.ai/notes): Essays, product decisions, and build-in-public writing by Deniz Wozniak
+- [From the Van](https://flixu.ai/notes/from-the-van): Founder story — building Flixu on the road
+- [Context Is Code](https://flixu.ai/notes/context-is-code): Why context is a technical variable, not a creative one
+- [Death of the TMS](https://flixu.ai/notes/death-of-the-tms): Why legacy translation management systems are losing to AI-native workflows
+- [The Uncanny Valley of Brand Voice](https://flixu.ai/notes/uncanny-valley-brand-voice): Why AI translation sounds almost right — and how to close the gap
+- [Stop Emailing Spreadsheets](https://flixu.ai/notes/stop-emailing-spreadsheets): The manual localization workflow and why it breaks at scale
+- [The PDF Geometry Problem](https://flixu.ai/notes/pdf-geometry-problem): Why format preservation is harder than it looks
+- [The Freelancer Perspective](https://flixu.ai/notes/freelancer-perspective): What independent translators actually need from AI tools
+
+## Company
+
+- [About](https://flixu.ai/about): Founder story, mission, and the problem Flixu was built to solve
+- [Contact](https://flixu.ai/contact): Technical support, enterprise inquiries, and billing
+- [Roadmap](https://flixu.ai/roadmap): Upcoming features and product direction
+- [Docs](https://flixu.ai/docs): API reference, developer workflows, and technical documentation
+- [Privacy Policy](https://flixu.ai/legal/privacy): Data handling, GDPR compliance, and user rights

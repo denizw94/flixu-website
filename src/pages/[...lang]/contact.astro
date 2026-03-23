@@ -1,14 +1,15 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Section from "../../components/ui/Section.astro";
-import ConversationalInterface from "../../components/support/ConversationalInterface.jsx";
-import { useTranslations, locales } from "../../i18n/utils";
+import FAQSection from "../../components/seo/FAQSection.astro";
+import SchemaOrg from "../../components/seo/SchemaOrg.astro";
+import { useTranslations, locales, getLocalizedPath } from "../../i18n/utils";
 
 export const prerender = true;
 
 export function getStaticPaths() {
   return [
-    { params: { lang: undefined } }, // Root (English default)
+    { params: { lang: undefined } },
     ...locales.map((lang) => ({ params: { lang } })),
   ];
 }
@@ -17,30 +18,174 @@ let { lang } = Astro.params;
 if (!lang) lang = "en";
 
 const t = await useTranslations(lang);
+
+// FAQ items for the FAQSection component
+const faqItems = t.contact.faq.items.map((item) => ({
+  question: item.question,
+  answer: item.answer,
+}));
+
+// Organization schema with contactPoint + FAQPage
+const contactSchema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Flixu",
+    url: "https://flixu.ai",
+    logo: "https://flixu.ai/flixu-favicon.svg",
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        email: "hello@flixu.ai",
+        availableLanguage: ["English", "German"],
+      },
+      {
+        "@type": "ContactPoint",
+        contactType: "technical support",
+        url: "https://discord.gg/flixu",
+        availableLanguage: ["English"],
+      },
+      {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        email: "founders@flixu.ai",
+        availableLanguage: ["English", "German"],
+      },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: t.contact.faq.items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  },
+];
 ---
 
-<BaseLayout title={t.contact.title} chapter="Support">
-  <Section
-    data-chapter={`01 — ${t.rail.contact.toUpperCase()}`}
-    class="hero-section min-h-screen bg-[#FDFCF8] border-none"
-  >
-    <div class="max-w-5xl mx-auto">
-      <!-- Header -->
-      <div class="mb-20 text-center">
-        <h1
-          class="font-serif text-6xl md:text-7xl text-stone-900 mb-6 tracking-tight italic"
-        >
-          {t.contact.title}
-        </h1>
-        <p
-          class="font-sans text-xl text-stone-500 max-w-xl mx-auto leading-relaxed"
-        >
-          {t.contact.sub}
-        </p>
-      </div>
+<BaseLayout
+  title={t.contact.metaTitle}
+  description={t.contact.metaDescription}
+  chapter="Support"
+>
+  <Fragment slot="schema">
+    {contactSchema.map((schema) => <SchemaOrg schema={schema} />)}
+  </Fragment>
 
-      <!-- Intelligent Conversational Interface -->
-      <ConversationalInterface client:load lang={lang} />
+  <!-- SECTION 1 — HERO -->
+  <Section
+    data-chapter="01 — CONTACT"
+    class="hero-section"
+  >
+    <div class="max-w-2xl mx-auto text-center">
+      <span
+        class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-6 block"
+        >{t.contact.badge}</span
+      >
+      <h1
+        class="font-serif text-5xl md:text-7xl text-stone-900 mb-8 tracking-tight leading-[1.1]"
+      >
+        {t.contact.h1}
+      </h1>
+      <p
+        class="font-sans text-xl text-stone-500 max-w-xl mx-auto leading-relaxed"
+      >
+        {t.contact.sub}
+      </p>
+    </div>
+  </Section>
+
+  <!-- SECTION 2 — ROUTING CARDS -->
+  <Section
+    data-chapter="02 — CHANNELS"
+    class="py-24 bg-[#FDFCF8] border-b border-stone-200"
+  >
+    <div class="w-full">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {t.contact.cards.map((card) => (
+          <div class="p-8 border border-stone-200 bg-white rounded-sm shadow-sm flex flex-col">
+            <div class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-6 border-b border-stone-100 pb-4">
+              {card.badge}
+            </div>
+            <h3 class="font-serif text-xl mb-4 text-stone-900">{card.h3}</h3>
+            <p class="text-stone-600 text-sm leading-relaxed mb-6 flex-grow">
+              {card.p}
+            </p>
+            {card.note && (
+              <p class="text-sm text-stone-500 mb-6">
+                {card.note}{" "}
+                {card.noteLinkText && card.noteLinkHref && (
+                  <a
+                    href={getLocalizedPath(card.noteLinkHref, lang)}
+                    class="text-orange-700 hover:text-orange-800 underline decoration-orange-200 underline-offset-2 transition-colors"
+                  >
+                    {card.noteLinkText}
+                  </a>
+                )}
+              </p>
+            )}
+            <a
+              href={card.ctaHref}
+              class="inline-flex items-center gap-2 px-6 py-3 rounded-sm bg-orange-700 text-white hover:bg-orange-800 transition-colors text-sm font-medium mt-auto w-fit"
+            >
+              {card.ctaText}
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </Section>
+
+  <!-- SECTION 3 — FAQ -->
+  <Section
+    data-chapter="03 — FAQ"
+    class="py-24 bg-paper border-b border-stone-200"
+  >
+    <div class="max-w-3xl mx-auto">
+      <FAQSection items={faqItems} title={t.contact.faq.title} />
+
+      <!-- FAQ deep links -->
+      <div class="mt-6 space-y-3">
+        {t.contact.faq.items
+          .filter((item) => item.linkHref)
+          .map((item) => (
+            <a
+              href={getLocalizedPath(item.linkHref!, lang)}
+              class="text-orange-700 hover:text-orange-800 text-xs font-medium transition-colors block"
+            >
+              → {item.linkText}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </Section>
+
+  <!-- SECTION 4 — HEADQUARTERS -->
+  <Section
+    data-chapter="04 — HEADQUARTERS"
+    class="py-16 bg-[#FDFCF8]"
+  >
+    <div class="max-w-2xl mx-auto text-center">
+      <h2 class="font-serif text-2xl text-stone-900 mb-6">{t.contact.hq.h2}</h2>
+      <p class="text-stone-500 text-sm leading-relaxed mb-4">
+        {t.contact.hq.p}{" "}
+        <a
+          href={getLocalizedPath(t.contact.hq.aboutLinkHref, lang)}
+          class="text-orange-700 hover:text-orange-800 underline decoration-orange-200 underline-offset-2 transition-colors"
+        >
+          {t.contact.hq.aboutLinkText}
+        </a>
+      </p>
+      <div class="mt-6 text-xs text-stone-400 font-mono uppercase tracking-widest">
+        Last Updated: {t.contact.lastUpdated}
+      </div>
     </div>
   </Section>
 </BaseLayout>

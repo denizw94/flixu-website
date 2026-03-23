@@ -1,13 +1,14 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Section from "../../components/ui/Section.astro";
-import { useTranslations, locales } from "../../i18n/utils";
+import SchemaOrg from "../../components/seo/SchemaOrg.astro";
+import { useTranslations, locales, getLocalizedPath } from "../../i18n/utils";
 
 export const prerender = true;
 
 export function getStaticPaths() {
   return [
-    { params: { lang: undefined } }, // Root (English default)
+    { params: { lang: undefined } },
     ...locales.map((lang) => ({ params: { lang } })),
   ];
 }
@@ -16,11 +17,51 @@ let { lang } = Astro.params;
 if (!lang) lang = "en";
 
 const t = await useTranslations(lang);
+
+// Organization + Person schema
+const aboutSchema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Flixu",
+    url: "https://flixu.ai",
+    logo: "https://flixu.ai/flixu-favicon.svg",
+    description:
+      "Context-aware AI translation platform. Orchestrates LLMs with glossaries, translation memory, and brand voice to deliver precise multilingual content.",
+    founder: {
+      "@type": "Person",
+      name: "Deniz Wozniak",
+    },
+    sameAs: ["https://www.linkedin.com/company/flixu"],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Deniz Wozniak",
+    jobTitle: "Founder",
+    worksFor: {
+      "@type": "Organization",
+      name: "Flixu AI",
+      url: "https://flixu.ai",
+    },
+    description: t.about.bio,
+    sameAs: ["https://www.linkedin.com/in/denizwozniak"],
+  },
+];
 ---
 
-<BaseLayout title={t.about.title} chapter="Manifesto">
+<BaseLayout
+  title={t.about.metaTitle}
+  description={t.about.metaDescription}
+  chapter="Manifesto"
+>
+  <Fragment slot="schema">
+    {aboutSchema.map((schema) => <SchemaOrg schema={schema} />)}
+  </Fragment>
+
+  <!-- SECTION 1 — HERO / MANIFESTO -->
   <Section
-    data-chapter={`01 — ${t.rail.manifesto.toUpperCase()}`}
+    data-chapter="01 — MANIFESTO"
     class="hero-section"
   >
     <div class="max-w-4xl mx-auto text-center">
@@ -29,7 +70,7 @@ const t = await useTranslations(lang);
         >{t.about.bgLabel}</span
       >
       <h1
-        class="font-serif text-6xl md:text-8xl text-stone-900 mb-8 tracking-tight leading-[1]"
+        class="font-serif text-5xl md:text-7xl text-stone-900 mb-8 tracking-tight leading-[1.1]"
       >
         {t.about.title}
       </h1>
@@ -41,8 +82,9 @@ const t = await useTranslations(lang);
     </div>
   </Section>
 
+  <!-- SECTION 2 — NOTES / MAIN PROSE -->
   <Section
-    data-chapter={`02 — ${t.rail.notes.toUpperCase()}`}
+    data-chapter="02 — NOTES"
     class="content-section bg-[#FDFCF8]"
   >
     <div class="max-w-2xl mx-auto">
@@ -58,23 +100,29 @@ const t = await useTranslations(lang);
 
         <p>{t.about.p2}</p>
 
-        <!-- Pull Quote / Insight -->
+        <!-- Pull Quote / Insight Block -->
         <div class="py-8 my-8 border-y border-stone-100">
           <p class="text-3xl text-stone-900 italic text-center">
             "{t.about.quote}"
           </p>
         </div>
 
-        <p>{t.about.p3}</p>
-        <p>{t.about.p4}</p>
+        <!-- P3 with inline links to /product/context and /method -->
+        <p>
+          {t.about.p3pre}<a href={getLocalizedPath("/product/context", lang)} class="text-orange-700 hover:text-orange-800 underline decoration-orange-200 underline-offset-4 transition-colors">{t.about.p3linkContext}</a>{t.about.p3mid}<a href={getLocalizedPath("/method", lang)} class="text-orange-700 hover:text-orange-800 underline decoration-orange-200 underline-offset-4 transition-colors">{t.about.p3linkMethod}</a>{t.about.p3post}
+        </p>
+
+        <!-- P4 with inline links to /notes/stop-emailing-spreadsheets and /notes/context-is-code -->
+        <p>
+          {t.about.p4pre}<a href={getLocalizedPath("/notes/stop-emailing-spreadsheets", lang)} class="text-orange-700 hover:text-orange-800 underline decoration-orange-200 underline-offset-4 transition-colors">{t.about.p4linkProblems}</a>{t.about.p4mid}<a href={getLocalizedPath("/notes/context-is-code", lang)} class="text-orange-700 hover:text-orange-800 underline decoration-orange-200 underline-offset-4 transition-colors">{t.about.p4linkContext2}</a>{t.about.p4post}
+        </p>
       </div>
 
-      <!-- Signature -->
-      <div class="mt-20 pt-8 border-t border-stone-100 flex items-center gap-6">
+      <!-- Signature Block -->
+      <div class="mt-20 pt-8 border-t border-stone-100 flex items-start gap-6">
         <div
-          class="w-16 h-16 bg-stone-100 rounded-full overflow-hidden grayscale relative"
+          class="w-16 h-16 bg-stone-100 rounded-full overflow-hidden grayscale relative shrink-0"
         >
-          <!-- Placeholder: Hier später dein Bild -->
           <span
             class="absolute inset-0 flex items-center justify-center font-serif italic text-stone-400 text-2xl"
             >D</span
@@ -89,7 +137,16 @@ const t = await useTranslations(lang);
           >
             {t.about.role}
           </div>
+          <!-- Bio Block for Person Schema / E-E-A-T -->
+          <p class="text-sm text-stone-500 mt-4 leading-relaxed font-sans">
+            {t.about.bio.split(t.about.bioLinkText)[0]}<a href={getLocalizedPath("/notes", lang)} class="text-orange-700 hover:text-orange-800 underline decoration-orange-200 underline-offset-2 transition-colors">{t.about.bioLinkText}</a>{t.about.bio.split(t.about.bioLinkText)[1]}
+          </p>
         </div>
+      </div>
+
+      <!-- Last Updated -->
+      <div class="mt-12 text-xs text-stone-400 font-mono uppercase tracking-widest">
+        Last Updated: {t.about.lastUpdated}
       </div>
     </div>
   </Section>
