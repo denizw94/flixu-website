@@ -1,0 +1,681 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Section from "../../../components/ui/Section.astro";
+import Breadcrumbs from "../../../components/seo/Breadcrumbs.astro";
+import TldrBlock from "../../../components/seo/TldrBlock.astro";
+import FAQSection from "../../../components/seo/FAQSection.astro";
+import SchemaOrg from "../../../components/seo/SchemaOrg.astro";
+import HeroAutoApproval from "../../../components/visuals/HeroAutoApproval.jsx";
+import { getLocalizedPath, locales } from "../../../i18n/utils";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: undefined } },
+    ...locales.map((lang) => ({ params: { lang } })),
+  ];
+}
+
+let { lang } = Astro.params;
+if (!lang) lang = "en";
+
+const title =
+  "Auto-Approval Workflows — Zero-Touch Translation at Scale | Flixu";
+const description =
+  "LQA score ≥ 90 or TM match ≥ 99% — auto-approved. Only flagged segments reach the review queue, with the specific failing dimension marked. Setup in under 10 minutes.";
+
+const breadcrumbItems = [
+  { name: "Home", url: getLocalizedPath("/", lang) },
+  { name: "Features", url: getLocalizedPath("/features", lang) },
+  { name: "Auto-Approval", url: Astro.url.pathname },
+];
+
+const faqs = [
+  {
+    question:
+      "What are the two conditions that trigger auto-approval?",
+    answer:
+      "A Translation Memory match at 99% or higher, or an LQA score above 90/100. Either condition is sufficient — both don't need to be met. A near-exact TM match is approved immediately regardless of the LQA score. A high LQA score approves independently of whether the string has appeared in the TM before.",
+  },
+  {
+    question: "Can I configure the LQA threshold for my project?",
+    answer:
+      "Yes. The threshold is configurable in project settings. The default is 90/100. Raise it for content where quality requirements are stricter — regulated documentation, customer-facing legal language. Lower it for high-volume content where a slightly higher flag rate is acceptable. The threshold is a project-level setting, not a global account setting.",
+  },
+  {
+    question: "What happens to the segments that don't auto-approve?",
+    answer:
+      "They appear in the review queue with the specific failing dimension marked: Grammar, Accuracy, Terminology Consistency, Formatting, or Fluency. The reviewer can see which dimension triggered the flag before reading the segment — they don't need to re-evaluate the full output from scratch. Most flagged segments require a targeted correction, not a full retranslation.",
+  },
+  {
+    question:
+      "Is there an audit trail for auto-approved translations?",
+    answer:
+      "Yes. Every auto-approved segment is logged with its LQA score, the threshold rule that triggered approval (LQA score or TM match), and the timestamp. Admins and Project Managers can access this log from the workspace. For teams in regulated industries where translation approval records are required, the audit log provides the documented decision trail.",
+  },
+  {
+    question:
+      "What prevents a low-quality translation from being auto-approved?",
+    answer:
+      "The LQA scoring. A segment with a broken placeholder, a mistranslated term, or an accuracy problem will score below 90 on the relevant dimension and fail auto-approval. The scoring runs on every segment — there's no sampling or batch-level check. The pre-translation constraints (Glossary and Brand Voice loaded before the model generates output) also reduce the frequency of low-scoring segments by preventing the most common error types before they occur.",
+  },
+  {
+    question:
+      "How is Flixu's auto-approval different from what Transifex or Lokalise offer?",
+    answer:
+      "Transifex's automations and Lokalise's workflow rules apply rule-based routing based on match percentages and user-defined conditions. Flixu's auto-approval is based on the LQA score — a five-dimension quality measurement that evaluates grammar, accuracy, terminology, formatting, and fluency independently. This means the routing decision reflects a quality assessment, not just a similarity score. A segment can match 85% of a previous translation but still fail auto-approval because it introduced a terminology error — something a match-percentage rule wouldn't catch.",
+  },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      name: "Flixu Auto-Approval Workflows",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    },
+    {
+      "@type": "HowTo",
+      name: "How to set up Auto-Approval for your project",
+      step: [
+        {
+          "@type": "HowToStep",
+          name: "Configure your LQA threshold",
+          text: "In project settings, set the LQA auto-approval threshold. The default is 90/100.",
+        },
+        {
+          "@type": "HowToStep",
+          name: "Load your Glossary and Translation Memory",
+          text: "Seed the Glossary with approved terminology and import existing Translation Memory as a TMX file.",
+        },
+        {
+          "@type": "HowToStep",
+          name: "Enable auto-approval for the project",
+          text: "Toggle auto-approval on at the project level. Every translation run applies the scoring and routing logic.",
+        },
+        {
+          "@type": "HowToStep",
+          name: "Monitor the review queue",
+          text: "Check flagged segments with their failing dimensions marked and adjust Glossary or Brand Voice configuration as needed.",
+        },
+      ],
+    },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <SchemaOrg schema={schema} slot="schema" />
+
+  <!-- 01 — HERO -->
+  <Section data-chapter="01 — OVERVIEW" class="hero-section pb-16">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center max-w-7xl mx-auto px-6"
+    >
+      <div class="max-w-3xl !px-0">
+        <Breadcrumbs items={breadcrumbItems} />
+        <span
+          class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-6 block"
+          >Feature Spotlight</span
+        >
+        <h1 class="mb-6">
+          High-confidence translations ship automatically. Exceptions go to
+          review.
+        </h1>
+        <p class="max-w-2xl text-xl text-stone-600 mb-8">
+          When a translated segment scores above 90 on the LQA scale, or
+          matches existing Translation Memory at 99% or higher, Flixu approves
+          and deploys it automatically — no human step required. Only the
+          segments that fall below that threshold appear in the review queue,
+          with the specific failing dimension flagged.
+        </p>
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          See auto-approval in your pipeline →
+        </a>
+      </div>
+      <div class="relative w-full aspect-[4/3] hidden md:block">
+        <HeroAutoApproval client:load />
+      </div>
+    </div>
+  </Section>
+
+  <!-- 02 — TL;DR -->
+  <Section data-chapter="02 — TL;DR" class="tldr-section">
+    <div class="max-w-3xl">
+      <TldrBlock
+        label="What are Auto-Approval Workflows?"
+        text="Auto-Approval Workflows apply two rule-based checks to every translated segment: a Translation Memory match at 99% or higher, or an overall LQA score above 90. Segments that meet either threshold are approved and deployed without human review. Segments that don't are routed to the review queue with the specific failing dimension marked. The result is a review process that scales with quality, not with volume."
+      />
+    </div>
+  </Section>
+
+  <!-- 03 — HOW IT WORKS -->
+  <Section data-chapter="03 — HOW IT WORKS" class="content-section mt-12">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">How Auto-Approval works.</h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The core problem auto-approval solves: Manual review distributes
+        equally across all translated content regardless of quality. A project
+        with 500 segments and 12 errors requires reading all 500 to find the
+        12. As translation volume grows, the review queue grows
+        proportionally — localization becomes a release bottleneck not because
+        the translations are bad, but because verification assumes they might
+        be.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-10">
+        Auto-Approval inverts this. The system determines what gets reviewed,
+        not the reviewer.
+      </p>
+
+      <div class="space-y-10">
+        <!-- Step 1 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            1
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">
+              Translation runs with pre-loaded constraints
+            </h3>
+            <p class="text-stone-600 leading-relaxed">
+              The translation request runs with the Glossary, Brand Voice, and
+              Translation Memory already loaded. The pre-translation context
+              layer applies your approved terminology and tone before the
+              language model generates output. This reduces the number of
+              segments that will fail the quality check — quality is built in
+              before scoring begins.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            2
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">LQA scores every segment</h3>
+            <p class="text-stone-600 leading-relaxed mb-4">
+              Every translated segment receives a score across five dimensions:
+            </p>
+            <div class="overflow-x-auto mb-4">
+              <table class="w-full text-sm border border-stone-200">
+                <thead>
+                  <tr class="bg-stone-50">
+                    <th
+                      class="text-left px-4 py-3 font-semibold border-b border-stone-200 w-1/3"
+                      >Dimension</th
+                    >
+                    <th
+                      class="text-left px-4 py-3 font-semibold border-b border-stone-200"
+                      >What it evaluates</th
+                    >
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-b border-stone-100">
+                    <td class="px-4 py-3 font-medium">Grammar</td>
+                    <td class="px-4 py-3 text-stone-600"
+                      >Grammatical correctness in the target language</td
+                    >
+                  </tr>
+                  <tr class="border-b border-stone-100">
+                    <td class="px-4 py-3 font-medium">Accuracy</td>
+                    <td class="px-4 py-3 text-stone-600"
+                      >Meaning preservation — does the translation say what
+                      the source said?</td
+                    >
+                  </tr>
+                  <tr class="border-b border-stone-100">
+                    <td class="px-4 py-3 font-medium"
+                      >Terminology Consistency</td
+                    >
+                    <td class="px-4 py-3 text-stone-600"
+                      >Approved glossary terms present and correctly applied</td
+                    >
+                  </tr>
+                  <tr class="border-b border-stone-100">
+                    <td class="px-4 py-3 font-medium">Formatting</td>
+                    <td class="px-4 py-3 text-stone-600"
+                      >Tags, placeholders, and variables intact and
+                      symmetrical with the source</td
+                    >
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 font-medium">Fluency</td>
+                    <td class="px-4 py-3 text-stone-600"
+                      >Natural reading quality in the target language</td
+                    >
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-stone-600 leading-relaxed">
+              The combined score is the LQA result for that segment.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            3
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Routing by threshold</h3>
+            <p class="text-stone-600 leading-relaxed mb-4">
+              Two conditions trigger auto-approval independently:
+            </p>
+            <div
+              class="bg-stone-50 border border-stone-200 rounded-sm p-4 space-y-2 text-sm font-mono text-stone-700 mb-4"
+            >
+              <p>
+                LQA score ≥ 90/100 → <span class="text-green-700 font-semibold"
+                  >auto-approved</span
+                >, deployed immediately
+              </p>
+              <p>
+                TM match ≥ 99% → <span class="text-green-700 font-semibold"
+                  >auto-approved</span
+                >, deployed immediately
+              </p>
+            </div>
+            <p class="text-stone-600 leading-relaxed">
+              Either condition is sufficient. A segment doesn't need both — a
+              near-exact TM match bypasses LQA scoring entirely, and a high
+              LQA score approves independently of TM overlap.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            4
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Exceptions routed to review</h3>
+            <p class="text-stone-600 leading-relaxed">
+              Segments that meet neither threshold appear in the review queue.
+              Each flagged segment shows the specific dimension that caused the
+              failure — a Terminology Consistency flag means a glossary term is
+              missing or incorrect; a Formatting flag means a variable or tag
+              wasn't preserved. The reviewer knows what to look at before
+              reading the segment.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            5
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Audit log</h3>
+            <p class="text-stone-600 leading-relaxed">
+              Every auto-approved segment is logged with its LQA score, the
+              approval rule triggered (LQA threshold or TM match), and the
+              timestamp. The audit trail is accessible to Admins and Project
+              Managers in the workspace without a separate logging system.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 04 — DETERMINISM -->
+  <Section data-chapter="04 — DETERMINISM" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">Why auto-approval requires deterministic output.</h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Auto-approval is only reliable when the translation pipeline produces
+        consistent, predictable output — not stochastic generation that might
+        include added commentary, altered placeholders, or invented content.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The translation pipeline uses Qwen and DeepInfra model routing
+        specifically configured for translation tasks. These models operate
+        within strict constraints: no added sentences, no reformatted
+        structure, no altered variables. A <code>{`{username}`}</code> placeholder
+        in the source appears as <code>{`{username}`}</code> in every target
+        language — not <code>{`{benutzer}`}</code> or omitted entirely. A tag
+        structure <code>&lt;strong&gt;text&lt;/strong&gt;</code> is preserved
+        as <code>&lt;strong&gt;translated text&lt;/strong&gt;</code>.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed">
+        This is what Deterministic AI and Zero Hallucinations means in
+        practice — and it's the prerequisite for trusting an automated approval
+        decision. If the pipeline could add or remove content unpredictably,
+        automated approval would be unsafe. Because the output is constrained
+        to the translation task, the LQA scores are meaningful signals.
+      </p>
+
+      <p class="text-stone-500 text-sm mt-4">
+        → How the translation pipeline is constrained:
+        <a
+          href={getLocalizedPath("/product/context", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >The Context Engine</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- 05 — SETUP -->
+  <Section data-chapter="05 — SETUP" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">How to set up Auto-Approval for your project.</h2>
+
+      <p class="text-stone-600 leading-relaxed mb-10">
+        For teams setting this up for the first time, the configuration takes
+        under ten minutes.
+      </p>
+
+      <div class="space-y-10">
+        <!-- Setup Step 1 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-stone-100 text-stone-700 rounded-sm font-mono font-bold text-sm"
+          >
+            1
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Configure your LQA threshold</h3>
+            <p class="text-stone-600 leading-relaxed">
+              In project settings, set the LQA auto-approval threshold. The
+              default is 90/100. Teams with stricter quality requirements can
+              raise it; teams processing high-volume, lower-stakes content can
+              lower it. The threshold applies to all segments in that project.
+            </p>
+          </div>
+        </div>
+
+        <!-- Setup Step 2 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-stone-100 text-stone-700 rounded-sm font-mono font-bold text-sm"
+          >
+            2
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">
+              Load your Glossary and Translation Memory
+            </h3>
+            <p class="text-stone-600 leading-relaxed">
+              The pre-translation constraints are what make auto-approval
+              reliable. A project with an empty Glossary will route more
+              segments to review than a project where the Glossary has been
+              populated and the TM has accumulated approvals. Before enabling
+              auto-approval at scale, seed the Glossary with approved
+              terminology and, if available, import existing Translation Memory
+              as a TMX file.
+            </p>
+          </div>
+        </div>
+
+        <!-- Setup Step 3 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-stone-100 text-stone-700 rounded-sm font-mono font-bold text-sm"
+          >
+            3
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">
+              Enable auto-approval for the project
+            </h3>
+            <p class="text-stone-600 leading-relaxed">
+              Toggle auto-approval on at the project level. From that point
+              forward, every translation run applies the scoring and routing
+              logic. The first few projects at a new threshold are useful
+              calibration: check what percentage of segments are routing to
+              review and whether the flagged segments are genuinely
+              problematic. Adjust the threshold if needed.
+            </p>
+          </div>
+        </div>
+
+        <!-- Setup Step 4 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-stone-100 text-stone-700 rounded-sm font-mono font-bold text-sm"
+          >
+            4
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Monitor the review queue</h3>
+            <p class="text-stone-600 leading-relaxed">
+              The review queue shows flagged segments with the failing
+              dimension marked. Reviewing patterns across several batches helps
+              identify whether consistent flags indicate a Glossary gap, a
+              Brand Voice configuration issue, or a content type that
+              consistently produces lower scores. Addressing those upstream —
+              updating the Glossary, refining the Brand Voice profile — reduces
+              the ongoing review load.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 06 — WHEN THIS MATTERS MOST -->
+  <Section data-chapter="06 — USE CASES" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-10">When auto-approval changes the release economics.</h2>
+
+      <!-- Mobile apps -->
+      <div class="mb-12">
+        <h3 class="text-xl mb-4">
+          Mobile app teams shipping daily content updates
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          A mobile app that updates in-app copy, push notification text, or
+          onboarding strings daily generates dozens to hundreds of translated
+          segments with each release. Running a manual review cycle for each
+          update adds hours between the English version and the localized
+          version going live. With auto-approval configured, standard
+          content — greetings, CTAs, status messages — ships immediately.
+          Unusual or complex strings surface for review. Time-to-market for
+          localized content shrinks from hours to minutes.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → Mobile app localization workflows:
+          <a
+            href={getLocalizedPath("/for/mobile-apps", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu for Mobile Apps</a
+          >
+        </p>
+      </div>
+
+      <!-- SaaS teams -->
+      <div class="mb-12">
+        <h3 class="text-xl mb-4">
+          SaaS teams with weekly product releases
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          A product releasing features weekly needs localization to run
+          alongside the development cycle, not after it. Teams that previously
+          allocated two to three hours per sprint to localization review — or
+          delayed the international release by a sprint — typically find that
+          auto-approval reduces that overhead to under 30 minutes. The review
+          queue contains only the edge cases; standard UI strings, help text,
+          and feature descriptions auto-approve and go live with the English
+          release.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → SaaS localization workflow:
+          <a
+            href={getLocalizedPath("/for/saas-teams", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu for SaaS Teams</a
+          >
+        </p>
+      </div>
+
+      <!-- LSPs -->
+      <div>
+        <h3 class="text-xl mb-4">
+          Language service providers scaling without adding reviewers
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          An LSP handling increasing translation volume for multiple clients
+          faces a choice: add reviewers proportionally, or find a way to make
+          each reviewer's time go further. Auto-approval lets a reviewer focus
+          on segments that genuinely need expert judgment — the ones below the
+          quality threshold. The segments above it don't require review; they
+          require only the audit log confirmation that the system provided.
+          Review capacity scales with quality complexity, not with raw volume.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → Agency workflows:
+          <a
+            href={getLocalizedPath("/for/agencies", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu for Agencies</a
+          >
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 07 — FAQ -->
+  <Section
+    data-chapter="07 — FAQ"
+    class="content-section bg-stone-50 border-t border-stone-200 mt-24"
+  >
+    <div class="max-w-3xl mx-auto">
+      <FAQSection items={faqs} />
+    </div>
+  </Section>
+
+  <!-- 08 — CTA -->
+  <Section data-chapter="08 — CTA" class="content-section mt-24 mb-16">
+    <div class="max-w-3xl text-center mx-auto">
+      <h2 class="mb-6">
+        Run your first project with auto-approval enabled.
+      </h2>
+      <p class="text-stone-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+        Set your LQA threshold, load your Glossary, and see what percentage of
+        segments auto-approve on the first run. Most projects see
+        auto-approval rates above 80% for standard content after the Glossary
+        is seeded.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center justify-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start translating for free →
+        </a>
+        <a
+          href={getLocalizedPath("/features/lqa", lang)}
+          class="inline-flex items-center justify-center gap-2 border border-stone-300 text-stone-700 px-6 py-3 rounded-sm font-medium hover:bg-stone-50 transition-colors"
+        >
+          See how LQA scoring works →
+        </a>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 09 — RELATED FEATURES -->
+  <Section
+    data-chapter="09 — RELATED"
+    class="content-section border-t border-stone-200 pt-12 mb-16"
+  >
+    <div class="max-w-3xl">
+      <h3
+        class="text-sm font-mono text-stone-400 uppercase tracking-widest mb-6"
+        >Related Features</h3
+      >
+      <ul class="space-y-3">
+        <li>
+          <a
+            href={getLocalizedPath("/features/lqa", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >LQA & Quality Assurance</a
+          >
+          <span class="text-stone-500">
+            — The scoring that determines auto-approval routing</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/translation-memory", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Translation Memory</a
+          >
+          <span class="text-stone-500">
+            — 99% TM match as one of the two auto-approval triggers</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/github-integration", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >GitHub Integration</a
+          >
+          <span class="text-stone-500">
+            — Automated pipeline where auto-approval enables zero-touch
+            deployment</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/product/context", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >The Context Engine</a
+          >
+          <span class="text-stone-500">
+            — Pre-translation constraints that reduce flagged segments</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/team-collaboration", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Team Collaboration</a
+          >
+          <span class="text-stone-500">
+            — Review queue access by role</span
+          >
+        </li>
+      </ul>
+    </div>
+  </Section>
+</BaseLayout>

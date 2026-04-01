@@ -3,8 +3,10 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Section from "../../../components/ui/Section.astro";
 import Breadcrumbs from "../../../components/seo/Breadcrumbs.astro";
 import TldrBlock from "../../../components/seo/TldrBlock.astro";
-import { getLocalizedPath, locales } from "../../../i18n/utils";
+import FAQSection from "../../../components/seo/FAQSection.astro";
+import SchemaOrg from "../../../components/seo/SchemaOrg.astro";
 import HeroTeamCollaboration from "../../../components/visuals/HeroTeamCollaboration.jsx";
+import { getLocalizedPath, locales } from "../../../i18n/utils";
 
 export const prerender = true;
 
@@ -18,45 +20,80 @@ export function getStaticPaths() {
 let { lang } = Astro.params;
 if (!lang) lang = "en";
 
-const title = "Team Collaboration & Translation Management | Flixu";
+const title = "Team Collaboration — Shared TM, Glossary & Roles | Flixu";
 const description =
-  "Scale your localization output effortlessly. Share translation memories, glossaries, and project access with built-in role management.";
+  "Shared Translation Memory, Glossaries, and Brand Voice across your team. Role-based access keeps freelancers scoped to their projects — without exposing global settings.";
 
 const breadcrumbItems = [
   { name: "Home", url: getLocalizedPath("/", lang) },
   { name: "Features", url: getLocalizedPath("/features", lang) },
   { name: "Team Collaboration", url: Astro.url.pathname },
 ];
+
+const faqs = [
+  {
+    question:
+      "How does shared Translation Memory work across team members?",
+    answer:
+      "When any team member confirms a translated segment in a client workspace, that approved translation becomes part of the shared Translation Memory for that client. The Semantic Reranker retrieves it as a style reference for subsequent translations — whether run by the same translator or a different one. Confirmed translations from any team member improve the quality pool for everyone working on that client.",
+  },
+  {
+    question: "Can I restrict what my freelance translators can see?",
+    answer:
+      "Yes. Translators assigned to a project see only that project — not other client workspaces, global Glossary settings, Brand Voice configurations, or billing information. You can invite external contractors as Translators for specific projects, and their access is scoped to those projects only.",
+  },
+  {
+    question: "What are the three roles and what can each do?",
+    answer:
+      "Admin: full workspace access including billing, global settings, and user management. Project Manager: create and configure projects, run translations, review and approve segments, monitor workspace progress. Translator: work within assigned projects — upload files, run translations, edit and submit segments. Translators cannot modify global Glossaries, Brand Voice profiles, or client settings.",
+  },
+  {
+    question:
+      "Can a team member be upgraded or downgraded between roles?",
+    answer:
+      "Yes. Admins can change any team member's role at any time through the workspace settings. A Translator can be promoted to Project Manager; an external contractor who no longer needs edit access can be downgraded. Role changes take effect immediately.",
+  },
+  {
+    question:
+      "Does Translation Memory update in real time when a team member confirms a translation?",
+    answer:
+      "Yes. Confirmed translations update the shared TM for that client workspace immediately. There's no batch sync or delay — the next translation run for any team member working on the same client will have access to the latest approved phrasing.",
+  },
+  {
+    question: "How is billing handled for a shared team workspace?",
+    answer:
+      "The workspace has a shared credit pool. Credits are consumed by translations run by any team member — the pool isn't per-user. One invoice covers the workspace's total translation volume. Admins can see credit usage broken down by project and language in the workspace settings.",
+  },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      name: "Flixu Team Collaboration",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    },
+  ],
+};
 ---
 
 <BaseLayout title={title} description={description}>
-  {/* SEO Schema */}
-  <script
-    type="application/ld+json"
-    set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: "How does shared Translation Memory work?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "When multiple team members work in the same client workspace, all confirmed translations instantly update the shared Translation Memory algorithm. The next translator benefits from those matches in real-time.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Can I restrict what my freelance translators can see?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Yes, Flixu utilizes Role-Based Access Control (RBAC). You can invite external vendors or team members as Viewers or Editors, restricting their access to specific projects or configuration settings.",
-          },
-        },
-      ],
-    })}
-  />
+  <SchemaOrg schema={schema} slot="schema" />
 
+  <!-- 01 — HERO -->
   <Section data-chapter="01 — OVERVIEW" class="hero-section pb-16">
     <div
       class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center max-w-7xl mx-auto px-6"
@@ -68,17 +105,19 @@ const breadcrumbItems = [
           >Feature Spotlight</span
         >
         <h1 class="mb-6">
-          Built for teams.<br /><span class="text-orange-700 italic"
-            >Not just individuals.</span
-          >
+          Built for teams.<br />Not just individuals.
         </h1>
         <p class="max-w-2xl text-xl text-stone-600 mb-8">
-          Achieve absolute consistency across your entire translation roster.
-          Shared memories, terminology, and project workflows without the
-          onboarding friction.
+          Shared Translation Memories, Glossaries, and Brand Voices across your
+          entire team. Role-based access so freelancers and contractors see only
+          what they need. One workspace, consistent terminology, clear
+          accountability.
         </p>
-        <a href={`/${lang !== "en" ? lang + "/" : ""}pricing`} class="hidden">
-          Start Your Free Team Trial
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start your free team trial →
         </a>
       </div>
       <div class="relative w-full aspect-[4/3] hidden md:block">
@@ -87,17 +126,182 @@ const breadcrumbItems = [
     </div>
   </Section>
 
+  <!-- 02 — TL;DR -->
   <Section data-chapter="02 — TL;DR" class="tldr-section">
     <div class="max-w-3xl">
       <TldrBlock
-        text="Flixu Team and Business plans transform solitary translation into a networked operation. Instantly share specific Translation Memories, Glossaries, and Brand Voices. Utilize a continuous activity feed to track translation progress, and assign strict Owner/Admin/Editor roles to maintain security when inviting external contractors to your workspace."
+        label="What is Team Collaboration in Flixu?"
+        text="Team and Business plans let multiple users share Translation Memories, Glossaries, and Brand Voice configurations within a single workspace. Role-based access controls scope what each team member or external contractor can view, edit, or approve. When any team member confirms a translation, it updates the shared Translation Memory — available to every user in the workspace."
       />
     </div>
   </Section>
 
-  <Section data-chapter="03 — CAPABILITIES" class="content-section mt-12">
+  <!-- 03 — RBAC -->
+  <Section data-chapter="03 — RBAC" class="content-section mt-12">
+    <div class="max-w-4xl">
+      <h2 class="mb-8">Role-based access control.</h2>
+
+      <p class="text-stone-600 leading-relaxed mb-8">
+        Three roles cover the range of team structures — from the workspace
+        administrator who configures everything to the contractor who reviews a
+        single project:
+      </p>
+
+      <div class="overflow-x-auto mb-8">
+        <table class="w-full text-sm border border-stone-200">
+          <thead>
+            <tr class="bg-stone-50">
+              <th
+                class="text-left px-4 py-3 font-semibold border-b border-stone-200 w-1/4"
+                >Role</th
+              >
+              <th
+                class="text-left px-4 py-3 font-semibold border-b border-stone-200"
+                >What they can do</th
+              >
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-stone-100">
+              <td class="px-4 py-3 font-medium align-top">Admin</td>
+              <td class="px-4 py-3 text-stone-600"
+                >Full workspace access: manage billing, configure global
+                settings, create and delete client profiles, edit Glossaries and
+                Brand Voice profiles, manage team members, invite and remove
+                users</td
+              >
+            </tr>
+            <tr class="border-b border-stone-100">
+              <td class="px-4 py-3 font-medium align-top">Project Manager</td>
+              <td class="px-4 py-3 text-stone-600"
+                >Create and configure projects, assign client profiles, run
+                translation workflows, review and approve segments, monitor
+                progress across the workspace</td
+              >
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium align-top">Translator</td>
+              <td class="px-4 py-3 text-stone-600"
+                >Work within assigned projects: upload files, run translations,
+                edit and submit segments for review. Cannot modify global
+                Glossaries, Brand Voice settings, or client configuration</td
+              >
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="text-stone-500 text-sm mb-4">
+        Note: These are the platform's current defined roles. Check the
+        documentation for the latest role permissions as the platform evolves.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed">
+        For teams that include external contractors or freelancers, role
+        assignment at the project level means they see the projects they're
+        invited to — not the broader workspace, client list, or global
+        configuration settings.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 04 — HOW IT WORKS -->
+  <Section data-chapter="04 — HOW IT WORKS" class="content-section mt-20">
     <div class="max-w-3xl">
-      <h2 class="mb-12">Core Capabilities</h2>
+      <h2 class="mb-8">How shared workspaces work.</h2>
+
+      <p class="text-stone-600 leading-relaxed mb-10">
+        The practical value of a shared workspace is that individual actions
+        compound. When one translator confirms a segment, every subsequent
+        translation for that client benefits from that approved phrasing — in
+        full projects and in Quick Translate.
+      </p>
+
+      <div class="space-y-10">
+        <!-- Step 1 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            1
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Shared Translation Memory</h3>
+            <p class="text-stone-600 leading-relaxed">
+              All confirmed translations within a client workspace update the
+              shared Translation Memory. When Translator A confirms "Submit" as
+              "Absenden" for a client, Translator B working on a different
+              document for the same client sees that as a style reference. The
+              workspace's quality improves with each approved segment,
+              regardless of who confirmed it.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            2
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Shared Glossary and Brand Voice</h3>
+            <p class="text-stone-600 leading-relaxed">
+              Changes to a client's Glossary or Brand Voice configuration are
+              immediately active for all projects under that client. An Admin
+              who adds a new approved term to the Glossary doesn't need to
+              notify the team — the next translation run for any team member
+              working on that client will apply the updated constraint.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            3
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">
+              Project-level assignment and visibility
+            </h3>
+            <p class="text-stone-600 leading-relaxed">
+              Projects can be assigned to specific team members. A Project
+              Manager assigns files to a Translator; the Translator sees their
+              assigned projects and works within them. The Admin and Project
+              Manager see progress across all projects in the workspace.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            4
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Activity feed and audit trail</h3>
+            <p class="text-stone-600 leading-relaxed">
+              Every action in the workspace — segment confirmed, Glossary
+              updated, Brand Voice changed, file translated — is logged in the
+              activity feed. Project Managers can see what changed, who changed
+              it, and when, without a separate communication thread.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 05 — CAPABILITIES GRID -->
+  <Section data-chapter="05 — CAPABILITIES" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-12">What team collaboration includes.</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div class="flex flex-col gap-4">
@@ -120,11 +324,12 @@ const breadcrumbItems = [
                 d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg
             >
           </div>
-          <h3 class="text-xl">Networked Intelligence</h3>
+          <h3 class="text-xl">Shared Translation Memory</h3>
           <p class="text-stone-600 leading-relaxed">
-            Structural consistency built-in. An agency deploying 5 translators
-            automatically builds a unified intelligence layer. Translator A's
-            edits instantly provide context for Translator B.
+            Every confirmed translation updates the shared TM for that client
+            workspace. New translations for the same client benefit from
+            previous approvals — across all team members, all projects, all
+            file types.
           </p>
         </div>
 
@@ -146,11 +351,12 @@ const breadcrumbItems = [
               ></path></svg
             >
           </div>
-          <h3 class="text-xl">Role-Based Access (RBAC)</h3>
+          <h3 class="text-xl">Role-based access control</h3>
           <p class="text-stone-600 leading-relaxed">
-            Prevent unintended modifications. Assign roles from Owner down to
-            Viewer. Freelancers can be restricted to specific projects without
-            exposing global client settings.
+            Three roles — Admin, Project Manager, Translator — scope workspace
+            access appropriately for internal teams and external contractors.
+            Freelancers assigned as Translators work within their projects
+            without accessing global configuration.
           </p>
         </div>
 
@@ -179,11 +385,12 @@ const breadcrumbItems = [
                 d="M12 18h.01"></path><path d="M16 18h.01"></path></svg
             >
           </div>
-          <h3 class="text-xl">Activity Feed</h3>
+          <h3 class="text-xl">Activity feed</h3>
           <p class="text-stone-600 leading-relaxed">
-            Eliminate project management ping-pong. See precisely when segments
-            are verified or modified across your entire organization in
-            real-time.
+            Every segment confirmation, file upload, Glossary change, and
+            project creation is logged in real time. Project Managers and
+            Admins see team activity without needing status updates sent
+            separately.
           </p>
         </div>
 
@@ -205,46 +412,196 @@ const breadcrumbItems = [
               ></path><path d="M12 8h.01"></path></svg
             >
           </div>
-          <h3 class="text-xl">Unified Billing</h3>
+          <h3 class="text-xl">Unified workspace billing</h3>
           <p class="text-stone-600 leading-relaxed">
-            One invoice, shared resource pools. Your Team or Business credit
-            pool is distributed automatically across your organization,
-            drastically simplifying procurement.
+            Your workspace's translation credits are shared across all team
+            members. One account, one credit pool, one invoice. Usage is
+            visible at the project and workspace level — broken down by file
+            and target language.
           </p>
         </div>
       </div>
     </div>
   </Section>
 
+  <!-- 06 — WHEN THIS MATTERS MOST -->
+  <Section data-chapter="06 — USE CASES" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-10">When team structure changes the outcome.</h2>
+
+      <!-- Agencies -->
+      <div class="mb-12">
+        <h3 class="text-xl mb-4">
+          Agencies running projects with in-house and freelance translators
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          An agency with three in-house translators and a rotating roster of
+          project-based freelancers needs access control that keeps each group
+          appropriately scoped. In-house staff with Admin or Project Manager
+          roles configure client settings and review output; freelancers
+          assigned as Translators work within their assigned projects without
+          seeing other clients or global configuration. Role assignment at the
+          project level handles this without a separate permission system.
+        </p>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          The shared Translation Memory is where the team's quality compounds:
+          every confirmation by any team member improves the style reference
+          pool for every subsequent translation for that client. The more the
+          team works, the more consistent the output.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → Agency workflow overview:
+          <a
+            href={getLocalizedPath("/for/agencies", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu for Agencies</a
+          >
+        </p>
+      </div>
+
+      <!-- Marketing teams -->
+      <div class="mb-12">
+        <h3 class="text-xl mb-4">
+          Marketing teams with distributed global reviewers
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          A marketing team localizing campaigns in-house often involves
+          native-speaking regional reviewers who check cultural accuracy, not
+          the full localization pipeline. Assigning regional reviewers as
+          Translators gives them access to review and approve translated output
+          for their language pair — without exposing Brand Voice configuration
+          or Glossary management to every reviewer.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → Marketing team workflows:
+          <a
+            href={getLocalizedPath("/for/global-marketing", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu for Global Marketing Teams</a
+          >
+        </p>
+      </div>
+
+      <!-- Enterprise -->
+      <div>
+        <h3 class="text-xl mb-4">
+          Enterprise localization programs with compliance requirements
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          For regulated content — legal, medical, financial — the activity feed
+          provides an audit trail of who approved what and when. The documented
+          approval chain is accessible to Admins and Project Managers without
+          requiring a separate compliance logging system.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → Enterprise workflows:
+          <a
+            href={getLocalizedPath("/for/enterprise", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu for Enterprise</a
+          >
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 07 — FAQ -->
   <Section
-    data-chapter="04 — FAQ"
+    data-chapter="07 — FAQ"
     class="content-section bg-stone-50 border-t border-stone-200 mt-24"
   >
     <div class="max-w-3xl mx-auto">
-      <h2 class="mb-10 text-center">Technical FAQ</h2>
-      <div class="space-y-6">
-        <div class="bg-white p-6 rounded-sm border border-stone-200 shadow-sm">
-          <h4 class="font-serif text-lg mb-2 text-stone-900">
-            How does shared Translation Memory work?
-          </h4>
-          <p class="text-sm text-stone-600">
-            When multiple team members work in the same client workspace, all
-            confirmed translations instantly update the shared Translation
-            Memory algorithm. The next translator benefits from those matches in
-            real-time.
-          </p>
-        </div>
-        <div class="bg-white p-6 rounded-sm border border-stone-200 shadow-sm">
-          <h4 class="font-serif text-lg mb-2 text-stone-900">
-            Can I restrict what my freelance translators can see?
-          </h4>
-          <p class="text-sm text-stone-600">
-            Yes, Flixu utilizes Role-Based Access Control (RBAC). You can invite
-            external vendors or team members as Viewers or Editors, restricting
-            their access to specific projects or configuration settings.
-          </p>
-        </div>
+      <FAQSection items={faqs} />
+    </div>
+  </Section>
+
+  <!-- 08 — CTA -->
+  <Section data-chapter="08 — CTA" class="content-section mt-24 mb-16">
+    <div class="max-w-3xl text-center mx-auto">
+      <h2 class="mb-6">Scale your team without losing consistency.</h2>
+      <p class="text-stone-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+        Invite your team, assign roles, and share Translation Memory and
+        Glossaries across every project from day one.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center justify-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start your free team trial →
+        </a>
+        <a
+          href={getLocalizedPath("/features/client-management", lang)}
+          class="inline-flex items-center justify-center gap-2 border border-stone-300 text-stone-700 px-6 py-3 rounded-sm font-medium hover:bg-stone-50 transition-colors"
+        >
+          See how client profiles work →
+        </a>
       </div>
+    </div>
+  </Section>
+
+  <!-- 09 — RELATED FEATURES -->
+  <Section
+    data-chapter="09 — RELATED"
+    class="content-section border-t border-stone-200 pt-12 mb-16"
+  >
+    <div class="max-w-3xl">
+      <h3
+        class="text-sm font-mono text-stone-400 uppercase tracking-widest mb-6"
+        >Related Features</h3
+      >
+      <ul class="space-y-3">
+        <li>
+          <a
+            href={getLocalizedPath("/features/client-management", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Client Management</a
+          >
+          <span class="text-stone-500">
+            — Isolated client profiles within the shared workspace</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/project-management", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Project Management</a
+          >
+          <span class="text-stone-500">
+            — Project-level assignment and progress tracking</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/translation-memory", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Translation Memory</a
+          >
+          <span class="text-stone-500">
+            — How shared TM accumulates across team approvals</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/brand-voice", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Brand Voice</a
+          >
+          <span class="text-stone-500">
+            — Shared Brand Voice configuration for all team translations</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/for/agencies", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu for Agencies</a
+          >
+          <span class="text-stone-500">
+            — Team collaboration in agency workflows</span
+          >
+        </li>
+      </ul>
     </div>
   </Section>
 </BaseLayout>

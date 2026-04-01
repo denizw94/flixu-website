@@ -1,42 +1,69 @@
 ---
 title: "LLM Routing"
-description: "The intelligent algorithmic architecture of dynamically directing diverse translation payloads to distinct Large Language Models based strictly upon domain complexity, emotional resonance criteria, and processing velocity constraints."
-relatedTerms:
-  [
-    "context-aware-translation",
-    "domain-aware-translation",
-    "machine-translation",
-  ]
+description: "LLM routing directs translation tasks to different AI models based on content type, language pair, and quality threshold — not one endpoint for everything."
+relatedTerms: ["context-aware-translation", "domain-aware-translation", "machine-translation", "bleu-score", "translation-quality-assurance", "api-based-translation", "glossary-management"]
 ---
 
-# Defining LLM Routing
+# What Is LLM Routing?
 
-In the hyper-accelerated ecosystem of modern AI-driven B2B localization, **Large Language Model (LLM) Routing** is the architectural intelligence that prevents a platform from becoming functionally locked into an outdated or suboptimal neural network.
+> **LLM Routing** is the practice of directing translation tasks to different Large Language Models based on the requirements of each job — content type, language pair, volume, quality threshold, or cost constraints. Rather than sending all content through a single model, a routing layer evaluates each request and selects the most appropriate processing path for it.
 
-Prior to advanced AI routing models, organizations typically relied on a single vendor’s API. All corporate text—from legal compliance documents to creative marketing assets—was processed through one specific algorithmic engine.
+## Why Routing Matters
 
-The fallacy of this monolithic approach is that **no single Artificial Intelligence model is objectively superior at every linguistic task across every global language pair.**
+No single AI model performs equally well across every translation task. A model that handles literary transcreation well may not be the most efficient choice for high-volume, repetitive UI strings. A model optimized for a specific language pair may outperform a general-purpose model on that corridor while being less accurate elsewhere.
 
-- A model like **Claude 3.5 Sonnet** (by Anthropic) frequently possesses staggering superiority in capturing creative intent, maintaining high-empathy brand tone, and executing sophisticated cultural transcreation for Western European marketing material.
-- A model like **Gemini 1.5 Pro** (by Google) frequently dominates in raw computational speed, processing monumental volumes of technical API JSON arrays or dense multilingual databases with unparalleled velocity.
-- A model like **GPT-4o** (by OpenAI) frequently serves as a highly resilient, deeply competent generalist model, handling highly rigorous logic and syntax alignment for complex technical documentation.
+This isn't a new problem. It mirrors how professional localization has always worked: different content types go to different specialists — legal translators for contracts, technical writers for documentation, copywriters for marketing. LLM routing applies the same logic to AI models.
 
-## The Orchestration Layer and Dynamic Switching
+Without routing, organizations either pick one model and accept its tradeoffs across all use cases, or they manually manage which content goes where — which doesn't scale.
 
-LLM Routing represents the architectural realization that translation AI should not be a static vendor; it must be a fluid commodity.
+## How LLM Routing Works in Practice
 
-Elite Contextual Orchestrators (like Flixu) sit explicitly between the client's continuous integration pipeline and the foundational AI models. They do not force the enterprise into a singular neural network. Instead, they operate as an intelligent traffic director.
+A routing layer sits between the application submitting content and the models processing it. When a translation request arrives, the router evaluates metadata about the request and makes a dispatch decision.
 
-When an API payload hits the orchestration layer, the router evaluates a matrix of metadata:
+The factors that typically inform routing include:
 
-1. **Source / Target Languages:** Which model algorithmically scores the absolute highest BLUE or COMET score for the specific English-to-Japanese corridor? If the Claude architecture fundamentally struggles with Japanese Keigo (honourifics) but the proprietary Gemini stack excels, the system routes the Japanese string securely to Gemini.
-2. **Contextual Objective:** Is the payload tagged as an "Emotionally Dense Marketing Landing Page"? The router will bypass the faster, rigid models and elect to route the text into the most expensive, highly creative reasoning model available to guarantee optimal transcreation.
-3. **Volume and Cost Optimization:** If the enterprise is requesting a large-scale translation of 4 million isolated, highly repetitive e-commerce product reviews (where poetic nuance is entirely irrelevant), the router immediately defaults to a lightning-fast, highly economical tier-two LLM, slashing the computational API cost by 90% while retaining acceptable contextual fidelity.
+**Language pair.** Some models perform more consistently on certain language corridors — particularly for languages with complex honorific systems (Japanese Keigo, Korean speech levels), non-Latin scripts, or right-to-left rendering. Routing to a model with stronger coverage for a specific pair reduces the quality gap.
 
-## Future-Proofing the Localization Stack
+**Content type and domain.** Technical documentation, legal contracts, marketing copy, and UI strings have different quality requirements. Routing can assign domain-specific parameters — matching the classification from [domain-aware translation](/topic/glossary/domain-aware-translation) to a model configuration optimized for that domain — rather than applying generic settings to all content.
 
-The most significant, unquantifiable ROI of a sophisticated LLM Routing architecture is permanent future-proofing against AI obsolescence.
+**Volume and cost efficiency.** For high-volume, low-complexity content where nuance is less critical — product metadata, short repeating labels, bulk data — routing to a faster, lower-cost processing path preserves quality where it matters and reduces spend where it doesn't.
 
-The landscape of LLM capabilities evolves rapidly. A model highly effective for German technical translation in January may be surpassed by a new architecture released shortly after.
+**Quality threshold.** Content that must meet a high [LQA](/topic/glossary/translation-quality-assurance) bar can be routed to a more capable processing path; content where a lower threshold is acceptable can go through a faster one.
 
-Hardcoding a specific API endpoint into a codebase can introduce technical debt as new models emerge. By utilizing a Contextual Orchestrator, an enterprise can iteratively upgrade to advanced localized intelligence, efficiently transitioning between foundation models as capabilities evolve.
+## How Flixu Handles This
+
+Flixu's approach to LLM routing is built around determinism. The Platform Overview describes this as **Deterministic AI (Zero Hallucinations):** backend routing through Qwen and DeepInfra models structured specifically for translation tasks, preventing the model from adding unsolicited commentary, changing formatting, or departing from glossary constraints.
+
+This matters for localization specifically because translation tasks have strict requirements that general-purpose model behavior can violate. A model that's flexible and creative in open-ended prompting is also more likely to paraphrase an approved term, reformat a placeholder, or add an explanatory clause that wasn't in the source. Routing to models structured for deterministic output — and configuring them with [glossary management](/topic/glossary/glossary-management), [translation memory](/topic/glossary/translation-memory), and [brand voice](/topic/glossary/brand-voice-translation) constraints — produces more predictable results than routing to a general-purpose endpoint.
+
+The Scalable Vector Search layer handles the retrieval side: when the system searches past translations for matching segments, it uses semantic vector retrieval to surface conceptually similar content — not just exact character matches. This means the routing decision and the context retrieval work together: the right model receives the right context before generating output.
+
+## LLM Routing vs. Single-Model Translation
+
+| | Single-Model Approach | LLM Routing |
+|---|---|---|
+| **Model selection** | Fixed — one endpoint for all content | Variable — matched to content requirements |
+| **Quality consistency** | Dependent on model's weaknesses | Weaknesses mitigated by routing decisions |
+| **Cost control** | One price regardless of content complexity | Higher-cost paths reserved for high-priority content |
+| **Adaptability as models evolve** | Requires codebase change to switch | Route logic updated; application unchanged |
+| **Hallucination risk in translation** | Varies by model | Managed via deterministic model selection |
+
+## Related Terms
+
+- [Context-Aware Translation](/topic/glossary/context-aware-translation) — the broader methodology that LLM routing supports; routing is one layer of the full context framework
+- [Domain-Aware Translation](/topic/glossary/domain-aware-translation) — domain classification that informs routing decisions
+- [Machine Translation](/topic/glossary/machine-translation) — the foundational AI translation layer that routing operates on top of
+- [BLEU Score](/topic/glossary/bleu-score) — one metric used to evaluate model performance per language pair
+- [Translation Quality Assurance](/topic/glossary/translation-quality-assurance) — the quality layer that routing decisions affect downstream
+- [API-Based Translation](/topic/glossary/api-based-translation) — the API infrastructure through which routing dispatches translation requests
+- [Glossary Management](/topic/glossary/glossary-management) — the constraint layer applied within each routing destination
+
+## Related Guides
+
+- [How Flixu's Context Engine Works](/product/context) — the five-dimension analysis that informs routing and context configuration
+- [AI in Translation: What's Actually Changed](/topic/ai-in-translation) — where LLM routing fits in the shift to AI-native localization pipelines
+- [For Developers](/for/developers) — how Flixu's routing and API infrastructure integrates into developer workflows
+
+---
+
+*Last Updated: March 2026 · Author: Deniz, Founder — Flixu AI*

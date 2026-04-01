@@ -145,19 +145,32 @@ export interface SpecCategory {
 
 export interface PricingSpecs {
     title: string;
-    headers: {
-        feature: string;
-        free: string;
-        ind: string;
-        team: string;
-        biz: string;
-        ent: string;
-    };
     enterprise: {
         text: string;
         link: string;
     };
-    rows: SpecCategory[];
+    dev: {
+        headers: {
+            feature: string;
+            free: string;
+            ind: string;
+            team: string;
+            biz: string;
+            ent: string;
+        };
+        rows: SpecCategory[];
+    };
+    ui: {
+        headers: {
+            feature: string;
+            free: string;
+            ind: string;
+            team: string;
+            biz: string;
+            ent: string;
+        };
+        rows: SpecCategory[];
+    };
 }
 
 export interface Pricing {
@@ -296,7 +309,10 @@ export interface UI {
     methodPage: MethodPage;
     navigation: Navigation;
     rail: Record<string, string>;
-    pricingGrid: PricingPlan[];
+    pricingGrid: {
+        tabs: { id: string; name: string; activeLabel: string }[];
+        plans: Record<string, PricingPlan[]>;
+    } | PricingPlan[];
     enterpriseCard: EnterpriseCard;
     comparison: ComparisonLayout;
     topic: TopicLayout;

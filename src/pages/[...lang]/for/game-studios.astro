@@ -1,0 +1,595 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Section from "../../../components/ui/Section.astro";
+import Breadcrumbs from "../../../components/seo/Breadcrumbs.astro";
+import TldrBlock from "../../../components/seo/TldrBlock.astro";
+import FAQSection from "../../../components/seo/FAQSection.astro";
+import SchemaOrg from "../../../components/seo/SchemaOrg.astro";
+import HeroGameStudios from "../../../components/visuals/HeroGameStudios.jsx";
+import { getLocalizedPath, locales } from "../../../i18n/utils";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: undefined } },
+    ...locales.map((lang) => ({ params: { lang } })),
+  ];
+}
+
+let { lang } = Astro.params;
+if (!lang) lang = "en";
+
+const title =
+  "Flixu for Game Studios — Character Voice Preservation in Localization";
+const description =
+  "Define character voices once. Flixu reads the full script before translating — so your villain stays sarcastic in German. XLIFF, .po, JSON supported.";
+
+const breadcrumbItems = [
+  { name: "Home", url: getLocalizedPath("/", lang) },
+  { name: "Who it's for", url: getLocalizedPath("/for/freelancers", lang) },
+  { name: "Game Studios", url: Astro.url.pathname },
+];
+
+const faqs = [
+  {
+    question:
+      "Can Flixu define separate voice profiles for different characters?",
+    answer:
+      "Yes. Each character can be set up as a named Brand Voice profile — defining their speech register, vocabulary preferences, formality level, and tonal characteristics. When dialogue lines associated with a character run through the pipeline, the corresponding profile is applied. The antagonist doesn't sound polite because the sarcastic register was specified before the language model generated the line.",
+  },
+  {
+    question:
+      "Does the platform read the full script before translating individual lines?",
+    answer:
+      "Yes. Whole-Document Context reads the entire document before processing any single string. Character relationships, recurring terms, narrative arc, and tonal context are understood at the document level before individual translation decisions are made. This is what allows dialogue from Chapter 8 to reflect context established in Chapter 1.",
+  },
+  {
+    question:
+      "What file formats does Flixu support for game localization?",
+    answer:
+      "XLIFF, .po / POT, JSON (Unity and custom formats), YAML, iOS .strings, Markdown, and subtitle files. For each format, structural elements — tags, variable names, format codes, XML structure — are preserved exactly in the exported file. The output file can be re-imported into the game engine without manual post-processing. Some proprietary engine formats may require conversion before import; check the documentation for the current format list.",
+  },
+  {
+    question:
+      "How does Glossary Enforcement help with game terminology?",
+    answer:
+      "Each game's Glossary stores approved translations for UI terms, skill names, item names, location names, and any vocabulary that must be consistent across the full script. Terminology is loaded as a payload constraint before translation — the model generates text with the approved terms already specified, not checked afterward. A term added to the Glossary applies to every subsequent translation for that project, across all target languages.",
+  },
+  {
+    question: "Is Flixu affordable for indie studios?",
+    answer:
+      "The free tier covers enough translation volume to test the pipeline on a sample of your game's strings before committing. Paid plans are credit-based — you pay for words translated, not for seats or hosting. For a visual novel with 100,000 words in three languages, the cost is significantly lower than professional localization agency rates (which typically run EUR 0.08–0.15 per word per language). The comparison worth running: translate a chapter through Flixu with character voice configured and compare the output to what generic MT produces on the same content.",
+  },
+  {
+    question:
+      "How does Flixu compare to Crowdin or Phrase for game localization?",
+    answer:
+      "Crowdin and Phrase are strong platforms for managing localization workflows and integrating with development pipelines. They don't address character voice consistency or document-level context — both translate strings without knowledge of who's speaking or the narrative context. Flixu's Brand Voice Manager and Whole-Document Context are designed specifically for the quality requirements of narrative games. For studios where community translation or straightforward UI string management is the primary need, Crowdin may be the more appropriate choice. For narrative games where character voice is a quality requirement, the architectural difference matters.",
+  },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      name: "Flixu for Game Studios",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <SchemaOrg schema={schema} slot="schema" />
+
+  <!-- 01 — HERO -->
+  <Section data-chapter="01 — INTRO" class="hero-section pb-16">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center max-w-7xl mx-auto px-6"
+    >
+      <div class="max-w-3xl !px-0">
+        <Breadcrumbs items={breadcrumbItems} />
+        <span
+          class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-6 block"
+          >For Game Studios & Interactive Media</span
+        >
+        <h1 class="mb-6">
+          "Reads like a machine translation" — in 30% of our negative Steam
+          reviews.
+        </h1>
+        <p class="max-w-2xl text-xl text-stone-600 mb-8">
+          Generic MT translates your villain's dialogue. It doesn't know the
+          villain is sarcastic. It doesn't know Sakura speaks more formally
+          than the protagonist. It doesn't know the same term appears 200
+          times across the script and needs to be consistent. Flixu's Brand
+          Voice Manager lets you define each character's voice — and the
+          pre-translation analysis reads the full script before translating a
+          single line.
+        </p>
+      </div>
+      <div class="relative w-full aspect-[4/3] hidden md:block">
+        <HeroGameStudios client:load />
+      </div>
+    </div>
+  </Section>
+
+  <!-- 02 — TL;DR -->
+  <Section data-chapter="02 — TL;DR" class="tldr-section">
+    <div class="max-w-3xl">
+      <TldrBlock
+        label="What is Flixu for Game Studios?"
+        text="A localization platform for narrative games, visual novels, and interactive media. Before translating individual strings, it reads the full script to understand character relationships, narrative arc, and tonal development. Each character's voice is configured as a separate Brand Voice profile — the dialogue output reflects the character's personality, not generic translated text. Format-preserving export returns XLIFF, .po, JSON, and .yaml files in exactly the format your game engine expects."
+      />
+    </div>
+  </Section>
+
+  <!-- 03 — EMPATHY / PROBLEM -->
+  <Section data-chapter="03 — PROBLEM" class="content-section mt-12">
+    <div class="max-w-3xl">
+      <span
+        class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-4 block"
+        >The Problem</span
+      >
+      <h2 class="mb-8">
+        Your localization was technically correct. The character still sounded
+        wrong.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        A localization agency delivered the translation on time. Every line
+        was technically accurate. The sarcastic antagonist who drove your
+        entire second act — the character players spent twenty hours learning
+        to hate — came back sounding polite and helpful in German. Review
+        after review mentioned it. One Steam comment put it directly:
+        <em
+          >"The German translation made the villain sound like a customer
+          service rep."</em
+        >
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        It's not that the translator was bad. It's that the translator didn't
+        know the character. They received a spreadsheet of strings without
+        context: no scene information, no emotional state, no character
+        biography, no relationship to other characters. Under those
+        conditions, consistent character voice is structurally impossible.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">From the community:</p>
+
+      <div class="space-y-4 mb-8">
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "Our translator didn't know the character at all — the villain
+            sounds friendly."
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "'Reads like a machine translation' was in 30% of our negative
+            reviews."
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "We need the whole script to be read before individual lines are
+            translated — context matters."
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "Our fan translation was better than our professional one."
+          </p>
+        </div>
+      </div>
+
+      <p class="text-stone-600 leading-relaxed">
+        The answer isn't finding a better translator. It's changing what
+        information the translation pipeline has access to before it starts.
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 1 — Character Voice -->
+  <Section data-chapter="04 — PAIN POINTS" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Each character's voice is a configuration, not a briefing document.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The Brand Voice Manager stores character definitions in the
+        workspace. Sakura's formal register, the antagonist's dry sarcasm,
+        the naive sidekick's casual vocabulary — each defined once as a named
+        profile. When the corresponding character's dialogue runs through the
+        translation pipeline, that profile is applied automatically.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The definition doesn't disappear when the project changes scope or
+        when you're translating the fourth language. It's in the
+        configuration, not in the memory of whoever read the briefing
+        document. The antagonist is sarcastic in German for the same reason
+        he's sarcastic in English — because the character definition was
+        specified before the language model generated a single line.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For visual novels and narrative-heavy games, this is the difference
+        between a localization that sustains immersion and one that breaks it
+        every time a character speaks.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Character voice configuration:
+        <a
+          href={getLocalizedPath("/features/brand-voice", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Brand Voice Manager</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 2 — Whole-Document Context -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        The full script is read before the first line is translated.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Standard string-based translation processes each line in isolation.
+        "Attack" in combat context and "Attack" in a political dialogue scene
+        are the same string — translated identically because the surrounding
+        context isn't part of the request.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Flixu's Whole-Document Context reads the full script before
+        processing individual strings. Character relationships, narrative
+        arc, tonal development, and recurring terms are understood from the
+        document before any single line is translated. A term introduced in
+        Chapter 1 informs how it should appear in Chapter 8. A character's
+        emotional state in a scene shapes how their dialogue should read.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For games where consistency across hundreds of hours of dialogue
+        matters — and where players will notice if it doesn't —
+        document-level context changes what the output can achieve.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → How pre-translation analysis works:
+        <a
+          href={getLocalizedPath("/product/context", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >The Context Engine</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 3 — Glossary Enforcement -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        "Inventory" is "Inventar" — not "Vorratstasche" in one quest and
+        "Gepäck" in another.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        A player who's put twenty hours into your game will notice if the same
+        game term appears as three different German words. Not consciously,
+        and probably not on the first instance — but it breaks immersion.
+        Terms tied to game mechanics — inventory systems, status effects,
+        skill names, location names — need to be consistent across UI
+        strings, quest descriptions, NPC dialogue, and tutorial text.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Glossary Enforcement loads your approved game terminology before
+        translation begins. "Inventory" maps to "Inventar." "Health" maps to
+        "Gesundheit." A custom item name stays in its approved form across
+        every string that references it, regardless of which part of the
+        script it appears in or which segment was translated first.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        When a term is added or updated, the change applies to every
+        subsequent translation for that project. No email chain, no risk that
+        the NPC dialogue was translated before the terminology update arrived.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Glossary enforcement:
+        <a
+          href={getLocalizedPath("/features/glossary-enforcement", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Glossary Enforcement</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 4 — Launch Timeline -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Localization stops being the reason your launch slips.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        A release in three languages typically means: content freeze eight
+        weeks before launch, handoff to translators, waiting,
+        re-integration, QA, more waiting. Localization sits at the end of the
+        production pipeline — and when it slips, the launch date slips with
+        it.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Studios report 4–6 week delays per language version from localization
+        bottlenecks. For an indie studio shipping to Steam with a seasonal
+        launch window, those weeks are revenue.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The Flixu pipeline can run alongside content development rather than
+        after it. When a string is finalized in the source language, it can
+        be queued for translation immediately — not batch-processed in the
+        final weeks before launch. LQA scores every segment automatically;
+        strings above the quality threshold auto-approve without a review
+        step. The production team reviews the edge cases, not every string.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Auto-approval workflow:
+        <a
+          href={getLocalizedPath("/features/auto-approval", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Auto-Approval Workflows</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- 07 — FORMAT SUPPORT -->
+  <Section data-chapter="07 — FORMATS" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-6">
+        Your game engine's format comes out exactly as it went in.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Flixu's parser extracts translatable strings and preserves all
+        structural elements — tags, variable names, placeholders, format
+        codes, XML structure — exactly as they appear in the source file.
+        The exported file is structurally identical to the import.
+      </p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+        {
+          [
+            "XLIFF",
+            ".po / POT",
+            "JSON",
+            "YAML",
+            "iOS .strings",
+            "Markdown",
+            "Subtitles",
+          ].map((fmt) => (
+            <div class="flex items-center gap-3 py-3 border-b border-stone-100">
+              <div class="w-1.5 h-1.5 rounded-full bg-orange-700 flex-shrink-0" />
+              <span class="font-mono text-sm text-stone-700">{fmt}</span>
+            </div>
+          ))
+        }
+      </div>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For Unity projects specifically: Unity XLIFF export typically includes
+        proprietary tags and format codes. The parser preserves these
+        structural elements and exports in the same format the engine can
+        re-import without manual post-processing.
+      </p>
+
+      <div
+        class="bg-amber-50 border border-amber-200 rounded-sm p-4 text-sm text-amber-800 mb-6"
+      >
+        <strong>Note:</strong> Godot's .tres resource files and some proprietary
+        custom engine formats may require format conversion before import. Check
+        the documentation for current format support before starting a full
+        localization project.
+      </div>
+
+      <p class="text-stone-500 text-sm">
+        → Format support documentation:
+        <a
+          href={getLocalizedPath("/product/documents", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Document Translation</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- 08 — WHAT'S DIFFERENT -->
+  <Section data-chapter="08 — DIFFERENTIATION" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        What's different about localization with character context.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Most localization tools — including Crowdin, Phrase, and generic MT
+        APIs — process strings without character context. They can produce
+        technically accurate translations of individual dialogue lines. What
+        they can't do is maintain consistent character voice across a
+        200,000-word script where each character has distinct speech
+        patterns, vocabulary preferences, and emotional registers.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Flixu's Brand Voice Manager and Whole-Document Context address this
+        at the architectural level. Character voice is a configuration, not a
+        briefing. Document-level reading means context from earlier in the
+        script informs later translations. The output quality for narrative
+        content reflects the full context of the story — not the statistical
+        average of translated dialogue across the internet.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed">
+        For visual novels, RPGs, and narrative-heavy games where character
+        voice <em>is</em> the product, that distinction is the entire value
+        proposition.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 09 — FAQ -->
+  <Section
+    data-chapter="09 — FAQ"
+    class="content-section bg-stone-50 border-t border-stone-200 mt-24"
+  >
+    <div class="max-w-3xl mx-auto">
+      <FAQSection items={faqs} />
+    </div>
+  </Section>
+
+  <!-- 10 — CTA -->
+  <Section data-chapter="10 — CTA" class="content-section mt-24 mb-16">
+    <div class="max-w-3xl text-center mx-auto">
+      <h2 class="mb-6">
+        Translate a chapter with character voices configured.
+      </h2>
+      <p class="text-stone-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+        Set up a character profile, upload a sample of your game's dialogue,
+        and compare the output with generic MT on the same content. The
+        character voice difference is usually visible within the first ten
+        lines.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center justify-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start translating for free →
+        </a>
+        <a
+          href={getLocalizedPath("/use-cases/game-localization", lang)}
+          class="inline-flex items-center justify-center gap-2 border border-stone-300 text-stone-700 px-6 py-3 rounded-sm font-medium hover:bg-stone-50 transition-colors"
+        >
+          See the game localization use case →
+        </a>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 11 — RELATED FEATURES -->
+  <Section
+    data-chapter="11 — RELATED"
+    class="content-section border-t border-stone-200 pt-12 mb-16"
+  >
+    <div class="max-w-3xl">
+      <h3
+        class="text-sm font-mono text-stone-400 uppercase tracking-widest mb-6"
+        >Related Features</h3
+      >
+      <ul class="space-y-3">
+        <li>
+          <a
+            href={getLocalizedPath("/features/brand-voice", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Brand Voice Manager</a
+          >
+          <span class="text-stone-500">
+            — Character voice configuration per profile</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/product/context", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >The Context Engine</a
+          >
+          <span class="text-stone-500">
+            — Whole-Document Context and pre-translation analysis</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/glossary-enforcement", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Glossary Enforcement</a
+          >
+          <span class="text-stone-500">
+            — Game terminology consistency across the full script</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/auto-approval", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Auto-Approval Workflows</a
+          >
+          <span class="text-stone-500">
+            — Launch timeline reduction through automated QA</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/product/documents", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Document Translation</a
+          >
+          <span class="text-stone-500">
+            — Game engine format support and structural parsing</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/use-cases/game-localization", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Game Localization Use Case</a
+          >
+          <span class="text-stone-500">
+            — Step-by-step narrative game workflow</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/compare/transifex-alternative", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu vs. Transifex</a
+          >
+          <span class="text-stone-500"> — Competitor comparison</span>
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/pricing", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Pricing</a
+          >
+          <span class="text-stone-500">
+            — Credit-based pricing for indie and AA studios</span
+          >
+        </li>
+      </ul>
+    </div>
+  </Section>
+</BaseLayout>

@@ -3,8 +3,10 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Section from "../../../components/ui/Section.astro";
 import Breadcrumbs from "../../../components/seo/Breadcrumbs.astro";
 import TldrBlock from "../../../components/seo/TldrBlock.astro";
-import { getLocalizedPath, locales } from "../../../i18n/utils";
+import FAQSection from "../../../components/seo/FAQSection.astro";
+import SchemaOrg from "../../../components/seo/SchemaOrg.astro";
 import HeroQuickTranslations from "../../../components/visuals/HeroQuickTranslations.jsx";
+import { getLocalizedPath, locales } from "../../../i18n/utils";
 
 export const prerender = true;
 
@@ -18,45 +20,80 @@ export function getStaticPaths() {
 let { lang } = Astro.params;
 if (!lang) lang = "en";
 
-const title = "Quick Translations Workspace | Flixu";
+const title = "Quick Translations — Instant Context-Aware Translation | Flixu";
 const description =
-  "Instantly translate text snippets using full AI context without creating a heavy project structure. Perfect for UI strings and emails.";
+  "Translate a single string, short email, or ad copy check — with your Glossary and Brand Voice applied automatically. No project setup required.";
 
 const breadcrumbItems = [
   { name: "Home", url: getLocalizedPath("/", lang) },
   { name: "Features", url: getLocalizedPath("/features", lang) },
   { name: "Quick Translations", url: Astro.url.pathname },
 ];
+
+const faqs = [
+  {
+    question:
+      "How is Quick Translate different from Google Translate or DeepL?",
+    answer:
+      "Consumer translation tools don't know your client's approved terminology, brand voice, or translation history. Quick Translate applies your selected client profile — Glossary, Brand Voice, Translation Memory — to every request automatically. The output is brand-consistent and terminology-compliant, not generic MT output. And corrections you approve feed back into the client's Translation Memory for future requests.",
+  },
+  {
+    question: "Do Quick Translate results get saved to the Translation Memory?",
+    answer:
+      "Yes, but only when you edit and approve the output. If you accept the translation without modification, the session doesn't automatically update the TM. If you correct the output and approve the revised version, that correction is saved to the client's Translation Memory and becomes a style reference for future translations.",
+  },
+  {
+    question:
+      "Can I use Quick Translate without assigning a client profile?",
+    answer:
+      "Yes. Without a client profile, Quick Translate runs the pre-translation context analysis — domain detection, formality calibration — but without client-specific Glossary or Brand Voice constraints. The output is context-aware but not brand-constrained. For one-off personal translations or when no client context is relevant, that's the appropriate setting.",
+  },
+  {
+    question:
+      "How does Quick Translate differ from the full project workflow?",
+    answer:
+      "Quick Translate is designed for single strings and short-form text without a structured review cycle. Full projects support multiple files, segment-by-segment LQA scoring, the review queue, auto-approval workflows, and activity tracking across a team. For content that needs documented review or involves structured file formats, the project workflow is the appropriate path. Quick Translate is for the translation that needs to happen in under a minute.",
+  },
+  {
+    question: "Is there a text length limit for Quick Translate?",
+    answer:
+      "Quick Translate is optimized for short-form text — single strings, short paragraphs, brief emails. For longer content or structured file formats (DOCX, XLIFF, JSON), the project workflow handles parsing, format preservation, and the full review pipeline. Check your current plan for specific character limits.",
+  },
+  {
+    question: "Does Quick Translate support all languages that Flixu covers?",
+    answer:
+      "Yes. Quick Translate uses the same language support as the full project workflow — all 22+ supported languages are available. Select the target language from the same language menu used in project settings.",
+  },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      name: "Flixu Quick Translate",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    },
+  ],
+};
 ---
 
 <BaseLayout title={title} description={description}>
-  {/* SEO Schema */}
-  <script
-    type="application/ld+json"
-    set:html={JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: "How is Quick Translate better than Google Translate?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Unlike standard web translators, Flixu's Quick Translate allows you to select a specific Client Profile, meaning the output will automatically conform to your private Translation Memories and Brand Voice.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Do Quick Translations get saved to the TM?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Yes. If an authorized user edits and approves a result in Quick Translate, that semantic pairing is permanently embedded into the selected client's Translation Memory dataset.",
-          },
-        },
-      ],
-    })}
-  />
+  <SchemaOrg schema={schema} slot="schema" />
 
+  <!-- 01 — HERO -->
   <Section data-chapter="01 — OVERVIEW" class="hero-section pb-16">
     <div
       class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center max-w-7xl mx-auto px-6"
@@ -69,12 +106,16 @@ const breadcrumbItems = [
         >
         <h1 class="mb-6">Fast. Simple. Contextual.</h1>
         <p class="max-w-2xl text-xl text-stone-600 mb-8">
-          Need to translate a 3-word UI string or an incredibly brief email? Use
-          Quick Translate to bypass complex project creation while keeping all
-          of your AI context.
+          For a single UI string, a short email, or a quick ad copy check —
+          Quick Translate runs the same context layer as a full project, without
+          the project setup. Select a client profile, paste your text, and
+          translate.
         </p>
-        <a href={`/${lang !== "en" ? lang + "/" : ""}pricing`} class="hidden">
-          Try Quick Translate
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Try Quick Translate →
         </a>
       </div>
       <div class="relative w-full aspect-[4/3] hidden md:block">
@@ -83,17 +124,59 @@ const breadcrumbItems = [
     </div>
   </Section>
 
+  <!-- 02 — TL;DR -->
   <Section data-chapter="02 — TL;DR" class="tldr-section">
     <div class="max-w-3xl">
       <TldrBlock
-        text="Sometimes you don't need a large multi-file project. For short strings, emails, or ad-hoc marketing copy, Flixu's Quick Translate interface acts just like a consumer translation tool—but it sits perfectly on top of your advanced RAG infrastructure. Select your Target Client, type your text, and ensure that even the smallest task respects your hard-earned Glossary and TM."
+        label="What is Quick Translate?"
+        text="Quick Translate is the ad-hoc interface for single strings, short copy, and one-off translations — no project setup required. It applies your selected client profile, Glossary, and Translation Memory to every request automatically. When you approve a corrected translation, it feeds back into the Translation Memory so future requests benefit from that correction."
       />
     </div>
   </Section>
 
-  <Section data-chapter="03 — CAPABILITIES" class="content-section mt-12">
+  <!-- 03 — HOW IT WORKS -->
+  <Section data-chapter="03 — HOW IT WORKS" class="content-section mt-12">
     <div class="max-w-3xl">
-      <h2 class="mb-12">Core Capabilities</h2>
+      <h2 class="mb-8">How Quick Translate works.</h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Quick Translate sits inside the Flixu workspace alongside the full
+        project workflow. The interface is a text input — paste your source
+        text, select a target language and an optional client profile, and
+        translate. There's no file upload, no project creation, no
+        configuration before you start.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        What makes it different from a consumer translation tool is what
+        happens before the translation runs. If you've selected a client
+        profile, the Glossary and Translation Memory associated with that
+        client are loaded for the request. The Brand Voice configuration
+        applies. The same analysis that runs on a full project document runs on
+        a three-word UI string.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        If you translate without a client profile, the request runs on the
+        foundational model — still context-aware through the pre-translation
+        analysis, but without client-specific terminology or brand voice
+        constraints.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed">
+        After translation, if you edit and approve the output, the correction
+        is fed back into the selected client's Translation Memory through the
+        Post-Edit Learning Loop. That approved phrasing becomes a style
+        reference for future requests — in Quick Translate and in full project
+        workflows.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 04 — CAPABILITIES GRID -->
+  <Section data-chapter="04 — CAPABILITIES" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-12">What Quick Translate includes.</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div class="flex flex-col gap-4">
@@ -117,11 +200,12 @@ const breadcrumbItems = [
                 y2="20"></line><line x1="12" x2="12" y1="4" y2="20"></line></svg
             >
           </div>
-          <h3 class="text-xl">Frictionless Entry</h3>
+          <h3 class="text-xl">No setup required</h3>
           <p class="text-stone-600 leading-relaxed">
-            Zero setup required. Just paste your text string directly into the
-            browser workspace for instantaneous, enterprise-grade AI translation
-            processing.
+            Paste text, select a language, translate. For one-off copy checks,
+            customer support responses, or quick string reviews, you don't need
+            to create a project. The interface is designed for the translation
+            that takes 30 seconds, not 30 minutes.
           </p>
         </div>
 
@@ -143,11 +227,13 @@ const breadcrumbItems = [
               ></path></svg
             >
           </div>
-          <h3 class="text-xl">Full Context Injection</h3>
+          <h3 class="text-xl">Client profile applies automatically</h3>
           <p class="text-stone-600 leading-relaxed">
-            Despite its simplified interface, Quick Translate maintains parity
-            with heavy project workflows. You can actively enforce Client Tone,
-            Formal constraints, and TM matching simultaneously.
+            Select a client and the correct Glossary, Brand Voice, and
+            Translation Memory load for the request. The same client-specific
+            constraints that govern a full project apply to a single string in
+            Quick Translate — including terminology enforcement and formality
+            settings.
           </p>
         </div>
 
@@ -169,11 +255,13 @@ const breadcrumbItems = [
               ></path><path d="m14.5 4-5 16"></path></svg
             >
           </div>
-          <h3 class="text-xl">Iterative Testing</h3>
+          <h3 class="text-xl">Brand voice testing</h3>
           <p class="text-stone-600 leading-relaxed">
-            Use the tool as a laboratory. It is the perfect place to experiment
-            with different prompts and Brand Voice adjustments before deploying
-            them globally to a 10,000-word dataset.
+            Quick Translate is a useful tool for testing Brand Voice
+            configurations before applying them to a large document. Translate
+            the same sentence with two different brand voice settings and
+            compare the outputs side by side. Adjust the configuration and test
+            again — without running a full project.
           </p>
         </div>
 
@@ -196,46 +284,165 @@ const breadcrumbItems = [
                 d="m5 7-3 5 3 5"></path><path d="m19 7 3 5-3 5"></path></svg
             >
           </div>
-          <h3 class="text-xl">Bi-Directional Archiving</h3>
+          <h3 class="text-xl">
+            Corrections feed back into Translation Memory
+          </h3>
           <p class="text-stone-600 leading-relaxed">
-            Approved answers feed back into the system. If you correctly
-            translate an ambiguous marketing phrase here, the AI will remember
-            that exact phrasing for subsequent automated projects.
+            If you edit the translation output and approve it, that correction
+            is saved to the client's Translation Memory via the Post-Edit
+            Learning Loop. A phrasing you approve in Quick Translate is
+            available as a style reference in every subsequent translation for
+            that client — quick requests and full projects alike.
           </p>
         </div>
       </div>
     </div>
   </Section>
 
+  <!-- 05 — WHEN THIS MATTERS MOST -->
+  <Section data-chapter="05 — USE CASES" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-10">When Quick Translate fits the workflow.</h2>
+
+      <!-- Freelancers -->
+      <div class="mb-12">
+        <h3 class="text-xl mb-4">
+          Freelancers handling ad-hoc client requests
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          A freelance translator handling a mix of project-based work and
+          one-off client requests benefits from a tool that applies
+          client-specific context without requiring full project setup for
+          every short task. Quick Translate provides access to the client's
+          Glossary and Translation Memory for a single string — the same
+          quality constraints, without the overhead.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → Freelancer workflows:
+          <a
+            href={getLocalizedPath("/for/freelancers", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu for Freelancers</a
+          >
+        </p>
+      </div>
+
+      <!-- Support teams -->
+      <div class="mb-12">
+        <h3 class="text-xl mb-4">Support and customer-facing teams</h3>
+        <p class="text-stone-600 leading-relaxed">
+          Customer support agents translating individual responses, or social
+          media managers checking copy for a specific market, need fast access
+          to brand-consistent translation without logging into a project
+          workflow. Quick Translate gives them a browser-based interface —
+          paste, translate, copy — with the brand voice and glossary
+          automatically applied if their workspace is configured.
+        </p>
+      </div>
+
+      <!-- Developers -->
+      <div>
+        <h3 class="text-xl mb-4">
+          Developers testing localization strings
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          Before adding a new UI string to a full localization project, a
+          developer can test how it translates across target languages using
+          Quick Translate. The same glossary enforcement that applies to the
+          production pipeline applies here — so the test output accurately
+          reflects what the automated pipeline will produce.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 06 — FAQ -->
   <Section
-    data-chapter="04 — FAQ"
+    data-chapter="06 — FAQ"
     class="content-section bg-stone-50 border-t border-stone-200 mt-24"
   >
     <div class="max-w-3xl mx-auto">
-      <h2 class="mb-10 text-center">Technical FAQ</h2>
-      <div class="space-y-6">
-        <div class="bg-white p-6 rounded-sm border border-stone-200 shadow-sm">
-          <h4 class="font-serif text-lg mb-2 text-stone-900">
-            How is Quick Translate better than Google Translate?
-          </h4>
-          <p class="text-sm text-stone-600">
-            Unlike standard web translators, Flixu's Quick Translate allows you
-            to select a specific Client Profile, meaning the output will
-            automatically conform to your private Translation Memories and Brand
-            Voice.
-          </p>
-        </div>
-        <div class="bg-white p-6 rounded-sm border border-stone-200 shadow-sm">
-          <h4 class="font-serif text-lg mb-2 text-stone-900">
-            Do Quick Translations get saved to the TM?
-          </h4>
-          <p class="text-sm text-stone-600">
-            Yes. If an authorized user edits and approves a result in Quick
-            Translate, that semantic pairing is permanently embedded into the
-            selected client's Translation Memory dataset.
-          </p>
-        </div>
+      <FAQSection items={faqs} />
+    </div>
+  </Section>
+
+  <!-- 07 — CTA -->
+  <Section data-chapter="07 — CTA" class="content-section mt-24 mb-16">
+    <div class="max-w-3xl text-center mx-auto">
+      <h2 class="mb-6">Translate intelligently. No setup.</h2>
+      <p class="text-stone-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+        Paste a string, select a language, and see your Brand Voice and
+        Glossary applied — even for a three-word UI label.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center justify-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start translating for free →
+        </a>
+        <a
+          href={getLocalizedPath("/product/text", lang)}
+          class="inline-flex items-center justify-center gap-2 border border-stone-300 text-stone-700 px-6 py-3 rounded-sm font-medium hover:bg-stone-50 transition-colors"
+        >
+          Try the text translation product →
+        </a>
       </div>
+    </div>
+  </Section>
+
+  <!-- 08 — RELATED FEATURES -->
+  <Section
+    data-chapter="08 — RELATED"
+    class="content-section border-t border-stone-200 pt-12 mb-16"
+  >
+    <div class="max-w-3xl">
+      <h3
+        class="text-sm font-mono text-stone-400 uppercase tracking-widest mb-6"
+        >Related Features</h3
+      >
+      <ul class="space-y-3">
+        <li>
+          <a
+            href={getLocalizedPath("/features/project-management", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Project Management</a
+          >
+          <span class="text-stone-500">
+            — For multi-file translation with structured review</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/translation-memory", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Translation Memory</a
+          >
+          <span class="text-stone-500">
+            — How approved Quick Translate corrections feed back in</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/brand-voice", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Brand Voice</a
+          >
+          <span class="text-stone-500">
+            — Tone configuration applied in Quick Translate</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/client-management", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Client Management</a
+          >
+          <span class="text-stone-500">
+            — Client profiles selectable in Quick Translate</span
+          >
+        </li>
+      </ul>
     </div>
   </Section>
 </BaseLayout>

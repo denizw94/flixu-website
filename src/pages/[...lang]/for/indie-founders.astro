@@ -1,0 +1,659 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Section from "../../../components/ui/Section.astro";
+import Breadcrumbs from "../../../components/seo/Breadcrumbs.astro";
+import TldrBlock from "../../../components/seo/TldrBlock.astro";
+import FAQSection from "../../../components/seo/FAQSection.astro";
+import SchemaOrg from "../../../components/seo/SchemaOrg.astro";
+import HeroIndieFounders from "../../../components/visuals/HeroIndieFounders.jsx";
+import { getLocalizedPath, locales } from "../../../i18n/utils";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: undefined } },
+    ...locales.map((lang) => ({ params: { lang } })),
+  ];
+}
+
+let { lang } = Astro.params;
+if (!lang) lang = "en";
+
+const title =
+  "Flixu for Indie Founders — Localization Without Agency Prices";
+const description =
+  "Brand voice, glossary enforcement, and LQA quality scores for solo founders. Free tier. No sales call. Translate your first language in under 30 minutes.";
+
+const breadcrumbItems = [
+  { name: "Home", url: getLocalizedPath("/", lang) },
+  { name: "Who it's for", url: getLocalizedPath("/for/freelancers", lang) },
+  { name: "Indie Founders", url: Astro.url.pathname },
+];
+
+const faqs = [
+  {
+    question:
+      "Is Flixu affordable for a product that's not yet profitable?",
+    answer:
+      "Yes. There's a free tier with translation credits — enough to localize your first language and check the quality before paying anything. Paid plans are credit-based, starting at a price point designed for small teams. Compare it to: what would one German user's annual subscription cover in localization costs?",
+  },
+  {
+    question:
+      "How do I know if the translation quality is good enough without speaking the language?",
+    answer:
+      "The LQA score. Every segment receives a quality score across five dimensions: Grammar, Accuracy, Terminology Consistency, Formatting, and Fluency. A score of 91/100 means the segment passed every dimension. A score of 73/100 with a Terminology Consistency flag means a product term wasn't applied correctly — you can see what failed and why, without reading the target language.",
+  },
+  {
+    question:
+      "Does Flixu work with Next.js i18n or standard JSON files?",
+    answer:
+      "Yes. JSON is a supported format. Upload your en.json, select your target languages, and get back localized files in the same structure — keys, variables, and nested objects preserved exactly. The GitHub App connects to your repository and handles delta translation automatically on push, so you don't have to manually re-run it every time you update a string.",
+  },
+  {
+    question:
+      "What if I just want to test one language before committing?",
+    answer:
+      "Start on the free tier. Translate one language, check the LQA scores, deploy the segments above threshold. If the quality meets your bar, add more languages. If you find an issue, the specific failing dimension is flagged — you can address it in the glossary or brand voice configuration and re-run.",
+  },
+  {
+    question:
+      "Can I set up the GitHub integration without a full localization workflow?",
+    answer:
+      "Yes. Install the app, point it at your localization file path, set your target languages. That's the configuration. On the next push that touches those files, Flixu detects the changes and translates only the new or modified strings. You don't need to set up projects, assign translators, or configure workflows. It's closer to a GitHub Action than a TMS.",
+  },
+  {
+    question: "I'm a solo founder. Do I need team features?",
+    answer:
+      "Not immediately — the free tier works for a single user. When you do add someone to help review, role-based access lets you add them as a Translator scoped to your project. They see your workspace without access to billing or global configuration. No per-seat pricing for adding a reviewer.",
+  },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      name: "Flixu for Indie Founders",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <SchemaOrg schema={schema} slot="schema" />
+
+  <!-- 01 — HERO -->
+  <Section data-chapter="01 — INTRO" class="hero-section pb-16">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center max-w-7xl mx-auto px-6"
+    >
+      <div class="max-w-3xl !px-0">
+        <Breadcrumbs items={breadcrumbItems} />
+        <span
+          class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-6 block"
+          >For Indie Founders & Micro-SaaS</span
+        >
+        <h1 class="mb-6">
+          Professional localization costs more than my MRR. So I built
+          something different.
+        </h1>
+        <p class="max-w-2xl text-xl text-stone-600 mb-8">
+          A German interface that sounds like DeepL ran it signals effort
+          level. Flixu applies your brand voice and enforces your
+          terminology — you get a quality score that tells you if it's
+          deploy-ready, even if you don't speak German.
+        </p>
+      </div>
+      <div class="relative w-full aspect-[4/3] hidden md:block">
+        <HeroIndieFounders client:load />
+      </div>
+    </div>
+  </Section>
+
+  <!-- 02 — TL;DR -->
+  <Section data-chapter="02 — TL;DR" class="tldr-section">
+    <div class="max-w-3xl">
+      <TldrBlock
+        label="What is Flixu for Indie Founders?"
+        text="Translation with context — brand voice, glossary, and quality scoring — without the enterprise overhead. Define how your product sounds in two sentences. Upload your i18n files. Get a quality score per segment. Deploy the ones above 90. Review the rest. No agency. No sales call. No per-seat pricing that punishes a team of two."
+      />
+    </div>
+  </Section>
+
+  <!-- 03 — EMPATHY / PROBLEM -->
+  <Section data-chapter="03 — PROBLEM" class="content-section mt-12">
+    <div class="max-w-3xl">
+      <span
+        class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-4 block"
+        >The Problem</span
+      >
+      <h2 class="mb-8">
+        Your Spanish version is two feature updates behind. Your German
+        sounds off. And you don't have time for either.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        You know the math. You're leaving a significant portion of your
+        potential market on the table by staying English-only. Adding German
+        or Spanish should be a growth lever. The problem is the workflow:
+        every feature update means manually updating the localization, and
+        for a one-person team that's realistically not happening on a
+        consistent schedule.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        So the Spanish version falls behind. The German copy you launched
+        with was DeepL, which was fine — until a German user sent you a
+        message saying it sounds "a bit off." You don't speak German. You
+        spent a weekend trying to fix it by hand. You're still not sure if
+        it's actually better.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">From the community:</p>
+
+      <div class="space-y-4 mb-8">
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "I used DeepL for my German UI but a user told me it sounds
+            off — I don't speak German, how do I know?"
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "My Spanish version is two feature updates behind because I can't
+            keep up."
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "Does anyone have a workflow for solo founders doing localization
+            without a team?"
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "How do you validate translation quality if you don't speak the
+            language?"
+          </p>
+        </div>
+      </div>
+
+      <p class="text-stone-600 leading-relaxed">
+        The answer to the last question: an LQA score. A number that says
+        "this segment is 91/100 across grammar, accuracy, terminology, and
+        fluency — you can deploy it." That's what replaces the weekend of
+        second-guessing.
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 1 — LQA Deploy Signal -->
+  <Section data-chapter="04 — PAIN POINTS" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        A quality score tells you if it's deploy-ready — even if you don't
+        speak the language.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The biggest practical problem for a solo founder doing localization
+        isn't translation. It's not knowing whether the translation is good
+        enough. Generic MT gives you text. It doesn't tell you whether the
+        text will embarrass you in the market.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Flixu's LQA scores every segment automatically across five
+        dimensions — Grammar, Accuracy, Terminology Consistency, Formatting,
+        and Fluency. Each segment gets a score. Segments above 90 are
+        auto-approved. Segments below 90 appear in the review queue with the
+        specific failing dimension marked. If Grammar is flagged, it's a
+        grammar issue. If Terminology is flagged, a product term wasn't
+        applied correctly.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For a founder who doesn't speak the target language, "Grammar 95,
+        Accuracy 98, Fluency 93 — auto-approved" is a deploy signal.
+        "Terminology 72 — review" is a meaningful flag. The score doesn't
+        require native speaker knowledge to interpret; it requires knowing
+        what 90 means.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → How LQA scoring works:
+        <a
+          href={getLocalizedPath("/features/lqa", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >LQA & Quality Assurance</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 2 — Brand Voice -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Your interface sounds like your product — not like Generic MT ran it.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Generic MT produces grammatically correct text. It doesn't know if
+        your product is playful and casual or professional and direct. It
+        doesn't know that you use "workspace" instead of "project." It picks
+        the statistically likely word, which is the average of every similar
+        text on the internet, which is not your brand voice.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Define your brand voice in two or three sentences — what register,
+        what energy, what vocabulary preferences. The Brand Voice Manager
+        stores that definition in the workspace and applies it to every
+        translation request automatically. Every language version sounds like
+        the product, not like DeepL applied to the product.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For a founder who built their copy carefully in English, that
+        distinction matters in markets where language quality signals effort
+        and professionalism.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Brand voice in two sentences:
+        <a
+          href={getLocalizedPath("/features/brand-voice", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Brand Voice Manager</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 3 — Delta Translation -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Delta translation: only the new strings get translated when you push
+        an update.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        A localization workflow that requires translating everything every
+        time a feature changes is a workflow that gets skipped. The Spanish
+        version falls two updates behind because no one had an hour to run
+        the full translation again. The German onboarding copy still mentions
+        a feature you renamed six months ago.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The Flixu GitHub App detects new and changed strings when you push to
+        the repository. Only the deltas get translated — not the entire file.
+        The translated strings commit to a dedicated localization branch. The
+        localized version of a feature is ready the same day you push it in
+        English.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For a solo founder where every hour matters, the difference between
+        "translate everything" and "translate only what changed" is the
+        difference between a workflow you actually maintain and one you
+        abandon after the third update.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → GitHub App for delta translation:
+        <a
+          href={getLocalizedPath("/features/github-integration", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >GitHub Integration</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- 06 — THE ECONOMICS -->
+  <Section data-chapter="06 — ECONOMICS" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        The cost comparison that actually matters for a bootstrapped product.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Professional localization agencies charge EUR 0.08–0.15 per word. For
+        a SaaS app with 10,000 words of interface and documentation in five
+        languages, that's EUR 4,000–7,500 upfront — before you know if
+        international users will convert. For most micro-SaaS products,
+        that's more than monthly MRR at the point where you're considering
+        localization.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Flixu is credit-based — you pay for words translated. The free tier
+        covers enough volume to test your first language. Paid plans scale
+        with translation volume, not with team size. Adding your co-founder
+        or a part-time reviewer to the workspace doesn't change the bill.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The comparison worth running before committing: translate one language
+        on the free tier. Check the LQA scores. Deploy the approved segments.
+        See if the quality is good enough to test the market before spending
+        anything meaningful.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Pricing and free tier:
+        <a
+          href={getLocalizedPath("/pricing", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Pricing</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- 07 — HOW TO GET STARTED -->
+  <Section data-chapter="07 — GETTING STARTED" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">Getting started without a setup project.</h2>
+
+      <div class="space-y-10">
+        <!-- Option 1 -->
+        <div>
+          <h3 class="text-lg mb-3">
+            <span class="text-orange-700 font-mono text-sm mr-2">01</span>
+            Paste and translate
+            <span class="text-stone-400 text-sm font-normal ml-2"
+              >(fastest)</span
+            >
+          </h3>
+          <p class="text-stone-600 leading-relaxed">
+            Open Quick Translate in the workspace. Paste your English string.
+            Select a language. Get the translation with the LQA score. This
+            requires nothing to configure — it's the right option for testing
+            the output before committing to a full integration.
+          </p>
+        </div>
+
+        <!-- Option 2 -->
+        <div>
+          <h3 class="text-lg mb-3">
+            <span class="text-orange-700 font-mono text-sm mr-2">02</span>
+            Upload your i18n file
+          </h3>
+          <p class="text-stone-600 leading-relaxed">
+            Upload your JSON, YAML, .po, or .strings file. Run translation.
+            Get the output file back in the same format. Keys, variables, and
+            placeholders preserved exactly. Takes under five minutes for a
+            typical app's string file.
+          </p>
+        </div>
+
+        <!-- Option 3 -->
+        <div>
+          <h3 class="text-lg mb-3">
+            <span class="text-orange-700 font-mono text-sm mr-2">03</span>
+            GitHub App for automated delta translation
+          </h3>
+          <p class="text-stone-600 leading-relaxed">
+            Install the GitHub App, configure the monitored file path and
+            target languages, push a commit. From that point, new and changed
+            strings translate automatically on push. The localized files
+            commit to a dedicated branch. Your localization stays current
+            without a manual step.
+          </p>
+        </div>
+      </div>
+
+      <p class="text-stone-500 text-sm mt-8 leading-relaxed">
+        You don't have to start with Option 3. Most indie founders start with
+        Option 1 or 2 to validate the output quality, then set up the GitHub
+        App once they've confirmed the workflow works for their stack.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 08 — WHAT'S DIFFERENT FROM DEEPL -->
+  <Section
+    data-chapter="08 — DIFFERENTIATION"
+    class="content-section mt-20"
+  >
+    <div class="max-w-3xl">
+      <h2 class="mb-8">What's different from running it through DeepL.</h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        DeepL produces good raw translation. It doesn't know your product. It
+        doesn't know your brand voice, your approved vocabulary, or what you
+        translated last month. Every request is a fresh start.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-4">
+        Flixu adds three things on top of the translation:
+      </p>
+
+      <div class="space-y-4 mb-6">
+        <div class="flex gap-4">
+          <div
+            class="w-1.5 h-1.5 rounded-full bg-orange-700 mt-2 flex-shrink-0"
+          >
+          </div>
+          <p class="text-stone-600 leading-relaxed">
+            <strong>Brand voice definition</strong> — you tell it once how
+            your product sounds, it applies that to every translation. The
+            German UI has the same energy as the English UI.
+          </p>
+        </div>
+        <div class="flex gap-4">
+          <div
+            class="w-1.5 h-1.5 rounded-full bg-orange-700 mt-2 flex-shrink-0"
+          >
+          </div>
+          <p class="text-stone-600 leading-relaxed">
+            <strong>Glossary</strong> — you tell it which terms are
+            non-negotiable. "Workspace" stays "Workspace." Your product name
+            stays your product name. Terms you've approved in previous
+            translations stay consistent.
+          </p>
+        </div>
+        <div class="flex gap-4">
+          <div
+            class="w-1.5 h-1.5 rounded-full bg-orange-700 mt-2 flex-shrink-0"
+          >
+          </div>
+          <p class="text-stone-600 leading-relaxed">
+            <strong>Quality score</strong> — every segment gets a number. You
+            know what to deploy and what to review, without asking a native
+            speaker.
+          </p>
+        </div>
+      </div>
+
+      <p class="text-stone-600 leading-relaxed">
+        For a solo founder, the practical difference is that you can actually
+        trust the output — not just hope it's good enough.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 09 — FAQ -->
+  <Section
+    data-chapter="09 — FAQ"
+    class="content-section bg-stone-50 border-t border-stone-200 mt-24"
+  >
+    <div class="max-w-3xl mx-auto">
+      <FAQSection items={faqs} />
+    </div>
+  </Section>
+
+  <!-- 10 — A NOTE FROM DENIZ -->
+  <Section data-chapter="10 — FOUNDER NOTE" class="content-section mt-24">
+    <div class="max-w-2xl mx-auto">
+      <div class="border-t border-stone-200 pt-12">
+        <p class="text-stone-500 leading-relaxed mb-6">
+          Building Flixu was partly about solving this exact problem. The
+          localization industry had two options: generic MT that you couldn't
+          trust, and agency workflows that cost more than early-stage MRR. The
+          gap between those two options is where most indie products
+          stayed — English-only until they had the budget for something
+          better, by which point they'd already left years of potential
+          international traction behind.
+        </p>
+
+        <p class="text-stone-500 leading-relaxed mb-6">
+          The approach here was: what if the quality signal was built in? What
+          if you could see the score, not just hope the translation is good
+          enough? That's what LQA is. The rest — brand voice, glossary, delta
+          translation — is what makes the output actually sound like your
+          product, not like a translation of your product.
+        </p>
+
+        <p class="text-stone-500 leading-relaxed mb-8">
+          If you're building something and you're trying to figure out
+          whether localization is worth it before committing real budget:
+          start with the free tier. Translate one language. Check the LQA
+          scores. Ship it. See what happens.
+        </p>
+
+        <p class="text-stone-600 text-sm font-medium">
+          — Deniz, Founder of Flixu
+        </p>
+        <p class="text-stone-400 text-sm mt-2">
+          →
+          <a
+            href={getLocalizedPath("/notes", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >More about the thinking behind this</a
+          >
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 11 — CTA -->
+  <Section data-chapter="11 — CTA" class="content-section mt-24 mb-16">
+    <div class="max-w-3xl text-center mx-auto">
+      <h2 class="mb-6">
+        Translate your first language in under 30 minutes.
+      </h2>
+      <p class="text-stone-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+        Free tier. No sales call. Upload your JSON, run the translation,
+        check the LQA scores. Deploy what passes.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center justify-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start translating for free →
+        </a>
+        <a
+          href={getLocalizedPath("/pricing", lang)}
+          class="inline-flex items-center justify-center gap-2 border border-stone-300 text-stone-700 px-6 py-3 rounded-sm font-medium hover:bg-stone-50 transition-colors"
+        >
+          See pricing →
+        </a>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 12 — RELATED FEATURES -->
+  <Section
+    data-chapter="12 — RELATED"
+    class="content-section border-t border-stone-200 pt-12 mb-16"
+  >
+    <div class="max-w-3xl">
+      <h3
+        class="text-sm font-mono text-stone-400 uppercase tracking-widest mb-6"
+        >Related Features</h3
+      >
+      <ul class="space-y-3">
+        <li>
+          <a
+            href={getLocalizedPath("/features/lqa", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >LQA & Quality Assurance</a
+          >
+          <span class="text-stone-500">
+            — Quality scores that replace native-speaker guesswork</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/brand-voice", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Brand Voice Manager</a
+          >
+          <span class="text-stone-500">
+            — Define how your product sounds in two sentences</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/github-integration", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >GitHub Integration</a
+          >
+          <span class="text-stone-500">
+            — Delta translation on every push</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/quick-translations", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Quick Translations</a
+          >
+          <span class="text-stone-500">
+            — Paste and translate without setup</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/product/developer-api", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Developer API</a
+          >
+          <span class="text-stone-500">
+            — Programmatic access for technical founders</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/pricing", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Pricing</a
+          >
+          <span class="text-stone-500">
+            — Free tier and credit-based plans</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/notes", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Notes</a
+          >
+          <span class="text-stone-500">
+            — Build-in-public thinking from the founder</span
+          >
+        </li>
+      </ul>
+    </div>
+  </Section>
+</BaseLayout>

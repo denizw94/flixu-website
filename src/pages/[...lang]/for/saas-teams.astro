@@ -6,11 +6,7 @@ import TldrBlock from "../../../components/seo/TldrBlock.astro";
 import FAQSection from "../../../components/seo/FAQSection.astro";
 import SchemaOrg from "../../../components/seo/SchemaOrg.astro";
 import HeroSaasTeams from "../../../components/visuals/HeroSaasTeams.jsx";
-import {
-  getLocalizedPath,
-  locales,
-  useTranslations,
-} from "../../../i18n/utils";
+import { getLocalizedPath, locales } from "../../../i18n/utils";
 
 export const prerender = true;
 
@@ -24,18 +20,13 @@ export function getStaticPaths() {
 let { lang } = Astro.params;
 if (!lang) lang = "en";
 
-const title = "Localization Tool for SaaS Teams | Flixu";
+const title = "Localization Tool for SaaS Teams — Git-Native | Flixu";
 const description =
-  "Ship your app in 15 languages without 15 different tools. Flixu combines developer APIs with context-aware TM and Quality Scoring.";
-
-const t = (await useTranslations(lang)) as any;
+  "Git-native localization for SaaS teams. New strings translated on push, committed to a dedicated branch — no merge conflicts, no manual export step.";
 
 const breadcrumbItems = [
-  { name: t?.breadcrumbs?.home || "Home", url: getLocalizedPath("/", lang) },
-  {
-    name: t?.navigation?.whofor?.title || "Who it's for",
-    url: getLocalizedPath("/for/freelancers", lang),
-  },
+  { name: "Home", url: getLocalizedPath("/", lang) },
+  { name: "Who it's for", url: getLocalizedPath("/for/freelancers", lang) },
   { name: "SaaS Teams", url: Astro.url.pathname },
 ];
 
@@ -43,23 +34,37 @@ const faqs = [
   {
     question: "Does Flixu have a localization API for developers?",
     answer:
-      "Yes, our API-first approach allows you to seamlessly push and pull translation strings right from your CI/CD pipeline, fully equipped with contextual Brand Voice constraints.",
-  },
-  {
-    question: "How does Flixu compare to Lokalise or Crowdin?",
-    answer:
-      "Legacy platforms charge high monthly fees and require disjointed integrations with DeepL. Flixu bundles the Translation Memory, LLM context, and API into one platform for a fraction of the cost.",
+      "Yes. The Developer API accepts translation requests programmatically and returns translated content with LQA scores per segment. The GitHub App handles the repository integration automatically without requiring API calls — you configure monitored file paths and the pipeline runs on push. For custom pipelines, the API supports webhook-based triggering for async translation of larger batches.",
   },
   {
     question:
-      "Can I protect code variables and placeholders during translation?",
+      "How does Flixu handle JSON keys, variables, and placeholders?",
     answer:
-      "Absolutely. Flixu utilizes Structural Parsers to identify and mathematically protect variables (e.g. {{user_name}}), ensuring developers never encounter syntax errors from mistranslated code.",
+      "The parser extracts only the translatable text values before the language model sees anything. JSON keys, HTML tags, Markdown syntax, and interpolation variables ({{user_name}}, {count}, <strong>) are excluded from the text that's sent for translation and re-injected into the output file from the preserved source structure. The file that goes in and the file that comes out are structurally identical — the only difference is the language of the human-readable values.",
   },
   {
-    question: "How does the Quality Scoring work?",
+    question:
+      "How does Flixu compare to Lokalise + DeepL or Crowdin?",
     answer:
-      "Flixu's algorithm mathematically scores the AI draft against the source text to ensure semantic, technical, and Brand Voice alignment. Only segments that fall below the confidence threshold require human PM review.",
+      "Lokalise and Crowdin integrate with DeepL or other MT providers as separate services. The GitHub integration creates pull requests for translated content, which compete with feature branches for the same localization files — causing the merge conflicts that slow sprints. Flixu's GitHub App commits to a dedicated localization branch that's structurally separate from feature branches. Brand Voice and Glossary apply to every translation request as pre-generation constraints, not as post-generation corrections.",
+  },
+  {
+    question:
+      "Can the Glossary enforce UI terminology across 22+ languages simultaneously?",
+    answer:
+      "Yes. Glossary terms are specified as payload constraints before translation begins. Every translation request for a project loads the active glossary — regardless of target language. Adding a new approved term applies to all subsequent translations for that project in all configured target languages. Updating an existing term applies immediately to all future translations.",
+  },
+  {
+    question:
+      "How does the QA workflow work for a PM who doesn't speak the target language?",
+    answer:
+      "The LQA score provides a quantified signal per segment across five dimensions. A Terminology Consistency flag tells the PM that a glossary term is missing or incorrect — without requiring them to read the target language. The review queue shows only the segments below threshold with the failing dimension marked. Everything above threshold is already auto-approved and deployable. The PM reviews the edge cases; the rest is already done.",
+  },
+  {
+    question:
+      "Is there a free tier for evaluating the API integration?",
+    answer:
+      "Yes. The free tier includes API access and translation credits — enough to connect the GitHub App or call the API and validate the output against your actual codebase before committing to a paid plan. The Glossary, Brand Voice, and Translation Memory are included in the free tier; it's the full pipeline, not a stripped-down preview.",
   },
 ];
 
@@ -90,20 +95,34 @@ const schema = {
 <BaseLayout title={title} description={description}>
   <SchemaOrg schema={schema} slot="schema" />
 
-  <Section data-chapter="01 — OVERVIEW" class="hero-section">
+  <!-- 01 — HERO -->
+  <Section data-chapter="01 — OVERVIEW" class="hero-section pb-16">
     <div
       class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center max-w-7xl mx-auto px-6"
     >
-      <div class="hero-container !px-0">
+      <div class="max-w-3xl !px-0">
         <Breadcrumbs items={breadcrumbItems} />
-        <span class="badge">For Product & Engineering</span>
-        <h1 class="hero-title">
-          Your app in 15 languages. Without 15 fragmented tools.
+        <span
+          class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-6 block"
+          >For Product & Engineering</span
+        >
+        <h1 class="mb-6">
+          Your app in 22 languages. Without the fragmented toolstack that's
+          killing your sprint velocity.
         </h1>
-        <p class="hero-desc">
-          Consolidate your localization stack. Get Precision TM, APIs, and AI
-          Quality Scoring in one unified platform.
+        <p class="max-w-2xl text-xl text-stone-600 mb-8">
+          Developers push code. Flixu detects new strings, translates with
+          your Glossary and Brand Voice applied, and commits translated files
+          to a dedicated branch. Product Managers see which segments need
+          review and which ones auto-approved. One platform. No separate
+          translation agency, no manual export step, no merge conflicts.
         </p>
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start translating for free →
+        </a>
       </div>
       <div class="relative w-full aspect-[4/3] hidden md:block">
         <HeroSaasTeams client:load />
@@ -111,139 +130,488 @@ const schema = {
     </div>
   </Section>
 
+  <!-- 02 — TL;DR -->
   <Section data-chapter="02 — TL;DR" class="tldr-section">
     <div class="max-w-3xl">
       <TldrBlock
-        text="SaaS product teams suffer from fragmented workflows—separating developers managing JSON files from Product Managers wrangling external translators. Flixu unifies this by providing an API for developers and a visual Quality Scoring dashboard for PMs. By baking Brand Voice strictly into our algorithm, your software sounds like your software everywhere in the world, directly from a Git push."
+        label="What is Flixu for SaaS Teams?"
+        text="SaaS teams typically manage localization across two disconnected workflows: developers handling JSON file extraction and a PM managing an external translation agency. Flixu connects those two workflows in a single platform — the GitHub App handles the pipeline, Brand Voice and Glossary apply automatically, and the LQA dashboard shows which segments need human review and which ones are already approved."
       />
     </div>
   </Section>
 
-  <Section data-chapter="03 — CAPABILITIES" class="content-section mt-12">
+  <!-- 03 — EMPATHY / PROBLEM -->
+  <Section data-chapter="03 — PROBLEM" class="content-section mt-12">
     <div class="max-w-3xl">
-      <h2 class="mb-12">Core Capabilities for SaaS</h2>
+      <span
+        class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-4 block"
+        >The Problem</span
+      >
+      <h2 class="mb-8">
+        By the time the translations come back, the feature has already been
+        refactored.
+      </h2>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div class="flex flex-col gap-4">
-          <div
-            class="w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm mb-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              ><rect width="18" height="18" x="3" y="3" rx="2" ry="2"
-              ></rect><line x1="8" x2="8" y1="12" y2="12"></line><line
-                x1="16"
-                x2="16"
-                y1="12"
-                y2="12"></line><path d="M12 8v8"></path></svg
-            >
-          </div>
-          <h3 class="text-xl">API-First Translation</h3>
-          <p class="text-stone-600 leading-relaxed">
-            Integrate directly. A single API call returns not only the
-            translation, but also the TM Match percentage and the AI Quality
-            Score, completely replacing the Lokalise + DeepL stack.
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The localization cycle in a SaaS product team follows the same
+        pattern. A developer adds new strings to a feature branch. Someone
+        extracts them — manually, or with a script that needs to be
+        maintained. The strings go to a translation tool or an agency.
+        Translations come back a week or two later. The developer merges
+        them, discovers that the feature was already updated since the strings
+        were sent out, and now the translations are stale.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Meanwhile, the TMS bot and the feature branch both wrote to the same
+        localization file. The result is a three-way merge conflict that has
+        nothing to do with the feature and takes forty minutes to untangle.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">From the community:</p>
+
+      <div class="space-y-4 mb-8">
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "Our translation cycles are killing our sprint velocity."
           </p>
         </div>
-
-        <div class="flex flex-col gap-4">
-          <div
-            class="w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm mb-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              ><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
-              ></path></svg
-            >
-          </div>
-          <h3 class="text-xl">UX Terminology Protection</h3>
-          <p class="text-stone-600 leading-relaxed">
-            Words matter in software. Force the LLM to translate "Settings"
-            consistently as "Einstellungen" (not "Konfiguration"). Protect
-            placeholders like <code>&#123;&#123; user_name &#125;&#125;</code> from
-            compile-breaking errors.
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "The TMS bot keeps creating merge conflicts in our i18n files."
           </p>
         </div>
-
-        <div class="flex flex-col gap-4">
-          <div
-            class="w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm mb-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              ><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"
-              ></path><circle cx="9" cy="7" r="4"></circle><path
-                d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path
-                d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg
-            >
-          </div>
-          <h3 class="text-xl">Seats for the Whole Squad</h3>
-          <p class="text-stone-600 leading-relaxed">
-            Bring your PMs, Devs, and Technical Writers together. Team and
-            Business plans include built-in multi-seat access with strict
-            Role-Based Access Control (RBAC).
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "We need something Git-native, not another file upload tool."
           </p>
         </div>
-
-        <div class="flex flex-col gap-4">
-          <div
-            class="w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm mb-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              ><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline
-                points="22 4 12 14.01 9 11.01"></polyline></svg
-            >
-          </div>
-          <h3 class="text-xl">Visual Quality Scoring</h3>
-          <p class="text-stone-600 leading-relaxed">
-            Your PM shouldn't need to speak Japanese to ship Japanese. Flixu's
-            Quality Score algorithm grades translations instantly, highlighting
-            the rare instances where human review is actually required.
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "Spent 40 hours last quarter just on localization coordination,
+            none of it actual translation work."
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "Crowdin PRs and our feature PRs keep colliding."
           </p>
         </div>
       </div>
+
+      <p class="text-stone-600 leading-relaxed">
+        The problem isn't the translation quality. It's the workflow
+        model — a human-centric pipeline attached to an engineering process
+        that runs faster than it can keep up with.
+      </p>
     </div>
   </Section>
 
+  <!-- PAIN POINT 1 — GitHub App / Branch Isolation -->
+  <Section data-chapter="04 — PAIN POINTS" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Translations commit to your repository when developers push
+        code — on a branch that doesn't conflict with your feature branches.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The Flixu GitHub App watches your monitored file paths. When a
+        developer pushes new or changed strings, the app detects them, runs
+        the translation pipeline with your Glossary and Brand Voice active,
+        and commits the translated files to a dedicated localization
+        branch — structurally separate from your feature branches.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The feature PR and the localization commit never touch the same files
+        at the same time. The three-way merge conflict that stops the sprint
+        doesn't happen because the files are separated at the branch level,
+        not just at the process level.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For teams shipping weekly or more frequently, this means localization
+        stops competing with development for the same repository files. The
+        German version of a feature ships when the feature ships — not two
+        sprints later.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        According to CSA Research, 76% of software buyers prefer products in
+        their native language. That preference only becomes revenue if the
+        localized version is ready on the same release cycle as English.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → GitHub App setup and configuration:
+        <a
+          href={getLocalizedPath("/features/github-integration", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >GitHub Integration</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 2 — Terminology Enforcement -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        "Settings" is "Einstellungen" — not "Konfiguration" or "Optionen."
+        Every time. Everywhere.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        A SaaS product with hundreds of UI strings updated across dozens of
+        sprints accumulates terminology decisions. Without systematic
+        enforcement, the same UI concept appears as multiple German words
+        across different parts of the interface. Users navigating from the
+        onboarding flow to the settings panel to the help documentation
+        encounter inconsistent vocabulary — and it signals, even if subtly,
+        that the product wasn't built for their market.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Flixu's Glossary loads your approved terms as payload constraints
+        before the language model generates output. "Settings" maps to
+        "Einstellungen" because the constraint was specified before
+        generation, not checked afterward. Variables and
+        placeholders — <code class="text-sm bg-stone-100 px-1 py-0.5 rounded"
+          >&#123;&#123;user_name&#125;&#125;</code
+        >,
+        <code class="text-sm bg-stone-100 px-1 py-0.5 rounded"
+          >&#123;count&#125;</code
+        >,
+        <code class="text-sm bg-stone-100 px-1 py-0.5 rounded"
+          >&lt;strong&gt;</code
+        >
+        tags — are extracted from the text before translation and re-injected into
+        the output file. The translated file is structurally identical to the
+        source; the developer doesn't fix broken placeholders.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Teams using pre-translation glossary enforcement typically find
+        terminology inconsistency drops from 15–25% of reviewed strings to
+        under 2%.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Glossary enforcement:
+        <a
+          href={getLocalizedPath("/features/glossary-enforcement", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Glossary Enforcement</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 3 — LQA for PMs -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Your PM doesn't need to speak Japanese to know which segments need
+        review.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        In a typical localization workflow, a PM reviewing translated output
+        either trusts it because they can't evaluate it, or they ask a native
+        speaker — which adds time and a coordination overhead. Without a
+        structured quality signal, the review is either superficial or slow.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Flixu's LQA scores every segment across five dimensions
+        automatically: Grammar, Accuracy, Terminology Consistency,
+        Formatting, and Fluency. Segments above the threshold auto-approve.
+        Segments below the threshold appear in the review queue with the
+        specific failing dimension marked.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        A PM can see that three segments scored below threshold on
+        Terminology Consistency — which means a glossary term is missing or
+        incorrect — without being able to read Japanese. The review focuses
+        on the edge cases; the rest is already approved and ready to deploy.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → LQA and quality reporting:
+        <a
+          href={getLocalizedPath("/features/lqa", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >LQA & Quality Assurance</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- 06 — HOW THE PIPELINE WORKS -->
+  <Section data-chapter="06 — PIPELINE" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-6">How the CI/CD pipeline works.</h2>
+
+      <p class="text-stone-600 leading-relaxed mb-8">
+        For teams using the GitHub App, the pipeline runs automatically on
+        push. For teams with custom CI/CD setups, the Developer API provides
+        programmatic access to the same pipeline.
+      </p>
+
+      <!-- GitHub App workflow -->
+      <div class="mb-10">
+        <h3 class="text-lg mb-4">
+          GitHub App workflow
+          <span class="text-stone-400 text-sm font-normal">(recommended)</span>
+        </h3>
+        <p class="text-stone-600 leading-relaxed">
+          Install the app, configure monitored file paths and target
+          languages, link the repository to a Flixu workspace project. From
+          that point, every push to monitored files triggers translation.
+          Translated files commit to the localization branch. The setup takes
+          under 15 minutes.
+        </p>
+      </div>
+
+      <!-- Developer API workflow -->
+      <div class="mb-8">
+        <h3 class="text-lg mb-4">
+          Developer API workflow
+          <span class="text-stone-400 text-sm font-normal"
+            >(for custom pipelines)</span
+          >
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          For teams using GitHub Actions or custom deployment pipelines, the
+          API supports direct integration:
+        </p>
+
+        <div
+          class="bg-stone-900 text-stone-100 rounded-sm p-5 font-mono text-sm leading-relaxed overflow-x-auto mb-4"
+        >
+          <p class="text-stone-500 text-xs mb-3">
+            # Conceptual example — actual endpoints in the API documentation
+          </p>
+          <p>
+            <span class="text-green-400">curl</span> -X POST https://api.flixu.ai/v1/translate
+            \
+          </p>
+          <p class="pl-4">
+            -H <span class="text-amber-300"
+              >"Authorization: Bearer YOUR_API_KEY"</span
+            > \
+          </p>
+          <p class="pl-4">
+            -H <span class="text-amber-300">"Content-Type: application/json"</span> \
+          </p>
+          <p class="pl-4">
+            -d <span class="text-amber-300">'&#123;</span>
+          </p>
+          <p class="pl-8">
+            <span class="text-amber-300"
+              >"file": "src/locales/en.json",</span
+            >
+          </p>
+          <p class="pl-8">
+            <span class="text-amber-300"
+              >"target_languages": ["de", "fr", "ja", "es"],</span
+            >
+          </p>
+          <p class="pl-8">
+            <span class="text-amber-300"
+              >"project_id": "your-project-id"</span
+            >
+          </p>
+          <p class="pl-4"><span class="text-amber-300">&#125;'</span></p>
+        </div>
+
+        <p class="text-stone-600 leading-relaxed">
+          The request runs the full translation pipeline — Pre-Translation
+          Analysis, Glossary enforcement, Brand Voice application, Translation
+          Memory retrieval, LQA scoring — and returns the translated content
+          with scores per segment. Segments above threshold auto-approve;
+          segments below are routed to the review queue.
+        </p>
+      </div>
+
+      <p class="text-stone-500 text-sm">
+        → Full API reference and authentication:
+        <a
+          href={getLocalizedPath("/product/developer-api", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Developer API</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- 07 — TEAM COLLABORATION -->
+  <Section data-chapter="07 — TEAM" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Developers, PMs, and Technical Writers in the same workspace.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The localization workspace supports the full product team without
+        per-seat pricing that penalizes collaboration. Roles follow the
+        platform's three-tier model:
+        <strong>Admin</strong> (workspace configuration, billing),
+        <strong>Project Manager</strong> (project setup, review, approval),
+        <strong>Translator</strong> (string-level editing within assigned projects).
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        External reviewers — a regional marketing manager checking the
+        Japanese launch, a native speaker verifying the French campaign — can
+        be added as Translators scoped to their assigned projects without
+        accessing global glossary configuration or other client workspaces.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The credit model charges for words translated, not for workspace
+        seats. Adding a PM to the review queue doesn't change the invoice.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Team roles and access controls:
+        <a
+          href={getLocalizedPath("/features/team-collaboration", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Team Collaboration</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- 08 — FAQ -->
   <Section
-    data-chapter="04 — FAQ"
+    data-chapter="08 — FAQ"
     class="content-section bg-stone-50 border-t border-stone-200 mt-24"
   >
     <div class="max-w-3xl mx-auto">
       <FAQSection items={faqs} />
+    </div>
+  </Section>
+
+  <!-- 09 — CTA -->
+  <Section data-chapter="09 — CTA" class="content-section mt-24 mb-16">
+    <div class="max-w-3xl text-center mx-auto">
+      <h2 class="mb-6">
+        Connect your repository and ship localized features on the same
+        release cycle as English.
+      </h2>
+      <p class="text-stone-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+        Install the GitHub App, configure your file paths, and push a commit.
+        The first automated translation runs without a dashboard step.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center justify-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start translating for free →
+        </a>
+        <a
+          href={getLocalizedPath("/product/developer-api", lang)}
+          class="inline-flex items-center justify-center gap-2 border border-stone-300 text-stone-700 px-6 py-3 rounded-sm font-medium hover:bg-stone-50 transition-colors"
+        >
+          Developer API and documentation →
+        </a>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 10 — RELATED FEATURES -->
+  <Section
+    data-chapter="10 — RELATED"
+    class="content-section border-t border-stone-200 pt-12 mb-16"
+  >
+    <div class="max-w-3xl">
+      <h3
+        class="text-sm font-mono text-stone-400 uppercase tracking-widest mb-6"
+        >Related Features</h3
+      >
+      <ul class="space-y-3">
+        <li>
+          <a
+            href={getLocalizedPath("/features/github-integration", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >GitHub Integration</a
+          >
+          <span class="text-stone-500">
+            — Automated string detection and branch-safe commits</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/product/developer-api", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Developer API</a
+          >
+          <span class="text-stone-500">
+            — Programmatic access for custom CI/CD pipelines</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/glossary-enforcement", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Glossary Enforcement</a
+          >
+          <span class="text-stone-500">
+            — UI terminology consistency across every sprint</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/lqa", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >LQA & Quality Assurance</a
+          >
+          <span class="text-stone-500">
+            — Quality signals for PMs who don't speak the target language</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/team-collaboration", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Team Collaboration</a
+          >
+          <span class="text-stone-500">
+            — Multi-role workspace without per-seat pricing</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/compare/crowdin-alternative", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu vs. Crowdin</a
+          >
+          <span class="text-stone-500"> — Direct competitor comparison</span>
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/compare/lokalise-alternative", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu vs. Lokalise</a
+          >
+          <span class="text-stone-500"> — Direct competitor comparison</span>
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/pricing", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Pricing</a
+          >
+          <span class="text-stone-500">
+            — Free tier with API access and translation credits</span
+          >
+        </li>
+      </ul>
     </div>
   </Section>
 </BaseLayout>

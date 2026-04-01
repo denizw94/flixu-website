@@ -6,12 +6,7 @@ import TldrBlock from "../../../components/seo/TldrBlock.astro";
 import FAQSection from "../../../components/seo/FAQSection.astro";
 import SchemaOrg from "../../../components/seo/SchemaOrg.astro";
 import HeroGlobalMarketing from "../../../components/visuals/HeroGlobalMarketing.jsx";
-import KeyTakeaways from "../../../components/seo/KeyTakeaways.astro";
-import {
-  getLocalizedPath,
-  locales,
-  useTranslations,
-} from "../../../i18n/utils";
+import { getLocalizedPath, locales } from "../../../i18n/utils";
 
 export const prerender = true;
 
@@ -27,34 +22,48 @@ if (!lang) lang = "en";
 
 const title = "Brand Voice Translation for Marketing Teams | Flixu";
 const description =
-  "Maintain your global brand tone across every language automatically. Translate marketing campaigns in minutes instead of weeks.";
+  "Configure your brand voice once. Every campaign translation applies it automatically — no agency briefing, no register drift, no correction cycle after delivery.";
 
 const breadcrumbItems = [
   { name: "Home", url: getLocalizedPath("/", lang) },
-  { name: "Who it's for", url: getLocalizedPath("/for/agencies", lang) },
+  { name: "Who it's for", url: getLocalizedPath("/for/freelancers", lang) },
   { name: "Global Marketing", url: Astro.url.pathname },
 ];
 
 const faqs = [
   {
-    question: "How does Flixu maintain our brand voice?",
+    question: "How does Flixu maintain our brand voice across languages?",
     answer:
-      "Flixu turns your brand guidelines into rigid algorithmic prompts. We physically force the translation engine to follow your tone, register, and stylistic rules across all target languages.",
+      "The Brand Voice Manager stores your tone definition — formality level, stylistic preferences, phrasing constraints — in the workspace. Every translation request applies that configuration before the language model generates output. The definition isn't a prompt the model can drift from over a long document; it's a payload parameter applied to every segment. The German campaign arrives with the correct register because the configuration was present before generation, not checked afterward.",
   },
   {
-    question: "Is Flixu cheaper than a localization agency?",
+    question:
+      "Can I manage different tones for different campaigns or departments?",
     answer:
-      "Yes. Traditional agencies can charge up to $150,000 to translate one million words. Flixu's Output-Only billing architecture reduces that cost dramatically, saving you up to 80% on localization overhead.",
+      "Yes. Each account supports multiple Brand Voice profiles. A formal 'B2B Whitepaper' profile and a casual 'Social Ads' profile can coexist in the same account — team members select the appropriate profile when running a translation. The profiles are independent; updating one doesn't affect the others.",
   },
   {
-    question: "Can I manage different tones for different campaigns?",
+    question:
+      "How does the Glossary work for campaign-specific terminology?",
     answer:
-      "Yes, you can configure unique Brand Voice Profiles. For example, use a formal, authoritative tone for a B2B whitepaper, and a casual, highly energetic tone for social media ads, switching effortlessly between them.",
+      "You upload approved terms — campaign slogans, product names, trademarked phrases, industry vocabulary — and the glossary loads those terms as constraints before translation begins. A term defined as 'do not translate' stays in the source language across all markets. A term with an approved target-language equivalent appears consistently across every campaign, every landing page, and every email. The consistency is structural, not dependent on individual translator recall.",
   },
   {
-    question: "How fast can I translate a large marketing campaign?",
+    question: "Is Flixu faster than working with a translation agency?",
     answer:
-      "Because Flixu operates via API and Contextual AI rather than manual human routing, multi-language marketing campaigns can be fully localized and returned in seconds instead of weeks.",
+      "For standard campaign content where your brand voice and glossary are already configured, significantly faster. The translation pipeline runs without a briefing session, a project intake form, or a waiting period for resource allocation. The review step covers the segments that fall below the LQA threshold — typically a small fraction of a campaign. For agencies with established client relationships and complex creative projects that require significant transcreation, the human judgment layer remains valuable; Flixu doesn't replace that for complex creative work.",
+  },
+  {
+    question:
+      "Do I need to speak the target language to trust the output quality?",
+    answer:
+      "No. The LQA score provides a quantified quality signal across five dimensions. A Terminology Consistency score tells you whether approved glossary terms were applied correctly — independent of your ability to read the target language. For content where you want a native speaker to verify the cultural accuracy, the flagged segments in the review queue are where that review time is most valuable.",
+  },
+  {
+    question:
+      "How does cultural adaptation work — dates, currencies, regional references?",
+    answer:
+      "The Cultural Adaptation Engine runs alongside translation automatically. Date formats (MM/DD/YYYY → DD/MM/YYYY for EU markets), currency context, and measurement units (imperial → metric) are adapted to the target market's conventions without a separate configuration step. For cultural references that require creative judgment — idioms, humor, market-specific metaphors — the review step is where a regional reviewer applies that judgment.",
   },
 ];
 
@@ -85,19 +94,31 @@ const schema = {
 <BaseLayout title={title} description={description}>
   <SchemaOrg schema={schema} slot="schema" />
 
-  <Section data-chapter="01 — OVERVIEW" class="hero-section">
+  <!-- 01 — HERO -->
+  <Section data-chapter="01 — OVERVIEW" class="hero-section pb-16">
     <div
       class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center max-w-7xl mx-auto px-6"
     >
-      <div class="hero-container !px-0">
+      <div class="max-w-3xl !px-0">
         <Breadcrumbs items={breadcrumbItems} />
-        <span class="badge">For Marketing Leaders</span>
-        <h1 class="hero-title">When 'Du' and 'Sie' dictates millions.</h1>
-        <p class="hero-desc">
-          Your brand voice guideline is 40 pages long. None of it survives
-          DeepL. Take back control of your global narrative with algorithmic
-          Tone Constraints.
+        <span
+          class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-6 block"
+          >For Marketing Leaders</span
+        >
+        <h1 class="mb-6">When "Du" and "Sie" dictates millions.</h1>
+        <p class="max-w-2xl text-xl text-stone-600 mb-8">
+          Your brand voice guideline is 40 pages long. Your agency translates
+          the words and misses the tone — every campaign, every language, every
+          quarter. The Brand Voice Manager lets you define how your brand
+          sounds once. Every translation applies that definition
+          automatically.
         </p>
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start translating for free →
+        </a>
       </div>
       <div class="relative w-full aspect-[4/3] hidden md:block">
         <HeroGlobalMarketing client:load />
@@ -105,161 +126,439 @@ const schema = {
     </div>
   </Section>
 
+  <!-- 02 — TL;DR -->
   <Section data-chapter="02 — TL;DR" class="tldr-section">
     <div class="max-w-3xl">
       <TldrBlock
-        text="Global marketing teams often face a difficult choice: pay significant agency retainers and wait weeks for localized campaigns, or use generic machine translation that compromises their carefully crafted tone of voice. Flixu solves both. Our unique Brand Voice AI ensures that an assertive, youthful English campaign is translated into an equally assertive, youthful Japanese campaign—in seconds, and at a significantly reduced cost compared to manual workflows."
+        label="What is Flixu for Global Marketing?"
+        text="For marketing teams, Flixu applies your brand voice configuration — tone, formality register, campaign-specific vocabulary — automatically to every translation request. Your assertive English campaign stays assertive in Japanese. Your casual consumer copy doesn't arrive back formal and stiff in German. The configuration is set once; every translation after that applies it without a briefing session."
       />
     </div>
   </Section>
 
-  <Section
-    data-chapter="03 — CAPABILITIES"
-    class="content-section mt-12 border-t border-stone-200 pt-16"
-  >
-    <div class="max-w-3xl prose-inline">
-      <KeyTakeaways
-        items={[
-          "Enforce stylistic rules across 15+ languages simultaneously.",
-          "Prevent DeepL from flattening your creative marketing copy.",
-          "Centralize terminology in a globally recognized Glossary.",
-        ]}
-      />
-      <h2 class="mb-4">Why do global marketing channels fail at scale?</h2>
-      <p class="text-xl text-stone-600 leading-relaxed max-w-2xl mb-12">
-        Your core brand identity relies on specific tonal nuances. What happens
-        when your bold, assertive English copy gets translated into overly
-        formal German or overly casual Japanese? You lose control of the
-        narrative. Traditional machine translation (like Google Translate or
-        standalone DeepL) completely ignores corporate identity, acting purely
-        on statistical probability. Flixu forces the AI engine to abide by your
-        Brand Voice guidelines with absolute rigidity. By defining tone
-        parameters upfront, you ensure your marketing campaigns convert at
-        exactly the same rate in Tokyo as they do in New York.
+  <!-- 03 — EMPATHY / PROBLEM -->
+  <Section data-chapter="03 — PROBLEM" class="content-section mt-12">
+    <div class="max-w-3xl">
+      <span
+        class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-4 block"
+        >The Problem</span
+      >
+      <h2 class="mb-8">
+        Your agency translates the words. The brand voice is what gets lost.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The marketing team spends months building a brand voice in
+        English — warm, a bit direct, not too formal, with a specific energy
+        that consistently converts. The agency translates it into German and
+        it comes back sounding like a corporate brochure from 2005. The
+        internal team rewrites it. That correction cycle repeats for every
+        campaign, every language, every quarter.
       </p>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-        <div class="flex flex-col gap-4">
-          <div
-            class="w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm mb-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              ><path
-                d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-              ></path></svg
-            >
-          </div>
-          <h3 class="text-xl">Tone & Register Control</h3>
-          <p class="text-stone-600 leading-relaxed">
-            Ensure formal "Sie" is never confused with informal "Du" in German.
-            Set precise audience instructions and let the AI rewrite the
-            translations to match your stylistic rules perfectly.
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The problem isn't the quality of the translation in isolation. A
+        skilled translator can render text accurately in German. The problem
+        is that brand voice consistency at scale depends on briefing documents
+        that don't travel reliably between agencies, translators, and
+        projects. A style guide PDF sent to a new agency contact six months
+        ago doesn't ensure that this week's campaign sounds the same as last
+        quarter's.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        From the community:
+      </p>
+
+      <div class="space-y-4 mb-8">
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "Our agency translates the words but kills our brand voice every
+            single time."
           </p>
         </div>
-
-        <div class="flex flex-col gap-4">
-          <div
-            class="w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm mb-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              ><path
-                d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"
-              ></path></svg
-            >
-          </div>
-          <h3 class="text-xl">Central Glossaries</h3>
-          <p class="text-stone-600 leading-relaxed">
-            Eliminate infinite review cycles. Input your product names and
-            industry jargon into the Glossary, and the AI algorithm is
-            mathematically forced to strictly adhere to them.
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "We have a brand voice guide but translators don't seem to read
+            it."
           </p>
         </div>
-
-        <div class="flex flex-col gap-4">
-          <div
-            class="w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm mb-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              ><path d="M12 2v20"></path><path d="m17 5-5-3-5 3"></path><path
-                d="m17 19-5 3-5-3"></path><path d="M2 12h20"></path><path
-                d="m5 7-3 5 3 5"></path><path d="m19 7 3 5-3 5"></path></svg
-            >
-          </div>
-          <h3 class="text-xl">Instant ROI</h3>
-          <p class="text-stone-600 leading-relaxed">
-            Translating a high-volume blog or ad campaign using an agency can
-            cost upwards of $0.15 per word. Flixu's output-based billing
-            averages a fraction of a cent per word, slashing your localization
-            budget overnight.
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "Our German landing page sounds like a government document."
           </p>
         </div>
-
-        <div class="flex flex-col gap-4">
-          <div
-            class="w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm mb-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              ><rect width="18" height="18" x="3" y="4" rx="2" ry="2"
-              ></rect><line x1="16" x2="16" y1="2" y2="6"></line><line
-                x1="8"
-                x2="8"
-                y1="2"
-                y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line><path
-                d="m9 16 2 2 4-4"></path></svg
-            >
-          </div>
-          <h3 class="text-xl">Quality Assurance for CMOs</h3>
-          <p class="text-stone-600 leading-relaxed">
-            You don't need to speak German to trust the German copy. Flixu's AI
-            Quality Scoring system evaluates the linguistic integrity
-            mathematically, giving you a green-light confidence dashboard.
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "Localization is always the bottleneck for our campaign calendar."
           </p>
+        </div>
+      </div>
+
+      <p class="text-stone-600 leading-relaxed">
+        The answer isn't a better briefing document. It's a configuration that
+        applies the brand voice before translation begins — not a document
+        that someone has to read and apply consistently.
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 1 — Campaign Timeline -->
+  <Section data-chapter="04 — PAIN POINTS" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Campaigns launch in English and reach Germany a week later.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        A campaign that goes live in English on Monday typically goes live in
+        German on Friday — if the turnaround from the agency is fast. In
+        seasonal campaigns, product launches, and time-sensitive promotions,
+        that gap has a direct revenue consequence. The English market captures
+        the first five days of campaign momentum; the DACH market gets the
+        last two.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The Brand Voice Manager changes the timeline by eliminating the
+        briefing-and-correction cycle. When the English campaign copy is
+        ready, it translates with the brand voice configuration already
+        active. The German version arrives with the correct register and
+        approved terminology applied. The review step focuses on cultural
+        nuance — not on correcting the same register issue that came up last
+        quarter.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        According to CSA Research, 76% of buyers prefer to purchase in their
+        native language. That preference is only a revenue opportunity if the
+        localized version is available when the campaign runs.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Brand voice configuration:
+        <a
+          href={getLocalizedPath("/features/brand-voice", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Brand Voice Manager</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 2 — Terminology Drift -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Your approved terminology appears in as many variants as there are
+        translators.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        "Free Trial" is "Kostenlose Testphase" in one email, "Gratis-
+        Testversion" in a landing page, and "Testlauf" in the app. The
+        inconsistency is subtle enough that no individual instance triggers a
+        complaint — but it accumulates into a signal that the brand wasn't
+        designed for this market. Trust builds from consistency; inconsistency
+        erodes it in ways that don't show up in a single conversion metric.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Glossary Enforcement loads your approved terminology as a payload
+        constraint before translation begins. "Free Trial" maps to
+        "Kostenlose Testversion" in German and "Essai gratuit" in
+        French — defined once, applied to every campaign, every landing page,
+        and every email sequence without exception. The correction cycle for
+        terminology drift disappears because the drift is prevented at the
+        source.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Glossary enforcement:
+        <a
+          href={getLocalizedPath("/features/glossary-enforcement", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Glossary Enforcement</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 3 — Multiple Voice Profiles -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Different campaigns need different voices — managed in configuration,
+        not in briefings.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        A B2B whitepaper and a social media campaign don't sound the same in
+        English. They shouldn't sound the same in German either. When both
+        run through generic MT or the same agency briefing, they often
+        converge on a middle register that's wrong for both.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The Brand Voice Manager supports multiple profiles per account. A
+        "B2B Campaigns" profile enforces formal <em>Sie</em> register, longer
+        sentences, authoritative tone. A "Consumer Ads" profile enforces
+        casual <em>du</em>, short punchy sentences, direct energy. When a
+        team member runs a translation, they assign the appropriate
+        profile — the configuration does the rest.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Switching between profiles doesn't require a new briefing session or a
+        change in agency contact. The configuration is already there; the
+        output reflects it from the first segment.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Multiple brand voice profiles:
+        <a
+          href={getLocalizedPath("/features/brand-voice", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Brand Voice Manager</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 4 — LQA for CMOs -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Translation quality is visible in a score, not just in a
+        read-through.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        A CMO reviewing a German campaign can tell when the tone is off — but
+        quantifying it for a vendor discussion requires judgment that's hard
+        to formalize. Without a structured quality measurement, the feedback
+        is subjective, the correction is iterative, and the timeline extends.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Flixu's LQA scores every segment across five dimensions
+        automatically: Grammar, Accuracy, Terminology Consistency,
+        Formatting, and Fluency. Segments above the threshold are
+        auto-approved. Segments below are flagged with the specific failing
+        dimension. A Terminology Consistency flag means a glossary term was
+        missing or incorrect — not that the translation generally felt off.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For marketing managers who don't speak the target language, that
+        specificity matters. "The Terminology Consistency score on three
+        segments is below threshold" is actionable. "It sounds a bit formal"
+        is not.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → LQA quality reporting:
+        <a
+          href={getLocalizedPath("/features/lqa", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >LQA & Quality Assurance</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- 07 — HOW THE WORKFLOW WORKS -->
+  <Section data-chapter="07 — HOW IT WORKS" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-10">How the marketing workflow works.</h2>
+
+      <div class="space-y-10">
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            1
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Configure brand voice profiles</h3>
+            <p class="text-stone-600 leading-relaxed">
+              Create one profile per content type or campaign category. Each
+              profile stores formality level, tone definition, and stylistic
+              constraints. A "Product Launch" profile might specify assertive
+              and direct language in the active voice. A "Customer Success"
+              profile might specify warm and conversational with a specific
+              formality level. The profiles are named and stored — a team
+              member selects the appropriate one when running a translation.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            2
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Upload campaign copy</h3>
+            <p class="text-stone-600 leading-relaxed">
+              Upload the source file — .docx, Markdown, YAML for localization
+              strings, or plain text. The translation runs with the selected
+              brand voice profile and the campaign glossary active.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            3
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Review flagged segments</h3>
+            <p class="text-stone-600 leading-relaxed">
+              LQA scores every segment. Segments above threshold are
+              auto-approved. Flagged segments appear in the review queue with
+              the specific failing dimension marked. Review time concentrates
+              on the segments that need editorial judgment — not on confirming
+              that correctly translated segments are correct.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            4
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">
+              Corrections improve subsequent campaigns
+            </h3>
+            <p class="text-stone-600 leading-relaxed">
+              When a reviewer corrects and approves a segment, the correction
+              feeds back into the Translation Memory. The next campaign for the
+              same brand voice profile benefits from that approval — the same
+              register correction doesn't need to be made again.
+            </p>
+          </div>
         </div>
       </div>
     </div>
   </Section>
 
+  <!-- 08 — FAQ -->
   <Section
-    data-chapter="04 — FAQ"
+    data-chapter="08 — FAQ"
     class="content-section bg-stone-50 border-t border-stone-200 mt-24"
   >
     <div class="max-w-3xl mx-auto">
       <FAQSection items={faqs} />
+    </div>
+  </Section>
+
+  <!-- 09 — CTA -->
+  <Section data-chapter="09 — CTA" class="content-section mt-24 mb-16">
+    <div class="max-w-3xl text-center mx-auto">
+      <h2 class="mb-6">
+        Configure your brand voice and run your next campaign.
+      </h2>
+      <p class="text-stone-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+        Set up a brand voice profile, add your approved terminology, and
+        translate a sample campaign. Compare the register to what your current
+        workflow produces on the same content.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center justify-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start translating for free →
+        </a>
+        <a
+          href={getLocalizedPath("/features/brand-voice", lang)}
+          class="inline-flex items-center justify-center gap-2 border border-stone-300 text-stone-700 px-6 py-3 rounded-sm font-medium hover:bg-stone-50 transition-colors"
+        >
+          See how brand voice configuration works →
+        </a>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 10 — RELATED FEATURES -->
+  <Section
+    data-chapter="10 — RELATED"
+    class="content-section border-t border-stone-200 pt-12 mb-16"
+  >
+    <div class="max-w-3xl">
+      <h3
+        class="text-sm font-mono text-stone-400 uppercase tracking-widest mb-6"
+        >Related Features</h3
+      >
+      <ul class="space-y-3">
+        <li>
+          <a
+            href={getLocalizedPath("/features/brand-voice", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Brand Voice Manager</a
+          >
+          <span class="text-stone-500">
+            — Tone and register configuration per campaign</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/glossary-enforcement", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Glossary Enforcement</a
+          >
+          <span class="text-stone-500">
+            — Approved terminology across all campaigns and markets</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/lqa", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >LQA & Quality Assurance</a
+          >
+          <span class="text-stone-500">
+            — Quantified quality without reading the target language</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/cultural-adaptation", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Cultural Adaptation Engine</a
+          >
+          <span class="text-stone-500">
+            — Date, currency, and unit localization</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/client-management", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Client Management</a
+          >
+          <span class="text-stone-500">
+            — Multi-brand isolation for marketing teams</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/use-cases/marketing-translation", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Use Case: Marketing Translation</a
+          >
+          <span class="text-stone-500">
+            — Step-by-step marketing localization workflow</span
+          >
+        </li>
+      </ul>
     </div>
   </Section>
 </BaseLayout>

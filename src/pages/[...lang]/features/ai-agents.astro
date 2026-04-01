@@ -1,0 +1,608 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Section from "../../../components/ui/Section.astro";
+import Breadcrumbs from "../../../components/seo/Breadcrumbs.astro";
+import TldrBlock from "../../../components/seo/TldrBlock.astro";
+import FAQSection from "../../../components/seo/FAQSection.astro";
+import SchemaOrg from "../../../components/seo/SchemaOrg.astro";
+import HeroAiAgents from "../../../components/visuals/HeroAiAgents.jsx";
+import { getLocalizedPath, locales } from "../../../i18n/utils";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: undefined } },
+    ...locales.map((lang) => ({ params: { lang } })),
+  ];
+}
+
+let { lang } = Astro.params;
+if (!lang) lang = "en";
+
+const title =
+  "AI Agents — Translate from Inside Your AI Assistant | Flixu";
+const description =
+  "Use Flixu's MCP integration to translate strings directly from Claude Code or Cursor. Brand Voice, Glossary, and Translation Memory applied — without leaving your AI assistant.";
+
+const breadcrumbItems = [
+  { name: "Home", url: getLocalizedPath("/", lang) },
+  { name: "Features", url: getLocalizedPath("/features", lang) },
+  { name: "AI Agents", url: Astro.url.pathname },
+];
+
+const faqs = [
+  {
+    question: "What is MCP and why does it matter for localization?",
+    answer:
+      "MCP (Model Context Protocol) is a standard developed by Anthropic that lets AI assistants connect to external tools and services through a defined interface. When an AI assistant supports MCP, it can call external tools — like Flixu's translation pipeline — as part of its natural operation. For developers, this means translation becomes a capability their AI assistant already has rather than a separate workflow they have to switch to.",
+  },
+  {
+    question: "Which AI assistants support Flixu's Agent Skills?",
+    answer:
+      "Any AI assistant that supports MCP can connect to Flixu's MCP server. This includes Claude Code and Cursor. As MCP adoption grows across AI coding tools, the range of compatible assistants expands. Check the Developer API documentation for the current list of tested integrations.",
+  },
+  {
+    question:
+      "Does the agent apply my Brand Voice and Glossary automatically?",
+    answer:
+      "Yes — when you specify a client profile or workspace context in the request, the Agent Skills integration uses the same Brand Voice and Glossary configuration as a full project translation. The translation pipeline doesn't bypass those constraints because the request came through an AI assistant rather than the dashboard.",
+  },
+  {
+    question: "How is this different from the GitHub App?",
+    answer:
+      "The GitHub App handles automated localization triggered by repository events — a developer pushes new strings, Flixu detects them, translates, and commits automatically. The Agent Skills integration is for developer-initiated, in-context tasks during the build process — translating strings on demand from inside an AI assistant, testing translations before a commit, or handling ad-hoc localization tasks that don't need to be part of an automated pipeline.",
+  },
+  {
+    question:
+      "Do translations run through Agent Skills count toward my credit balance?",
+    answer:
+      "Yes. Translations invoked through Agent Skills use the same credit system as translations run through the dashboard or GitHub App. Credits = words translated, regardless of which interface triggers the request.",
+  },
+  {
+    question:
+      "Can I use Agent Skills for non-string content — documentation, emails, product copy?",
+    answer:
+      "Yes. Agent Skills handle string-level translation and short-to-medium content. For long-form structured documents, the full document translation pipeline (via the dashboard or Developer API) handles format preservation and segment-level LQA scoring. Agent Skills work well for in-context translation tasks where you need an answer in the next minute, not a full project workflow.",
+  },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      name: "Flixu AI Agents",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <SchemaOrg schema={schema} slot="schema" />
+
+  <!-- 01 — HERO -->
+  <Section data-chapter="01 — OVERVIEW" class="hero-section pb-16">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center max-w-7xl mx-auto px-6"
+    >
+      <div class="max-w-3xl !px-0">
+        <Breadcrumbs items={breadcrumbItems} />
+        <span
+          class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-6 block"
+          >Feature Spotlight</span
+        >
+        <h1 class="mb-6">
+          Translate from inside your AI assistant. No dashboard required.
+        </h1>
+        <p class="max-w-2xl text-xl text-stone-600 mb-8">
+          Flixu's Agent Skills let you trigger localization directly from
+          Claude Code, Cursor, or any MCP-compatible AI assistant. Type what
+          you want in plain English. Flixu handles the translation, applies
+          your brand voice and glossary, and returns the result — without
+          switching tools.
+        </p>
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Try it with your workflow →
+        </a>
+      </div>
+      <div class="relative w-full aspect-[4/3] hidden md:block">
+        <HeroAiAgents client:load />
+      </div>
+    </div>
+  </Section>
+
+  <!-- 02 — TL;DR -->
+  <Section data-chapter="02 — TL;DR" class="tldr-section">
+    <div class="max-w-3xl">
+      <TldrBlock
+        label="What are Flixu AI Agents?"
+        text="Flixu AI Agents expose translation operations as callable skills inside AI assistants that support MCP (Model Context Protocol). Instead of exporting files, logging into a dashboard, and waiting for a translation to run, a developer can describe the task to their AI assistant and Flixu executes it in the background — with your Translation Memory, Glossary, and Brand Voice already applied."
+      />
+    </div>
+  </Section>
+
+  <!-- 03 — WHAT THIS REPLACES -->
+  <Section data-chapter="03 — CONTEXT" class="content-section mt-12">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">What the workflow looks like without this.</h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For most developers using AI coding assistants today, localization is
+        still a manual step that happens outside the AI workflow. The code gets
+        written in English, the new strings get extracted manually, uploaded to
+        a localization tool, translated, downloaded, and merged back. That
+        handoff breaks the flow.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Even teams with automated CI/CD localization through the GitHub App
+        still interact with a dashboard when they want to translate a specific
+        string, check a translation, or run a quick localization test before a
+        commit.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed">
+        The Agent Skills integration removes that interruption. Localization
+        becomes a capability your AI assistant already has — one you invoke
+        with a sentence, not a tab switch.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 04 — HOW IT WORKS -->
+  <Section data-chapter="04 — HOW IT WORKS" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">How Flixu Agent Skills work.</h2>
+
+      <p class="text-stone-600 leading-relaxed mb-10">
+        Flixu provides an MCP (Model Context Protocol) server that exposes
+        translation operations as tools. Any AI assistant that supports MCP —
+        including Claude Code and Cursor — can connect to Flixu and call those
+        tools directly. The connection is set up once. After that, it works
+        like this:
+      </p>
+
+      <div class="space-y-10">
+        <!-- Step 1 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            1
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">
+              Describe the task in natural language
+            </h3>
+            <p class="text-stone-600 leading-relaxed mb-4">
+              You type your instruction directly in your AI assistant:
+            </p>
+            <div
+              class="bg-stone-50 border border-stone-200 rounded-sm p-4 font-mono text-sm text-stone-600 space-y-2"
+            >
+              <p>
+                "Translate the new checkout flow strings into French using our
+                enterprise brand voice"
+              </p>
+              <p class="text-stone-400">or</p>
+              <p>
+                "Localize these three UI labels into German, Japanese, and
+                Spanish — use the SaaS product glossary"
+              </p>
+            </div>
+            <p class="text-stone-600 leading-relaxed mt-4">
+              The AI assistant passes the request to Flixu through the MCP
+              connection.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            2
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">
+              Flixu runs the full translation pipeline
+            </h3>
+            <p class="text-stone-600 leading-relaxed">
+              The request hits Flixu's translation pipeline with your workspace
+              context already loaded — the Translation Memory, Glossary, and
+              Brand Voice associated with your account or client profile. The
+              pre-translation analysis runs, the language model generates
+              output with all constraints applied, and the LQA scores the
+              result. This is the same pipeline that runs on a full project
+              document. The agent interface doesn't bypass it.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            3
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Result returns to your workflow</h3>
+            <p class="text-stone-600 leading-relaxed">
+              The translated strings return to your AI assistant's context. You
+              can review them, ask for adjustments, pass them to a file, or
+              commit them — all without leaving the environment where you were
+              already working.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 05 — WHAT THE AGENT CAN DO -->
+  <Section data-chapter="05 — CAPABILITIES" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        What you can ask Flixu to do from inside your AI assistant.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The scope of what Agent Skills handle is the same as what Flixu
+        handles in a project — the difference is the interface:
+      </p>
+
+      <ul class="space-y-3 text-stone-600 leading-relaxed mb-8">
+        <li class="flex gap-3">
+          <span class="text-orange-700 flex-shrink-0">—</span>
+          <span
+            >Translate individual strings or short copy with a specified client
+            profile</span
+          >
+        </li>
+        <li class="flex gap-3">
+          <span class="text-orange-700 flex-shrink-0">—</span>
+          <span
+            >Translate larger content blocks with brand voice and glossary
+            enforcement</span
+          >
+        </li>
+        <li class="flex gap-3">
+          <span class="text-orange-700 flex-shrink-0">—</span>
+          <span
+            >Apply a specific language target and formality level to a
+            translation request</span
+          >
+        </li>
+        <li class="flex gap-3">
+          <span class="text-orange-700 flex-shrink-0">—</span>
+          <span>Check a translation against glossary constraints</span>
+        </li>
+        <li class="flex gap-3">
+          <span class="text-orange-700 flex-shrink-0">—</span>
+          <span
+            >Run a quick translation test before pushing strings to the full
+            CI/CD pipeline</span
+          >
+        </li>
+      </ul>
+
+      <p class="text-stone-600 leading-relaxed">
+        <strong>What it doesn't do yet:</strong> automate full multi-file project
+        workflows entirely from the AI assistant interface. For large-scale
+        automated localization, the GitHub App handles that path. The Agent Skills
+        integration is the interface for developer-initiated, in-context
+        translation tasks during the build process.
+      </p>
+      <p class="text-stone-500 text-sm mt-4">
+        → For fully automated pipeline localization:
+        <a
+          href={getLocalizedPath("/features/github-integration", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >GitHub Integration</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- 06 — EXAMPLE -->
+  <Section data-chapter="06 — EXAMPLE" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">What this looks like in practice.</h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        A developer adds a new payment confirmation flow to a checkout page.
+        The flow has six UI strings. They're working in Claude Code and have
+        already been coding for two hours. Rather than switching to Flixu,
+        exporting the strings, and running a project, they type:
+      </p>
+
+      <!-- Input prompt -->
+      <div
+        class="bg-stone-50 border border-stone-200 rounded-sm p-6 font-mono text-sm text-stone-700 mb-6"
+      >
+        <p class="text-stone-400 text-xs uppercase tracking-widest mb-4">
+          Developer prompt
+        </p>
+        <p class="mb-4">
+          Translate these checkout confirmation strings into German and French.<br
+          />
+          Use the e-commerce brand voice profile. Apply the product glossary.
+        </p>
+        <p class="text-stone-500 mb-1">strings:</p>
+        <ul class="space-y-1 pl-2">
+          <li>- "Your order is confirmed."</li>
+          <li>- "You'll receive a confirmation email shortly."</li>
+          <li>- "Track your order"</li>
+          <li>- "Continue shopping"</li>
+          <li>- "Order #&#123;&#123;order_id&#125;&#125;"</li>
+          <li>- "Estimated delivery: &#123;&#123;date&#125;&#125;"</li>
+        </ul>
+      </div>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Flixu's MCP server receives the request, loads the specified brand
+        voice and glossary, runs the pre-translation analysis, and returns:
+      </p>
+
+      <!-- Output -->
+      <div
+        class="bg-stone-50 border border-stone-200 rounded-sm p-6 font-mono text-sm text-stone-700 mb-6"
+      >
+        <p class="text-stone-400 text-xs uppercase tracking-widest mb-4">
+          Flixu response
+        </p>
+
+        <p class="text-orange-700 font-semibold mb-2">German:</p>
+        <ul class="space-y-1 pl-2 mb-4">
+          <li>- "Ihre Bestellung ist bestätigt."</li>
+          <li>- "Sie erhalten in Kürze eine Bestätigungs-E-Mail."</li>
+          <li>- "Bestellung verfolgen"</li>
+          <li>- "Weiter einkaufen"</li>
+          <li>- "Bestellung #&#123;&#123;order_id&#125;&#125;"</li>
+          <li>
+            - "Voraussichtliche Lieferung: &#123;&#123;date&#125;&#125;"
+          </li>
+        </ul>
+
+        <p class="text-orange-700 font-semibold mb-2">French:</p>
+        <ul class="space-y-1 pl-2">
+          <li>- "Votre commande est confirmée."</li>
+          <li>- "Vous recevrez bientôt un e-mail de confirmation."</li>
+          <li>- "Suivre votre commande"</li>
+          <li>- "Continuer vos achats"</li>
+          <li>- "Commande #&#123;&#123;order_id&#125;&#125;"</li>
+          <li>- "Livraison estimée : &#123;&#123;date&#125;&#125;"</li>
+        </ul>
+      </div>
+
+      <p class="text-stone-600 leading-relaxed">
+        Variables are preserved. Glossary terms are applied. Brand voice is
+        reflected in the output register. The developer pastes the strings
+        directly into their localization files. The whole interaction took
+        under two minutes and never left the coding environment.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 07 — WHEN THIS MATTERS MOST -->
+  <Section data-chapter="07 — USE CASES" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-10">When the agent integration changes the workflow.</h2>
+
+      <!-- Developer teams -->
+      <div class="mb-12">
+        <h3 class="text-xl mb-4">
+          Developer-led teams using AI coding assistants daily
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          For teams where the developer writes code and manages localization
+          without a dedicated localization manager, the context switch to a
+          localization dashboard is a real friction point. AI Agent integration
+          reduces localization to a task the developer can handle from their
+          existing AI assistant context — the same way they'd ask for a code
+          review or a function refactor.
+        </p>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          Teams that move from dashboard-based ad-hoc translation to
+          agent-based in-context translation find the adoption rate for
+          localization increases — developers use the capability more because
+          the barrier is lower.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → Developer workflow overview:
+          <a
+            href={getLocalizedPath("/for/developers", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu for Developers</a
+          >
+        </p>
+      </div>
+
+      <!-- Micro-SaaS -->
+      <div class="mb-12">
+        <h3 class="text-xl mb-4">
+          Micro-SaaS founders managing multiple product areas solo
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          A solo founder working on a product in multiple languages uses every
+          tool at once. Context switching to a localization dashboard for each
+          new string adds overhead that compounds across a day. Being able to
+          invoke translation directly from the AI assistant they're already
+          using — without a separate login, without file management — reduces
+          that overhead to a conversational instruction.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → Indie founder and micro-SaaS workflows:
+          <a
+            href={getLocalizedPath("/product/developer-api", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Developer API</a
+          >
+        </p>
+      </div>
+
+      <!-- Technical docs -->
+      <div>
+        <h3 class="text-xl mb-4">
+          Technical documentation teams using AI-assisted writing
+        </h3>
+        <p class="text-stone-600 leading-relaxed">
+          Documentation teams using AI assistants to draft content can invoke
+          Flixu to translate completed documentation sections directly from the
+          writing workflow. The Brand Voice Manager ensures documentation tone
+          is consistent across languages — the same careful technical voice in
+          English translates to the same careful technical voice in German or
+          Japanese.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 08 — HONEST STATUS NOTE -->
+  <Section data-chapter="08 — STATUS" class="content-section mt-20">
+    <div class="max-w-2xl">
+      <div class="border border-stone-200 rounded-sm p-8 bg-stone-50/50">
+        <h2 class="mb-6 text-2xl">Where this is today.</h2>
+
+        <p class="text-stone-600 leading-relaxed mb-4">
+          The MCP integration is actively being developed and expanded. Current
+          Agent Skills support in-context translation for strings and
+          short-form content with workspace context applied. Multi-file project
+          management and full workflow automation from within an AI assistant
+          is the direction we're building toward — it's not yet the full scope
+          of what's available.
+        </p>
+
+        <p class="text-stone-600 leading-relaxed">
+          If you're building workflows around this integration or want to test
+          current capabilities, the
+          <a
+            href={getLocalizedPath("/product/developer-api", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Developer API documentation</a
+          >
+          has the most current information on what's available and what's
+          coming. The
+          <a
+            href={getLocalizedPath("/features/github-integration", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >GitHub App</a
+          >
+          covers the automated CI/CD localization path for larger-scale
+          pipeline automation today.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 09 — FAQ -->
+  <Section
+    data-chapter="09 — FAQ"
+    class="content-section bg-stone-50 border-t border-stone-200 mt-24"
+  >
+    <div class="max-w-3xl mx-auto">
+      <FAQSection items={faqs} />
+    </div>
+  </Section>
+
+  <!-- 10 — CTA -->
+  <Section data-chapter="10 — CTA" class="content-section mt-24 mb-16">
+    <div class="max-w-3xl text-center mx-auto">
+      <h2 class="mb-6">Connect Flixu to your AI assistant.</h2>
+      <p class="text-stone-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+        Set up the MCP integration once and invoke translation directly from
+        Claude Code, Cursor, or any MCP-compatible assistant. Your Brand Voice
+        and Glossary apply automatically.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center justify-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start translating for free →
+        </a>
+        <a
+          href={getLocalizedPath("/product/developer-api", lang)}
+          class="inline-flex items-center justify-center gap-2 border border-stone-300 text-stone-700 px-6 py-3 rounded-sm font-medium hover:bg-stone-50 transition-colors"
+        >
+          Developer API and integration docs →
+        </a>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 11 — RELATED FEATURES -->
+  <Section
+    data-chapter="11 — RELATED"
+    class="content-section border-t border-stone-200 pt-12 mb-16"
+  >
+    <div class="max-w-3xl">
+      <h3
+        class="text-sm font-mono text-stone-400 uppercase tracking-widest mb-6"
+        >Related Features</h3
+      >
+      <ul class="space-y-3">
+        <li>
+          <a
+            href={getLocalizedPath("/features/github-integration", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >GitHub Integration</a
+          >
+          <span class="text-stone-500">
+            — Automated pipeline localization triggered by repository
+            events</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/auto-approval", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Auto-Approval Workflows</a
+          >
+          <span class="text-stone-500">
+            — LQA-based routing for agent-generated translations</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/product/developer-api", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Developer API</a
+          >
+          <span class="text-stone-500">
+            — API reference and current MCP integration documentation</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/quick-translations", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Quick Translations</a
+          >
+          <span class="text-stone-500">
+            — Ad-hoc translation without agent integration</span
+          >
+        </li>
+      </ul>
+    </div>
+  </Section>
+</BaseLayout>

@@ -1,39 +1,68 @@
 ---
 title: "CAT Tool (Computer-Assisted Translation)"
-description: "The foundational software environment utilized by human linguists, heavily relying on Translation Memory databases and Glossary integration to increase localization efficiency."
-relatedTerms: ["translation-memory", "tms", "glossary-management"]
+description: "A CAT Tool helps translators work faster by surfacing Translation Memory matches and enforcing glossary terms inline. Learn how it works and how it differs from a TMS."
+relatedTerms: ["translation-memory", "tms", "glossary-management", "fuzzy-match", "exact-match", "mtpe", "xliff", "language-service-provider"]
 ---
 
-# Defining the CAT Tool
+# What Is a CAT Tool?
 
-A **CAT Tool** (Computer-Assisted Translation Tool) is the fundamental, specialized software environment utilized by professional freelance linguists and enterprise localization agencies to translate documents and software strings efficiently.
+> A **CAT Tool** (Computer-Assisted Translation Tool) is software that helps human translators work more efficiently by presenting source and target text side by side, automatically surfacing matches from a [Translation Memory](/topic/glossary/translation-memory), and enforcing approved terminology via a connected [glossary](/topic/glossary/glossary-management). The translator does the linguistic work; the tool handles consistency and formatting.
 
-Before the invention of the CAT tool, translation was exclusively a manual, analog labor process. A translator placed an English paper manuscript on the left side of their desk and physically typed the Spanish equivalent on a typewriter on the right side of their desk. The CAT tool digitized this workflow, introducing the concept of a bilingual, split-screen editor where the original source text is surgically segmented (typically sentence-by-sentence) and presented parallel to a blank target input box.
+## How a CAT Tool Works
 
-More crucially, the CAT tool introduced structural computational leverage into the localization industry. By wrapping the human translator within a digital framework, the software enforces consistency, dramatically accelerates turnaround velocity, and actively prevents the human user from making critical formatting errors.
+Before CAT tools existed, translating a document meant working directly from a printed or digital source file — no automatic consistency checks, no reuse of previously approved segments, no formatting protection.
 
-## The Core Technical Mechanics
+A CAT tool changes that by breaking the source document into segments, typically sentence by sentence. Each segment appears in a split-screen editor alongside an empty target field. As the translator works through the document, the tool checks each new segment against the Translation Memory — a database of previously translated segment pairs. If a close or exact match exists, the tool suggests it automatically.
 
-While consumer-grade web translators (like Google Translate) simply overwrite the English text with foreign text, a professional B2B CAT tool operates as a complex data management application containing three mandatory pillars:
+This segment-by-segment structure does more than speed up the work. It creates a record. Every approved translation gets added back to the TM, making the next project more consistent and reducing the volume of text that needs to be translated from scratch.
 
-### 1. Translation Memory (TM) Integration
+## The Three Core Components
 
-The highest financial value of a CAT tool lies in its automatic linkage to a Translation Memory database. As the human linguist translates a segment, the CAT tool saves the paired sentence to the database. If, three hours later, the software detects a mathematically identical sentence elsewhere in the document, it instantly auto-populates the target box. The translator never wastes mental capital translating the same specific legal clause twice.
+**Translation Memory (TM) integration.** When the tool detects a segment that matches something already in the TM — a recurring legal disclaimer, a repeated UI label, a standard instruction — it surfaces that match before the translator types anything. [Exact matches](/topic/glossary/exact-match) auto-populate the target field. [Fuzzy matches](/topic/glossary/fuzzy-match) appear as suggestions. Over time, a well-maintained TM reduces the proportion of text requiring full translation, which directly affects [Total Cost of Ownership](/topic/glossary/total-cost-of-ownership).
 
-### 2. Active Glossary Enforcement
+**Glossary enforcement.** When the tool detects a term from the connected glossary in the source segment, it highlights the term and displays the approved translation. The translator sees the reminder inline — they don't need to check a separate document. This is how product names, trademark terms, and domain-specific vocabulary stay consistent across translators and projects.
 
-CAT tools seamlessly interface with proprietary corporate Terminology databases (Glossaries). When the software detects a highly specific corporate trademark or medical acronym within the source text, it algorithmically highlights the word in the editor and displays a mandated warning: _"You must translate 'Dashboard' exclusively as 'Kontrollzentrum'."_ This feature prevents freelance linguists from hallucinating rogue synonyms that break product consistency.
+**Markup and formatting protection.** When the source file contains HTML tags, XML placeholders, or other non-translatable code, the CAT tool locks those elements and presents them as protected tokens. The translator works around them without touching the underlying structure. This matters most for software strings, [XLIFF](/topic/glossary/xliff) files, and localization formats where a broken tag causes a build failure rather than a typo.
 
-### 3. Geometric Formatting Protection
+## CAT Tool vs. TMS
 
-When translating a complex HTML framework or an Adobe InDesign file, code formatting must be preserved. A CAT tool isolates the translatable text from the underlying markup tags, presenting the tags as locked placeholders. This mechanism prevents translators from accidentally modifying or deleting critical syntax components like a closing `</div>` tag, thereby protecting the integrity of the build.
+These two terms are related but not interchangeable.
 
-## The AI Evolution: From CAT to Context Orchestrator
+| | CAT Tool | [TMS](/topic/glossary/tms) |
+|---|---|---|
+| **Primary user** | Individual translator | Localization manager or project lead |
+| **Core function** | Translation editing environment | Project workflow, team coordination, asset management |
+| **TM and glossary** | Integrated for use during translation | Stored and managed at the project level |
+| **Scope** | Single translator, single file | Multi-user, multi-project, multi-language |
+| **Examples** | Trados, MemoQ, Wordfast | Phrase, Crowdin, Smartling |
 
-For twenty years, desktop CAT software (such as Trados or MemoQ) dominated the localization space. However, in the era of Continuous SaaS Deployment and Large Language Models (LLMs), the traditional CAT architecture is increasingly viewed as an outdated bottleneck.
+In practice, most enterprise workflows use both: the TMS manages the project, assigns work, and stores assets; the CAT tool is what the translator opens to do the actual translation. Some platforms combine both into a single interface.
 
-Legacy CAT tools were explicitly designed to facilitate _human manual typing_. They operated under the assumption that a human was creating the document from scratch, utilizing the machine merely as a helpful reference library.
+## How the Role of CAT Tools Is Changing
 
-The modern paradigm has fundamentally inverted.
+For most of localization's history, the assumption built into CAT tools was that a human would type every translated segment. The tool assisted; the translator produced.
 
-Next-generation cloud platforms (like Flixu) have evolved beyond the CAT tool into **Contextual AI Orchestrators**. In this new framework, the AI generates the perfect, highly contextualized first draft in milliseconds, strictly obeying the Translation Memory and the corporate Brand Voice limitations implicitly within the prompt payload. The freelance linguist no longer types manually inside a rigid split-screen editor; instead, their role elevates to Linguistic Quality Assurance (LQA). They act as elite cultural editors, utilizing the platform solely to review and refine the high-fidelity AI output, achieving triple the historical daily throughput while maintaining enterprise perfection.
+AI-generated first drafts change that assumption. When a translation engine produces a draft for every segment before the translator opens the file, the editor's role shifts — less typing, more reviewing, correcting, and approving. This workflow is called [Machine Translation Post-Editing (MTPE)](/topic/glossary/mtpe).
+
+Many modern localization platforms are built around this model: the AI handles the first pass, and the translator focuses on segments that fall below a quality threshold or require judgment that the model can't provide. Whether a traditional CAT tool's split-screen editor is the right interface for that kind of review work — or whether something closer to a document review tool makes more sense — is a question the industry is still working through.
+
+## Related Terms
+
+- [Translation Memory](/topic/glossary/translation-memory) — the database that powers CAT tool segment suggestions
+- [TMS (Translation Management System)](/topic/glossary/tms) — the project-level platform that CAT tools typically connect to
+- [Glossary Management](/topic/glossary/glossary-management) — the terminology layer enforced within the CAT editor
+- [Fuzzy Match](/topic/glossary/fuzzy-match) — partial TM matches surfaced during CAT tool editing
+- [Exact Match](/topic/glossary/exact-match) — 100% TM matches that auto-populate in the CAT tool
+- [MTPE](/topic/glossary/mtpe) — the workflow that changes how CAT tools are used when AI generates the first draft
+- [XLIFF](/topic/glossary/xliff) — the file format most commonly used to transfer segments between TMS and CAT tool
+- [Language Service Provider](/topic/glossary/language-service-provider) — the agencies and freelancers who work within CAT tools daily
+
+## Related Guides
+
+- [Translation Memory: How It Works and Why It Matters](/topic/translation-memory-guide) — a practical guide to building and maintaining TM across projects
+- [For Translation Agencies](/for/agencies) — how Flixu fits into agency workflows that already rely on TM and glossary infrastructure
+- [AI in Translation: What's Actually Changed](/topic/ai-in-translation) — where CAT tools fit in the shift toward AI-native localization
+
+---
+
+*Last Updated: March 2026 · Author: Deniz, Founder — Flixu AI*

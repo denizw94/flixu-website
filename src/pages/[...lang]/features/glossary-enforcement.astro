@@ -1,0 +1,670 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Section from "../../../components/ui/Section.astro";
+import Breadcrumbs from "../../../components/seo/Breadcrumbs.astro";
+import TldrBlock from "../../../components/seo/TldrBlock.astro";
+import FAQSection from "../../../components/seo/FAQSection.astro";
+import SchemaOrg from "../../../components/seo/SchemaOrg.astro";
+import HeroGlossaryEnforcement from "../../../components/visuals/HeroGlossaryEnforcement.jsx";
+import { getLocalizedPath, locales } from "../../../i18n/utils";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: undefined } },
+    ...locales.map((lang) => ({ params: { lang } })),
+  ];
+}
+
+let { lang } = Astro.params;
+if (!lang) lang = "en";
+
+const title =
+  "Glossary Enforcement — Enforce Your Terminology | Flixu";
+const description =
+  "Define approved terms once. Flixu loads them as constraints before translation — not as post-hoc corrections. Consistent terminology across 22+ languages, every segment.";
+
+const breadcrumbItems = [
+  { name: "Home", url: getLocalizedPath("/", lang) },
+  { name: "Features", url: getLocalizedPath("/features", lang) },
+  { name: "Glossary Enforcement", url: Astro.url.pathname },
+];
+
+const faqs = [
+  {
+    question: "How many terms can I add to a glossary?",
+    answer:
+      "There's no defined cap on glossary size. You can add as many terms as your vocabulary requires — a small SaaS product might have 50–100 terms; a large enterprise with legal, clinical, and product vocabulary might have thousands. All terms are loaded for each translation request associated with that client profile.",
+  },
+  {
+    question:
+      "Can I specify different approved translations for the same term in different languages?",
+    answer:
+      "Yes. Each glossary entry can have separate approved translations per target language. \"Chargeback\" might be \"Rückbuchung\" in German and \"rétrofacturation\" in French — both specified in the same entry. You can also mark a term as \"keep in original language\" for cases where the English term should remain untranslated in a specific target language.",
+  },
+  {
+    question:
+      "What happens if a source string contains a term not in the glossary?",
+    answer:
+      "Terms not in the glossary are handled by the context layer — domain detection, formality, and translation memory inform how the model renders them. Adding a term to the glossary doesn't prevent the rest of the string from being translated normally; it only specifies the constraint for that specific term.",
+  },
+  {
+    question:
+      "How does enforcement work in languages with complex inflection?",
+    answer:
+      "Because the glossary constraint is specified before the language model generates text, the model builds the surrounding grammar around the fixed term from the start — it doesn't insert the term into already-generated grammar. This is why the output reads naturally even in inflected languages like German, Russian, or Polish, where inserting a fixed word into an existing sentence often produces awkward constructions.",
+  },
+  {
+    question:
+      "Can I mark terms as forbidden to translate (i.e., keep them in the source language)?",
+    answer:
+      "Yes. Glossary entries support a \"do not translate\" flag — the term appears in the target language output exactly as it appears in the source. This is common for product names, brand names, and technical identifiers that should remain in English across all markets.",
+  },
+  {
+    question:
+      "Is there an audit trail showing which terms were enforced in which segments?",
+    answer:
+      "Yes. The LQA Terminology Consistency dimension checks glossary adherence on every segment. Segments where a glossary term was expected and applied correctly contribute to a clean Terminology Consistency score. Segments where a term was missing or a forbidden alternative was used fail the Terminology Consistency dimension and appear in the review queue — providing a documented record of where enforcement succeeded and where human correction was needed.",
+  },
+  {
+    question:
+      "How does Flixu's glossary enforcement differ from what other TMS tools offer?",
+    answer:
+      "Most TMS tools with glossary features apply enforcement through one of two mechanisms: a visual highlight for human translators, or a find-and-replace substitution applied after MT output. Flixu loads the glossary as a payload constraint before the language model generates text — the model sees the approved terms as part of the input specification, not as a correction applied to its output. This means the surrounding grammar is built around the fixed terms from the start, and the enforcement holds even when source strings are paraphrased or reformulated between sprints.",
+  },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      name: "Flixu Glossary Enforcement",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <SchemaOrg schema={schema} slot="schema" />
+
+  <!-- 01 — HERO -->
+  <Section data-chapter="01 — OVERVIEW" class="hero-section pb-16">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center max-w-7xl mx-auto px-6"
+    >
+      <div class="max-w-3xl !px-0">
+        <Breadcrumbs items={breadcrumbItems} />
+        <span
+          class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-6 block"
+          >Feature Spotlight</span
+        >
+        <h1 class="mb-6">
+          Define your terms once. Enforce them across every language, every
+          time.
+        </h1>
+        <p class="max-w-2xl text-xl text-stone-600 mb-8">
+          Without enforced terminology, AI translation makes independent
+          decisions about how to render your brand's vocabulary. "Dashboard"
+          becomes "Armaturenbrett" in German. "Chargeback" becomes three
+          different words across your app. Glossary Enforcement loads your
+          approved terms as constraints before translation begins — not as a
+          post-hoc check, but as a pre-generation specification.
+        </p>
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Upload your glossary →
+        </a>
+      </div>
+      <div class="relative w-full aspect-[4/3] hidden md:block">
+        <HeroGlossaryEnforcement client:load />
+      </div>
+    </div>
+  </Section>
+
+  <!-- 02 — TL;DR -->
+  <Section data-chapter="02 — TL;DR" class="tldr-section">
+    <div class="max-w-3xl">
+      <TldrBlock
+        label="What is Glossary Enforcement?"
+        text="Glossary Enforcement in Flixu loads your approved terminology as hard constraints into every translation request before the language model generates output. Each term you define — with its approved target-language translations and any forbidden alternatives — is enforced across all 22+ supported languages, for every segment, without exception. The model generates translations with those terms already specified, not selected afterward."
+      />
+    </div>
+  </Section>
+
+  <!-- 03 — THE PROBLEM -->
+  <Section data-chapter="03 — PROBLEM" class="content-section mt-12">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">What happens without enforced terminology.</h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Generic AI translation makes probabilistic decisions about vocabulary.
+        It selects the statistically likely word for each term based on its
+        training data — which is the statistical average of language across the
+        internet, not your approved corporate vocabulary.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The consequences compound quickly. A product with a large UI string
+        count translated without glossary enforcement will accumulate
+        terminology variants over time. "Feature" appears as "Funktion" in one
+        part of the app and "Merkmal" in another. "Submit" translates as
+        "Absenden" on one screen and "Bestätigen" on another. "Dashboard"
+        might appear as "Armaturenbrett" — technically a German word for the
+        same concept, but not what your product means.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Users in international markets notice this. Not always consciously, and
+        often not immediately — but terminology inconsistency accumulates into
+        a signal that the product wasn't really built for their market.
+        According to CSA Research, 76% of software buyers prefer products in
+        their native language; the preference is undermined when the
+        native-language version reads as if the localization was done
+        piecemeal.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed">
+        The fix isn't to review every translation for terminology after the
+        fact. The fix is to specify the terminology before generation begins.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 04 — HOW IT WORKS -->
+  <Section data-chapter="04 — HOW IT WORKS" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-10">How Glossary Enforcement works.</h2>
+
+      <div class="space-y-10">
+        <!-- Step 1 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            1
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Define your terms</h3>
+            <p class="text-stone-600 leading-relaxed mb-4">
+              Each glossary entry includes three components:
+            </p>
+            <div class="overflow-x-auto mb-4">
+              <table class="w-full text-sm border border-stone-200">
+                <thead>
+                  <tr class="bg-stone-50">
+                    <th
+                      class="text-left px-4 py-3 font-semibold border-b border-stone-200 w-1/4"
+                      >Field</th
+                    >
+                    <th
+                      class="text-left px-4 py-3 font-semibold border-b border-stone-200 w-1/3"
+                      >What it contains</th
+                    >
+                    <th
+                      class="text-left px-4 py-3 font-semibold border-b border-stone-200"
+                      >Example</th
+                    >
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-b border-stone-100">
+                    <td class="px-4 py-3 font-medium">Source term</td>
+                    <td class="px-4 py-3 text-stone-600"
+                      >The term as it appears in the source language</td
+                    >
+                    <td class="px-4 py-3 font-mono text-sm">Dashboard</td>
+                  </tr>
+                  <tr class="border-b border-stone-100">
+                    <td class="px-4 py-3 font-medium"
+                      >Approved translation</td
+                    >
+                    <td class="px-4 py-3 text-stone-600"
+                      >The required term in each target language</td
+                    >
+                    <td class="px-4 py-3 font-mono text-sm"
+                      ><span class="text-green-700"
+                        >DE: Dashboard</span
+                      >
+                      / <span class="text-green-700"
+                        >FR: Tableau de bord</span
+                      ></td
+                    >
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 font-medium"
+                      >Forbidden alternatives</td
+                    >
+                    <td class="px-4 py-3 text-stone-600"
+                      >Terms the model must not use</td
+                    >
+                    <td class="px-4 py-3 font-mono text-sm"
+                      ><span class="text-red-700"
+                        >DE: Armaturenbrett, Schalttafel</span
+                      ></td
+                    >
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-stone-600 leading-relaxed">
+              You can define as many terms as needed — product names, UI
+              labels, legal vocabulary, clinical terminology, brand-specific
+              phrases. Upload a CSV or add terms directly through the workspace
+              interface.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            2
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">
+              Glossary loaded before translation
+            </h3>
+            <p class="text-stone-600 leading-relaxed">
+              When a translation request runs, your glossary is loaded into the
+              translation payload before the language model sees the source
+              text. The approved terms are specified as payload constraints —
+              the model receives the source content with the terminology
+              already defined, not as a system prompt suggestion it can
+              override, but as a specified parameter it must use.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            3
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">
+              Semantic enforcement, not string matching
+            </h3>
+            <p class="text-stone-600 leading-relaxed mb-4">
+              The enforcement isn't a find-and-replace that substitutes terms
+              after translation. The language model generates text with the
+              approved terms already specified as constraints — which means the
+              surrounding grammar is built around the fixed term from the
+              start. In inflected languages like German or Polish, this
+              matters: inserting a fixed term into already-generated grammar
+              often produces awkward constructions. Specifying the term before
+              generation means the conjugation is native.
+            </p>
+            <p class="text-stone-600 leading-relaxed">
+              This also handles paraphrased contexts. If a source string is
+              reformulated between one sprint and the next — "access the
+              Dashboard" becomes "open your Dashboard" — the model still
+              applies the approved term correctly in both formulations, because
+              the constraint is semantic, not exact-string-dependent.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            4
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Verification at scoring</h3>
+            <p class="text-stone-600 leading-relaxed">
+              The LQA Terminology Consistency dimension checks that approved
+              glossary terms are present and correctly applied in the
+              translated output. A translation that uses a forbidden
+              alternative or omits a required term scores below threshold on
+              this dimension and is routed for human review.
+            </p>
+            <p class="text-stone-500 text-sm mt-4">
+              → LQA scoring in detail:
+              <a
+                href={getLocalizedPath("/features/lqa", lang)}
+                class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+                >LQA & Quality Assurance</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 05 — GLOSSARY VS BRAND VOICE -->
+  <Section data-chapter="05 — DIFFERENTIATION" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Glossary Enforcement vs. Brand Voice — what's the difference?
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        These two features solve adjacent but distinct problems:
+      </p>
+
+      <div class="overflow-x-auto mb-6">
+        <table class="w-full text-sm border border-stone-200">
+          <thead>
+            <tr class="bg-stone-50">
+              <th
+                class="text-left px-4 py-3 font-semibold border-b border-stone-200"
+              ></th>
+              <th
+                class="text-left px-4 py-3 font-semibold border-b border-stone-200"
+                >Glossary Enforcement</th
+              >
+              <th
+                class="text-left px-4 py-3 font-semibold border-b border-stone-200"
+                >Brand Voice Manager</th
+              >
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-stone-100">
+              <td class="px-4 py-3 font-medium">What it controls</td>
+              <td class="px-4 py-3 text-stone-600"
+                >Specific terms — exact vocabulary</td
+              >
+              <td class="px-4 py-3 text-stone-600"
+                >Overall tone — formality, style, register</td
+              >
+            </tr>
+            <tr class="border-b border-stone-100">
+              <td class="px-4 py-3 font-medium">Precision level</td>
+              <td class="px-4 py-3 text-stone-600"
+                >Binary: this term, not that term</td
+              >
+              <td class="px-4 py-3 text-stone-600"
+                >Gradient: more formal, less informal</td
+              >
+            </tr>
+            <tr class="border-b border-stone-100">
+              <td class="px-4 py-3 font-medium">Primary use case</td>
+              <td class="px-4 py-3 text-stone-600"
+                >Product names, legal vocabulary, UI labels</td
+              >
+              <td class="px-4 py-3 text-stone-600"
+                >Campaign tone, formality register, stylistic preferences</td
+              >
+            </tr>
+            <tr class="border-b border-stone-100">
+              <td class="px-4 py-3 font-medium">Example</td>
+              <td class="px-4 py-3 text-stone-600 font-mono text-xs"
+                >"Dashboard" → always "Dashboard" in German</td
+              >
+              <td class="px-4 py-3 text-stone-600 font-mono text-xs"
+                >"Use casual du register in German"</td
+              >
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium">When missing</td>
+              <td class="px-4 py-3 text-stone-600"
+                >Terminology variants across the product</td
+              >
+              <td class="px-4 py-3 text-stone-600"
+                >Brand voice drift across languages</td
+              >
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="text-stone-600 leading-relaxed">
+        Both load before translation begins and work together in the same
+        pipeline. A product can simultaneously require that "Dashboard" stays
+        untranslated in German and that the overall register is casual — both
+        constraints apply to the same translation request.
+      </p>
+
+      <p class="text-stone-500 text-sm mt-4">
+        → Brand voice configuration:
+        <a
+          href={getLocalizedPath("/features/brand-voice", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Brand Voice Manager</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- 06 — WHEN THIS MATTERS MOST -->
+  <Section data-chapter="06 — USE CASES" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-10">When glossary enforcement changes the outcome.</h2>
+
+      <!-- SaaS -->
+      <div class="mb-12">
+        <h3 class="text-xl mb-4">
+          B2B SaaS products with a defined UI vocabulary
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          A SaaS product with 1,000+ UI strings developed over multiple
+          sprints accumulates terminology decisions. Each time a new string is
+          added and translated without enforced glossary, there's a chance a
+          key term appears differently than it did in previous strings. Over
+          time, the same concept appears as multiple German words in different
+          parts of the interface — a user churning ticket waiting to happen.
+        </p>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          Enforcing the glossary from the first sprint means the 1,001st
+          string has the same terminology as the first. Teams using
+          pre-translation glossary enforcement typically find terminology
+          inconsistency drops from 15–25% of reviewed strings to under 2% —
+          because the constraint prevented the error rather than catching it
+          after.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → SaaS UI localization:
+          <a
+            href={getLocalizedPath("/for/saas-teams", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu for SaaS Teams</a
+          >
+        </p>
+      </div>
+
+      <!-- Legal -->
+      <div class="mb-12">
+        <h3 class="text-xl mb-4">
+          Legal and compliance documents
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          Legal content requires specific terminology that has defined meaning
+          in the jurisdiction. A contract clause that uses "termination" in
+          English must translate to the specific legal term in German that
+          corresponds to contract termination — not a general word for
+          "ending." A glossary entry that specifies the approved legal term for
+          each concept ensures that terminology is applied consistently across
+          every clause, every document, every jurisdiction.
+        </p>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          For compliance teams, the audit trail shows which terms were enforced
+          in which segments — providing a documented record that the
+          translation adhered to the approved terminology standard.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → Legal compliance localization:
+          <a
+            href={getLocalizedPath("/use-cases/legal-compliance", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Legal Compliance</a
+          >
+        </p>
+      </div>
+
+      <!-- Healthcare -->
+      <div class="mb-12">
+        <h3 class="text-xl mb-4">
+          Healthcare and clinical documentation
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          Clinical terminology requires absolute precision — a term that means
+          one thing in general language may mean something more specific in
+          clinical context. A glossary that defines approved translations for
+          clinical terms ensures that the same clinical concept appears
+          identically across patient-facing documentation, device labeling, and
+          healthcare provider guides, regardless of which document was
+          translated first or by which pipeline.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → Healthcare localization:
+          <a
+            href={getLocalizedPath("/for/healthcare", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Telehealth & Digital Healthcare</a
+          >
+        </p>
+      </div>
+
+      <!-- Marketing -->
+      <div>
+        <h3 class="text-xl mb-4">
+          Global marketing with protected brand terms
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          A brand with protected product names, campaign slogans, or branded
+          phrases in English needs those terms treated consistently across all
+          markets. Some terms should remain untranslated; others have
+          officially approved local variants. Glossary Enforcement lets
+          marketing teams specify both — "ProductName" stays "ProductName" in
+          German, but the campaign tagline has an approved German adaptation
+          that must be used verbatim.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → Marketing team localization:
+          <a
+            href={getLocalizedPath("/for/global-marketing", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu for Global Marketing Teams</a
+          >
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 07 — FAQ -->
+  <Section
+    data-chapter="07 — FAQ"
+    class="content-section bg-stone-50 border-t border-stone-200 mt-24"
+  >
+    <div class="max-w-3xl mx-auto">
+      <FAQSection items={faqs} />
+    </div>
+  </Section>
+
+  <!-- 08 — CTA -->
+  <Section data-chapter="08 — CTA" class="content-section mt-24 mb-16">
+    <div class="max-w-3xl text-center mx-auto">
+      <h2 class="mb-6">
+        Upload your glossary and run your first enforced translation.
+      </h2>
+      <p class="text-stone-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+        Define your critical terms, upload them to a client profile, and see
+        how the output changes. The terminology enforcement is visible from the
+        first translation run.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center justify-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start translating for free →
+        </a>
+        <a
+          href={getLocalizedPath("/features/brand-voice", lang)}
+          class="inline-flex items-center justify-center gap-2 border border-stone-300 text-stone-700 px-6 py-3 rounded-sm font-medium hover:bg-stone-50 transition-colors"
+        >
+          See how Brand Voice and Glossary work together →
+        </a>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 09 — RELATED FEATURES -->
+  <Section
+    data-chapter="09 — RELATED"
+    class="content-section border-t border-stone-200 pt-12 mb-16"
+  >
+    <div class="max-w-3xl">
+      <h3
+        class="text-sm font-mono text-stone-400 uppercase tracking-widest mb-6"
+        >Related Features</h3
+      >
+      <ul class="space-y-3">
+        <li>
+          <a
+            href={getLocalizedPath("/features/brand-voice", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Brand Voice Manager</a
+          >
+          <span class="text-stone-500">
+            — Tone and style enforcement alongside glossary constraints</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/translation-memory", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Translation Memory</a
+          >
+          <span class="text-stone-500">
+            — Style references that complement glossary enforcement</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/lqa", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >LQA & Quality Assurance</a
+          >
+          <span class="text-stone-500">
+            — Terminology Consistency dimension that verifies glossary
+            adherence</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/auto-approval", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Auto-Approval Workflows</a
+          >
+          <span class="text-stone-500">
+            — LQA-based routing that includes terminology compliance</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/topic/glossary-terminology-management", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Glossary & Terminology Management</a
+          >
+          <span class="text-stone-500"> — Topic guide</span>
+        </li>
+      </ul>
+    </div>
+  </Section>
+</BaseLayout>

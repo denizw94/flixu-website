@@ -1,33 +1,75 @@
 ---
-title: "TMX"
-description: "Translation Memory eXchange—the critical open-source XML data standard utilized to port historical translation databases seamlessly across competing SaaS vendors, preventing critical enterprise data monopolies."
-relatedTerms: ["translation-memory", "xliff", "cat-tool"]
+title: "TMX (Translation Memory eXchange)"
+description: "TMX is the open XML standard for transferring Translation Memory between tools. Learn what it contains, why portability matters, and how it differs from XLIFF."
+relatedTerms: ["translation-memory", "xliff", "cat-tool", "tms", "exact-match", "fuzzy-match", "glossary-management", "language-service-provider"]
 ---
 
-# Defining TMX (Translation Memory eXchange)
+# What Is TMX (Translation Memory eXchange)?
 
-In the software ecosystem of global localization, **TMX (Translation Memory eXchange)** is the foundational architectural standard that guarantees an enterprise maintains absolute legal and digital sovereignty over its linguistic intellectual property.
+> **TMX (Translation Memory eXchange)** is an open XML standard for storing and transferring bilingual translation memory data between localization tools and platforms. A TMX file contains aligned source-target segment pairs — each sentence or phrase you've translated, stored alongside metadata about who translated it and when. It exists to make translation memory portable across different software systems.
 
-At a functional level, TMX is a highly structured, open-source XML (Extensible Markup Language) format rigidly defined by the OSCAR (Open Standards for Container/Content Allowing Re-use) steering committee. Its singular purpose is to store aligned, bilingual sentence pairs (e.g., an English Source sentence mapped perfectly to its approved French Target sentence) alongside critical administrative metadata detailing exactly when the sentence was translated, and which human linguist or AI engine approved it.
+## What TMX Contains
 
-## The Architecture of Vendor Independence
+A TMX file is structured XML. The core unit is a `<tu>` (Translation Unit), which holds one aligned pair: the source segment and its approved target translation. For a [Translation Memory](/topic/glossary/translation-memory) with English source and French target, each `<tu>` contains two `<tuv>` (Translation Unit Variant) elements — one in English, one in French.
 
-To understand the strategic necessity of TMX, one must understand the predatory business model of legacy Language Service Providers (LSPs) and early Translation Management Systems (TMS).
+Alongside the text, each Translation Unit can carry metadata:
 
-When an enterprise pays an agency millions of dollars over five years to translate a large software platform, the true financial value generated is not the translated software itself—it is the accumulating Translation Memory (TM) database that results from the labor. A dense TM database containing 500,000 perfectly approved string pairs allows the enterprise to mathematically auto-translate all future software updates at near-zero cost.
+- The source and target language codes (e.g., `en-US`, `fr-FR`)
+- The date the segment was created or last modified
+- The creation tool or system that generated it
+- The user or process that approved it
 
-Historically, predatory software vendors would substantially lock this translation database inside proprietary, encrypted file formats (such as Trados `.sdltm`). If the enterprise ever attempted to fire the vendor or migrate to a faster SaaS platform, the vendor would hold the TM hostage, effectively destroying five years of accumulated corporate knowledge and forcing the enterprise to translate their entire application from scratch.
+This metadata is what makes TMX more than a bilingual spreadsheet. A Translation Memory system that ingests TMX can read not just what was translated, but when, by whom, and through which process — information that affects how that segment is weighted when it's retrieved for future projects.
 
-The TMX format completely broke this monopoly.
+## Why TMX Matters: Portability
 
-Because TMX is a universally recognized open standard, every professional CAT tool and Contextual Orchestrator (including Flixu) is fundamentally required to support lossless TMX ingestion and extraction. An enterprise developer can export a 5GB `.tmx` database from an outdated desktop editor on Friday, and seamlessly upload it into a hyper-modern Cloud LLM Orchestrator on Monday, instantly activating the machine-learning models utilizing the enterprise's exact historical syntax without losing a single pixel of data.
+The most important function of TMX is vendor independence. Translation Memory is an asset that accumulates value over years of localization work. A large TM — hundreds of thousands of approved segment pairs — represents a significant reduction in future translation costs through [exact match](/topic/glossary/exact-match) and [fuzzy match](/topic/glossary/fuzzy-match) reuse.
 
-## TMX Data Geometry and Weighting
+Before open standards like TMX, TM data was often stored in proprietary formats — Trados `.sdltm`, for example — that were difficult or impossible to migrate to another tool. A team wanting to switch platforms risked losing years of accumulated TM data, which in practice created strong vendor lock-in.
 
-A raw TMX file is significantly more sophisticated than a simple two-column Excel spreadsheet. It is a dense, nested XML hierarchy designed to track extreme granularity.
+TMX is recognized by every major localization tool — [CAT tools](/topic/glossary/cat-tool), [TMS](/topic/glossary/tms) platforms, and modern localization APIs. A `.tmx` file exported from one platform can be imported into another without data loss. This portability is the standard's primary value: the TM belongs to the organization, not to the tool that built it.
 
-A standard `<tu>` (Translation Unit) within a TMX file contains the English `<tuv>` (Translation Unit Variant) and the corresponding Spanish `<tuv>`. However, alongside the text, premium TMX extraction includes heavy **Weighting Metadata**.
+## Metadata and TM Quality
 
-When modern AI systems ingest historical TMX files to build RAG (Retrieval-Augmented Generation) vectors, they evaluate this metadata to establish linguistic supremacy. If a TMX file indicates that a specific German translation was generated by "Machine_Output_Google" in 2018, the Contextual AI will score its reliability significantly lower than a translation tagged as "Approved_By_LQA_Director" in 2025.
+When a TM system processes an incoming TMX file, it can use the segment metadata to make decisions about reliability.
 
-Therefore, maintaining strict, uncorrupted TMX hygiene is arguably the most critical data responsibility of an enterprise Localization Manager. A polluted TMX database flooded with unverified machine output will actively poison the generative capabilities of the neural networks relying upon it.
+A segment generated by a generic machine translation engine and never reviewed by a human carries different reliability than a segment that was translated by a professional linguist and approved through an LQA workflow. Both can exist in the same TMX file — the metadata tells the system which is which.
+
+This matters for how segments get surfaced. A Semantic Reranker — which retrieves TM matches by meaning similarity rather than character matching — can weight human-approved segments higher than unreviewed machine output when surfacing suggestions. A TM that has been built carefully, with consistent approval workflows, becomes a more reliable asset over time.
+
+The practical implication: TMX quality depends on TMX hygiene. If unreviewed machine output accumulates in the TM without being marked as such, the metadata distinction is lost. Segments that should carry a lower confidence score are treated the same as carefully reviewed work. Most localization teams with mature TM practices maintain a clear workflow distinction between provisional machine output and human-approved translations.
+
+## TMX vs. XLIFF
+
+Both TMX and XLIFF are XML standards used in localization, but they serve different purposes.
+
+| | TMX | XLIFF |
+|---|---|---|
+| **Purpose** | Store and transfer Translation Memory | Transfer content for translation |
+| **Content** | Previously translated segment pairs | Source content to be translated |
+| **Direction** | Archived asset — historical reference | Active workflow — in-progress translation |
+| **File lifecycle** | Long-lived — maintained and updated over time | Per-project — created, used, archived |
+| **Used by** | TMS platforms, CAT tools, localization APIs | CAT tools, TMS handoffs, developer workflows |
+
+TMX is the archive. XLIFF is the active job. When a localization workflow starts, XLIFF carries the new content to be translated. When that job completes, the approved segments can be written back to the TM and exported as TMX for the long-term record.
+
+## Related Terms
+
+- [Translation Memory](/topic/glossary/translation-memory) — the database that TMX stores and transfers; the underlying asset
+- [XLIFF](/topic/glossary/xliff) — the complementary file standard for active translation workflows
+- [CAT Tool](/topic/glossary/cat-tool) — the editing environment that reads and writes TMX files
+- [TMS](/topic/glossary/tms) — the platform that manages TM assets, including TMX import/export
+- [Exact Match](/topic/glossary/exact-match) — the 100% match condition that TMX data enables
+- [Fuzzy Match](/topic/glossary/fuzzy-match) — partial matches surfaced from TM data stored in TMX format
+- [Glossary Management](/topic/glossary/glossary-management) — the term-level complement to TMX's segment-level data
+- [Language Service Provider](/topic/glossary/language-service-provider) — agencies that maintain and transfer client TM data in TMX format
+
+## Related Guides
+
+- [Translation Memory: How It Works and Why It Matters](/topic/glossary/translation-memory) — how TM is built, maintained, and how TMX fits into the longer-term asset strategy
+- [How Flixu's Translation Memory Works](/features/translation-memory) — how Flixu handles TMX import and semantic retrieval
+- [For Translation Agencies](/for/agencies) — how agencies manage client TM assets across platforms using TMX
+
+---
+
+*Last Updated: March 2026 · Author: Deniz, Founder — Flixu AI*

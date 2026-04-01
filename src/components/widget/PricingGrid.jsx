@@ -11,20 +11,55 @@ const PRICE_MAP = {
 };
 
 export default function PricingGrid({ plans, enterprise }) {
-    const [isYearly, setIsYearly] = useState(false);
+    const isObjectFormat = plans && !Array.isArray(plans) && plans.tabs;
+    const [isYearly, setIsYearly] = useState(true);
+    const [activeTab, setActiveTab] = useState(isObjectFormat ? plans.tabs[0].id : null);
+
+    const handleTabChange = (tabId) => {
+        setActiveTab(tabId);
+        if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('pricing-tab-change', { detail: tabId }));
+        }
+    };
 
     useEffect(() => {
         (async function () {
             const cal = await getCalApi({"namespace":"flixu-discovery-call-20-min"});
             cal("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
         })();
-    }, []);
+        
+        // Dispatch initial state
+        if (isObjectFormat && plans.tabs[0]) {
+            handleTabChange(plans.tabs[0].id);
+        }
+    }, [isObjectFormat, plans]);
 
-    // Fallback if no data provided (prevents crash, though usage should always provide data)
-    const effectivePlans = plans || [];
+    // Fallback if no data provided
+    const effectivePlans = isObjectFormat ? (plans.plans[activeTab] || []) : (plans || []);
 
     return (
         <div className="w-full max-w-[1400px] mx-auto">
+
+            {/* Tabs */}
+            {isObjectFormat && (
+                <div className="flex justify-center mb-6">
+                    <div className="inline-flex bg-stone-100 p-1 rounded-md">
+                        {plans.tabs.map(tab => (
+                            <button
+                                key={tab.id}
+                                onClick={() => handleTabChange(tab.id)}
+                                className={`px-6 py-2 rounded text-sm font-medium transition-colors ${
+                                    activeTab === tab.id
+                                        ? 'bg-white text-stone-900 shadow-sm'
+                                        : 'text-stone-500 hover:text-stone-700'
+                                }`}
+                            >
+                                {tab.name} <span className="opacity-50 font-normal ml-1">({tab.activeLabel})</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {/* Toggle */}
             <div className="flex justify-center mb-16 items-center gap-4">
@@ -73,6 +108,7 @@ export default function PricingGrid({ plans, enterprise }) {
 
                         <div className="mb-1 flex items-baseline gap-1">
                             <span className="text-3xl font-sans font-medium">${currentPrice}</span>
+                            <span className="text-stone-500 font-sans">/ mo</span>
                         </div>
                         <div className="text-xs text-stone-400 mb-8 uppercase tracking-wide h-4">
                             {billingText || "\u00A0"}

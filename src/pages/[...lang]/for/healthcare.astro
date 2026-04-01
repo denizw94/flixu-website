@@ -1,0 +1,604 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Section from "../../../components/ui/Section.astro";
+import Breadcrumbs from "../../../components/seo/Breadcrumbs.astro";
+import TldrBlock from "../../../components/seo/TldrBlock.astro";
+import FAQSection from "../../../components/seo/FAQSection.astro";
+import SchemaOrg from "../../../components/seo/SchemaOrg.astro";
+import HeroHealthcare from "../../../components/visuals/HeroHealthcare.jsx";
+import { getLocalizedPath, locales } from "../../../i18n/utils";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: undefined } },
+    ...locales.map((lang) => ({ params: { lang } })),
+  ];
+}
+
+let { lang } = Astro.params;
+if (!lang) lang = "en";
+
+const title =
+  "Flixu for Telehealth & Healthcare — Clinical Terminology Enforcement";
+const description =
+  "Enforce clinical terminology before translation. LQA scores every segment — clinical linguists review exceptions, not everything. Audit trail included.";
+
+const breadcrumbItems = [
+  { name: "Home", url: getLocalizedPath("/", lang) },
+  { name: "Who it's for", url: getLocalizedPath("/for/freelancers", lang) },
+  { name: "Healthcare", url: Astro.url.pathname },
+];
+
+const faqs = [
+  {
+    question:
+      "How does Flixu handle medical terminology consistency?",
+    answer:
+      "Clinical terms are uploaded to the project Glossary and loaded as payload constraints before translation begins. The approved term is specified in the input payload — the language model generates text with the term already fixed, not checked afterward. 'Dosierung' appears as 'Dosierung' across every patient-facing string and every clinical document for that project, because the constraint was present before generation. Terminology updates to the Glossary apply immediately to all subsequent translations.",
+  },
+  {
+    question:
+      "Can Flixu reduce the time our clinical linguists spend on review?",
+    answer:
+      "LQA scores every segment automatically across five dimensions. Segments above the threshold are auto-approved without human review. Segments below threshold appear in the review queue with the specific failing dimension marked — the clinical linguist reviews those segments and the quality concern is identified, not just flagged as 'needs review.' Healthcare teams using this workflow typically find clinical linguist review time drops from 7–10 days per release to under 2 days.",
+  },
+  {
+    question:
+      "How does Flixu handle urgent content updates — hotfixes, regulatory changes?",
+    answer:
+      "The GitHub App synchronizes automatically when developers push changes to monitored file paths. Changed strings are detected, translated with the current Glossary and clinical context applied, and committed to the localization branch. The localized version follows the English update by minutes rather than the 24–48 hours that result from manual synchronization workflows.",
+  },
+  {
+    question: "Is Flixu appropriate for patient-facing content?",
+    answer:
+      "The Pre-Translation Analysis detects content type and target audience and applies appropriate calibration — patient-facing content receives lay-healthcare register; clinical documentation receives professional medical register. For patient-facing content where safety and clarity are the primary quality requirements, the clinical terminology enforcement and LQA scoring provide the quality gate. However, healthcare organizations should assess whether the automated quality gate meets their specific clinical and regulatory review requirements for their content type and jurisdiction.",
+  },
+  {
+    question:
+      "What are the data privacy and HIPAA considerations?",
+    answer:
+      "Flixu processes content ephemerally — strings are not stored beyond the active session and are not used to train models. For HIPAA-covered entities, the relevant question is whether the translation process constitutes a covered healthcare operation and whether a Business Associate Agreement (BAA) is required. Healthcare organizations should assess this against their specific HIPAA obligations. Contact the team at founders@flixu.ai to discuss your specific compliance requirements.",
+  },
+  {
+    question:
+      "Can multiple team members — engineers, product managers, clinical reviewers — work in the same workspace?",
+    answer:
+      "Yes. Role-based access controls scope what each team member can see and modify: Admins configure the workspace and manage users; Project Managers run translations and review output; Translators (including external clinical reviewers) work within their assigned projects without accessing global configuration. Clinical reviewers can be added for specific projects without requiring them to access the full workspace.",
+  },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      name: "Flixu for Telehealth & Healthcare",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <SchemaOrg schema={schema} slot="schema" />
+
+  <!-- 01 — HERO -->
+  <Section data-chapter="01 — INTRO" class="hero-section pb-16">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center max-w-7xl mx-auto px-6"
+    >
+      <div class="max-w-3xl !px-0">
+        <Breadcrumbs items={breadcrumbItems} />
+        <span
+          class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-6 block"
+          >For Telehealth & Digital Healthcare</span
+        >
+        <h1 class="mb-6">
+          We missed the German launch window because our key medical terms
+          weren't consistent across the app.
+        </h1>
+        <p class="max-w-2xl text-xl text-stone-600 mb-8">
+          In healthcare software, a mistranslated term isn't a quality issue.
+          It's a patient confusion risk, a support ticket, a compliance flag,
+          or a liability exposure — depending on the context. Flixu loads
+          your clinical terminology as hard constraints before translation
+          begins, and scores every segment automatically so clinical linguists
+          review exceptions, not everything.
+        </p>
+      </div>
+      <div class="relative w-full aspect-[4/3] hidden md:block">
+        <HeroHealthcare client:load />
+      </div>
+    </div>
+  </Section>
+
+  <!-- 02 — TL;DR -->
+  <Section data-chapter="02 — TL;DR" class="tldr-section">
+    <div class="max-w-3xl">
+      <TldrBlock
+        label="What is Flixu for Healthcare?"
+        text="Flixu for telehealth and healthcare SaaS enforces clinical terminology consistency through pre-translation Glossary constraints, scores translation quality automatically across five dimensions, and provides an audit trail of every approved segment. Clinical linguists review the segments below the quality threshold — not every string in every release. The pipeline integrates directly with your CI/CD workflow, eliminating the 48-hour manual synchronization delays that leave outdated content in production."
+      />
+    </div>
+  </Section>
+
+  <!-- 03 — EMPATHY / PROBLEM -->
+  <Section data-chapter="03 — PROBLEM" class="content-section mt-12">
+    <div class="max-w-3xl">
+      <span
+        class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-4 block"
+        >The Problem</span
+      >
+      <h2 class="mb-8">
+        Mistranslated medical terms are a liability risk, not just a quality
+        issue.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        A dosage instruction that appears as "Dosierung" in one section of
+        the app and "Einnahme-Menge" in another isn't just inconsistent. It's
+        confusing to patients who don't speak German as a first language, it
+        generates support tickets, and it creates a documented discrepancy
+        between what the product claims to communicate and what it actually
+        communicates to patients in different contexts.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Generic MT doesn't know the difference between a patient-facing
+        dosage instruction and a clinical reference document. It doesn't know
+        that your compliance framework requires specific terminology in
+        specific contexts. It translates strings in isolation, without
+        clinical context, and produces technically plausible text that's
+        clinically imprecise.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        From the healthcare technology community:
+      </p>
+
+      <div class="space-y-4 mb-8">
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "Mistranslated medical terms are a liability risk, not just a
+            quality issue."
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "We can't use generic MT for patient-facing content — it's not
+            acceptable clinically."
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "We missed the German launch window because of localization
+            bottlenecks."
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "Terminology inconsistency across the app leads to patient
+            confusion and support tickets."
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "We need auditability — who translated what, when, with what
+            glossary version."
+          </p>
+        </div>
+      </div>
+
+      <p class="text-stone-600 leading-relaxed">
+        The answer isn't more clinical linguist review time on every release.
+        It's a pipeline that enforces the right terminology before generating
+        anything, and routes only the exceptions to human review.
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 1 — Clinical Terminology Enforcement -->
+  <Section data-chapter="04 — PAIN POINTS" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Clinical terminology is enforced before translation — not reviewed
+        after.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Your glossary defines how clinical terms appear across your platform.
+        "Dosierung" is always "Dosierung." "Contraindication" maps to the
+        approved clinical term in each target language. A patient-facing
+        dosage instruction and a clinical reference document use different
+        vocabulary because the context is different — and the pre-translation
+        analysis detects which is which before generating a single word.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Glossary Enforcement loads your approved clinical terminology as
+        payload constraints before the language model sees the source text.
+        The model builds grammar around the fixed terms from the
+        start — not inserted into already-generated text as a post-processing
+        substitution. In inflected languages like German, Polish, or French,
+        this produces natural constructions rather than awkward insertions.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        When your terminology is updated — a term is standardized, a
+        regulatory requirement changes, a clinical protocol is revised — the
+        update applies to every subsequent translation for that project. No
+        email chain, no risk that the update arrived after twenty strings were
+        already processed.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Teams using pre-translation glossary enforcement typically find that
+        terminology inconsistency — the same term appearing in multiple
+        variants across a platform — drops from 5–10% of patient-facing
+        strings to under 1%.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Clinical glossary enforcement:
+        <a
+          href={getLocalizedPath("/features/glossary-enforcement", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Glossary Enforcement</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 2 — LQA Review by Exception -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Clinical linguists review exceptions — not every string in every
+        release.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        A clinical linguist reviewing every string in every release cycle
+        spends 7–10 days per release on translation quality assurance. That's
+        the bottleneck that delays feature rollouts by 30% against
+        engineering timelines — not because the linguist is slow, but because
+        the pipeline routes everything through human review regardless of
+        quality.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Flixu's LQA scores every segment automatically across five
+        dimensions: Grammar, Accuracy, Terminology Consistency, Formatting,
+        and Fluency. Segments above the quality threshold — or matching
+        Translation Memory at 99% — are auto-approved without human review.
+        Segments below threshold appear in the review queue with the specific
+        failing dimension marked.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For a healthcare platform where clinical accuracy is non-negotiable,
+        this means the clinical linguist's time concentrates on the segments
+        that actually require clinical judgment — unusual constructions,
+        ambiguous clinical contexts, edge cases that the automated scoring
+        correctly identified as needing human attention. The routine strings
+        don't consume that time.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Healthcare teams using LQA-based review workflows find clinical
+        linguist review time drops from 7–10 days to under 2 days per
+        release cycle.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → LQA and quality scoring:
+        <a
+          href={getLocalizedPath("/features/lqa", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >LQA & Quality Assurance</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 3 — Engineering Hours on Handoffs -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        150 engineering hours per quarter on content handoffs.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Every time the engineering team pushes a hotfix or a content update,
+        someone manually extracts the changed strings, uploads them to the
+        TMS, waits for translations to come back, and re-imports. For urgent
+        updates — a corrected medical instruction, a regulatory disclaimer
+        change, a safety alert — that manual pipeline creates a 24–48 hour
+        delay between the English correction and the localized version.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        In a live healthcare environment, a 48-hour delay in a corrected
+        dosage instruction isn't a QA metric. It's a compliance exposure.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The Flixu GitHub App automates the synchronization. When a developer
+        pushes a hotfix, the app detects the changed strings, runs the
+        translation pipeline with clinical terminology and brand voice
+        applied, and commits the translated files to the dedicated
+        localization branch. The localized update follows the English update
+        by minutes rather than days.
+      </p>
+
+      <div class="border-l-2 border-orange-200 pl-6 mb-6">
+        <p class="text-stone-500 italic text-sm leading-relaxed">
+          "We spent 150 engineering hours last quarter just managing content
+          handoffs between our EHR and our old TMS."
+        </p>
+      </div>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Teams moving from manual handoff workflows to automated pipelines
+        typically reduce engineering time on localization coordination from
+        150+ hours per quarter to under 20 hours.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Automated CI/CD pipeline:
+        <a
+          href={getLocalizedPath("/features/github-integration", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >GitHub Integration</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 4 — Patient vs. Clinical Context -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        The pipeline knows whether it's translating patient-facing content or
+        clinical documentation.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        A dosage instruction for a patient and a pharmacokinetic reference
+        for a clinician require different register, different vocabulary
+        level, and different cultural context. Generic MT makes no
+        distinction — it applies the same statistical translation to both.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Flixu's Pre-Translation Analysis detects the domain and target
+        audience before any string is translated. Patient-facing content
+        receives formality calibration appropriate for lay healthcare
+        communication. Clinical documentation receives the technical register
+        appropriate for medical professionals. The same platform handles both
+        content types with different calibration applied automatically.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For telehealth platforms serving both patients and clinical staff from
+        the same codebase, this context detection is the difference between
+        translation that serves each audience correctly and translation that
+        serves neither well.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Pre-translation context analysis:
+        <a
+          href={getLocalizedPath("/product/context", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >The Context Engine</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- 07 — COMPLIANCE AND DATA HANDLING -->
+  <Section data-chapter="07 — COMPLIANCE" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">Data handling for healthcare content.</h2>
+
+      <div class="space-y-6 mb-8">
+        <div>
+          <h3 class="text-lg mb-2">Ephemeral processing</h3>
+          <p class="text-stone-600 leading-relaxed">
+            Flixu processes your content and returns the translation. Your
+            strings and documents are not stored beyond the active session and
+            are not used to train public or shared AI models.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-lg mb-2">Audit trail</h3>
+          <p class="text-stone-600 leading-relaxed">
+            Every approved translation is logged with its LQA score, the
+            approval decision (auto-approved via threshold or reviewed by a
+            human), the approving user, and the timestamp. For compliance
+            teams that need to demonstrate translation quality
+            governance — which glossary version was active, which strings were
+            reviewed by a clinical linguist, when each segment was
+            approved — that data is accessible from the workspace without a
+            separate reporting step.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-lg mb-2">Role-based access</h3>
+          <p class="text-stone-600 leading-relaxed">
+            Three roles scope workspace access:
+            <strong>Admin</strong> (global configuration, billing, user
+            management),
+            <strong>Project Manager</strong> (project configuration, review,
+            approval),
+            <strong>Translator</strong> (string-level editing within assigned
+            projects). External clinical reviewers can be assigned as
+            Translators scoped to their assigned projects without accessing
+            global configuration.
+          </p>
+        </div>
+      </div>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For specific HIPAA and GDPR compliance questions relevant to your
+        organization's data handling requirements:
+        <a
+          href={getLocalizedPath("/legal/privacy", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Privacy Policy</a
+        >
+      </p>
+
+      <div
+        class="bg-amber-50 border border-amber-200 rounded-sm p-4 text-sm text-amber-800"
+      >
+        <strong>Note:</strong> Flixu does not make specific regulatory compliance
+        claims for healthcare content. Healthcare organizations should evaluate
+        Flixu's data handling against their specific regulatory obligations and
+        conduct their own compliance assessment.
+      </div>
+    </div>
+  </Section>
+
+  <!-- 08 — FAQ -->
+  <Section
+    data-chapter="08 — FAQ"
+    class="content-section bg-stone-50 border-t border-stone-200 mt-24"
+  >
+    <div class="max-w-3xl mx-auto">
+      <FAQSection items={faqs} />
+    </div>
+  </Section>
+
+  <!-- 09 — CTA -->
+  <Section data-chapter="09 — CTA" class="content-section mt-24 mb-16">
+    <div class="max-w-3xl text-center mx-auto">
+      <h2 class="mb-6">
+        Set up clinical glossary enforcement and run your first test project.
+      </h2>
+      <p class="text-stone-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+        Upload your clinical terminology, configure the project, and run a
+        sample of your patient-facing strings. Compare the output — and the
+        terminology consistency — against what your current pipeline
+        produces.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center justify-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start translating for free →
+        </a>
+        <a
+          href={getLocalizedPath("/contact", lang)}
+          class="inline-flex items-center justify-center gap-2 border border-stone-300 text-stone-700 px-6 py-3 rounded-sm font-medium hover:bg-stone-50 transition-colors"
+        >
+          Talk to the team about your clinical requirements →
+        </a>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 10 — RELATED FEATURES -->
+  <Section
+    data-chapter="10 — RELATED"
+    class="content-section border-t border-stone-200 pt-12 mb-16"
+  >
+    <div class="max-w-3xl">
+      <h3
+        class="text-sm font-mono text-stone-400 uppercase tracking-widest mb-6"
+        >Related Features</h3
+      >
+      <ul class="space-y-3">
+        <li>
+          <a
+            href={getLocalizedPath("/features/glossary-enforcement", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Glossary Enforcement</a
+          >
+          <span class="text-stone-500">
+            — Clinical terminology consistency as a pre-generation
+            constraint</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/lqa", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >LQA & Quality Assurance</a
+          >
+          <span class="text-stone-500">
+            — Audit trail and review by exception</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/github-integration", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >GitHub Integration</a
+          >
+          <span class="text-stone-500">
+            — Hotfix pipeline automation without 48h delays</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/product/context", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >The Context Engine</a
+          >
+          <span class="text-stone-500">
+            — Patient vs. clinician context detection</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/legal/privacy", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Privacy Policy</a
+          >
+          <span class="text-stone-500">
+            — Data handling and HIPAA/GDPR trust signal</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/use-cases/healthcare-translation", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Healthcare Translation Use Case</a
+          >
+          <span class="text-stone-500">
+            — Step-by-step clinical localization workflow</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/contact", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Contact</a
+          >
+          <span class="text-stone-500">
+            — Discuss specific compliance requirements</span
+          >
+        </li>
+      </ul>
+    </div>
+  </Section>
+</BaseLayout>

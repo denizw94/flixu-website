@@ -1,0 +1,706 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Section from "../../../components/ui/Section.astro";
+import Breadcrumbs from "../../../components/seo/Breadcrumbs.astro";
+import TldrBlock from "../../../components/seo/TldrBlock.astro";
+import FAQSection from "../../../components/seo/FAQSection.astro";
+import SchemaOrg from "../../../components/seo/SchemaOrg.astro";
+import HeroGithubIntegration from "../../../components/visuals/HeroGithubIntegration.jsx";
+import { getLocalizedPath, locales } from "../../../i18n/utils";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: undefined } },
+    ...locales.map((lang) => ({ params: { lang } })),
+  ];
+}
+
+let { lang } = Astro.params;
+if (!lang) lang = "en";
+
+const title =
+  "GitHub Integration — Git-Native Localization | Flixu";
+const description =
+  "Flixu's GitHub App detects new strings on push, translates with your Glossary and Brand Voice applied, and commits to a dedicated branch — no merge conflicts, no manual export.";
+
+const breadcrumbItems = [
+  { name: "Home", url: getLocalizedPath("/", lang) },
+  { name: "Features", url: getLocalizedPath("/features", lang) },
+  { name: "GitHub Integration", url: Astro.url.pathname },
+];
+
+const faqs = [
+  {
+    question:
+      "How does Flixu's GitHub integration prevent merge conflicts?",
+    answer:
+      "The Flixu GitHub App commits translated files to a dedicated localization branch that's separate from your feature development branches. Your feature PRs and the localization commits never target the same files simultaneously. The three-way merge conflicts that occur when a TMS bot and a feature branch both write to the same localization files — a common problem with Crowdin, Lokalise, and similar tools — don't happen because the files are structurally separated at the branch level.",
+  },
+  {
+    question:
+      "Does the GitHub App require access to my entire repository?",
+    answer:
+      "No. When you authorize the GitHub App, you specify which repositories it can access. Within each repository, the configuration file specifies which file paths it monitors — you can scope it to your localization directories only. The app doesn't read or write to files outside the paths you configure.",
+  },
+  {
+    question: "What happens when a translation doesn't auto-approve?",
+    answer:
+      "Segments that score below the LQA threshold appear in the Flixu review queue with the specific failing dimension marked. The commit to the localization branch waits for those segments to be reviewed and approved. High-confidence segments that have already auto-approved are committed immediately; the flagged segments are held until a reviewer addresses them.",
+  },
+  {
+    question:
+      "What file formats does the GitHub integration support?",
+    answer:
+      "JSON, YAML, .po / POT, iOS .strings, XLIFF, Markdown, and subtitle files. Android XML is not currently supported — if your project uses Android XML, check the developer API documentation for the current support status before configuring. For formats not in the list, the Developer API provides programmatic access to the translation pipeline that you can integrate into your own automation.",
+  },
+  {
+    question:
+      "How long does the GitHub integration take to set up?",
+    answer:
+      "Under 15 minutes for a standard configuration: install the GitHub App, authorize repository access, create the configuration file specifying monitored paths and target languages, link the repository to a Flixu workspace project. The first translation run happens automatically on the next commit that touches the monitored paths.",
+  },
+  {
+    question: "Does the integration work with GitHub Actions?",
+    answer:
+      "The GitHub App runs independently of GitHub Actions — it responds to push events directly without requiring an Actions workflow. If you want to integrate Flixu into an existing GitHub Actions workflow instead of using the App, the Developer API supports that path with webhook-based triggering.",
+  },
+  {
+    question:
+      "Can the GitHub App handle repositories with multiple applications or teams?",
+    answer:
+      "Yes. Configuration files can specify different monitored paths, target languages, and Flixu workspace contexts within the same repository — for monorepos where multiple applications share a repository. Each path configuration maps to the appropriate Flixu project and client profile, applying the correct Glossary and Brand Voice per application.",
+  },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      name: "Flixu GitHub Integration",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    },
+    {
+      "@type": "HowTo",
+      name: "How to set up Flixu's GitHub Integration",
+      step: [
+        {
+          "@type": "HowToStep",
+          name: "Install the GitHub App",
+          text: "Install the Flixu GitHub App from the GitHub marketplace and connect it to your repository.",
+        },
+        {
+          "@type": "HowToStep",
+          name: "Configure file detection rules",
+          text: "Specify which files the app should monitor: file paths, file extensions, branch rules.",
+        },
+        {
+          "@type": "HowToStep",
+          name: "Connect your workspace context",
+          text: "Link the repository to a Flixu client profile or project to load Glossary, Brand Voice, and Translation Memory.",
+        },
+        {
+          "@type": "HowToStep",
+          name: "Developer pushes English strings",
+          text: "The Flixu GitHub App detects new or changed strings and extracts translatable text.",
+        },
+        {
+          "@type": "HowToStep",
+          name: "Translation pipeline runs",
+          text: "Pre-Translation Analysis, language model translation with all constraints, and LQA scoring runs automatically.",
+        },
+        {
+          "@type": "HowToStep",
+          name: "Translated files committed to localization branch",
+          text: "Auto-approved translations are committed; flagged segments wait for review.",
+        },
+        {
+          "@type": "HowToStep",
+          name: "Merge localization branch into main",
+          text: "Merge the localization branch so your CI/CD pipeline picks up both English and localized versions.",
+        },
+      ],
+    },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <SchemaOrg schema={schema} slot="schema" />
+
+  <!-- 01 — HERO -->
+  <Section data-chapter="01 — OVERVIEW" class="hero-section pb-16">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center max-w-7xl mx-auto px-6"
+    >
+      <div class="max-w-3xl !px-0">
+        <Breadcrumbs items={breadcrumbItems} />
+        <span
+          class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-6 block"
+          >Feature Spotlight</span
+        >
+        <h1 class="mb-6">
+          Push English. Get translations back. No manual step in between.
+        </h1>
+        <p class="max-w-2xl text-xl text-stone-600 mb-8">
+          The Flixu GitHub App watches your repository. When a developer pushes
+          new or changed strings, it detects them, runs the translation
+          pipeline with your Glossary and Brand Voice applied, and commits the
+          translated files to a dedicated branch — without touching your
+          feature branches, without a manual export, and without waiting for a
+          project manager to start the process.
+        </p>
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Connect your repository →
+        </a>
+      </div>
+      <div class="relative w-full aspect-[4/3] hidden md:block">
+        <HeroGithubIntegration client:load />
+      </div>
+    </div>
+  </Section>
+
+  <!-- 02 — TL;DR -->
+  <Section data-chapter="02 — TL;DR" class="tldr-section">
+    <div class="max-w-3xl">
+      <TldrBlock
+        label="What is Flixu's GitHub Integration?"
+        text="The Flixu GitHub App is a Git-native localization pipeline. When developers push new strings to a connected repository, the app automatically detects the changes, translates them using your configured Translation Memory, Glossary, and Brand Voice, and commits the translated files to a dedicated localization branch. High-confidence translations auto-approve; only flagged segments appear in the review queue. The English commit and the localized commits ship on the same timeline."
+      />
+    </div>
+  </Section>
+
+  <!-- 03 — HOW IT WORKS -->
+  <Section data-chapter="03 — HOW IT WORKS" class="content-section mt-12">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">How the GitHub App works.</h2>
+
+      <div class="mb-10">
+        <h3 class="text-lg font-semibold mb-4">
+          The structural difference from other GitHub integrations
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          Most localization tools with GitHub integrations work by syncing
+          files — they detect changes, create PRs for translated content, and
+          let you merge. The problem is that the PR model creates merge
+          conflicts when the translation bot and the developer team both write
+          to the same localization files. Crowdin's bot PR and your feature PR
+          target the same file: the result is a three-way merge conflict that
+          stops the sprint.
+        </p>
+        <p class="text-stone-600 leading-relaxed">
+          The Flixu GitHub App commits to a dedicated localization branch
+          that's separate from your feature branches. The translation pipeline
+          never touches your feature files, and your feature PRs never touch
+          the localization files. The conflict doesn't happen.
+        </p>
+      </div>
+
+      <div class="space-y-10">
+        <!-- Step 1 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            1
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Install the GitHub App</h3>
+            <p class="text-stone-600 leading-relaxed">
+              Install the Flixu GitHub App from the GitHub marketplace and
+              connect it to your repository. You'll authorize access to the
+              specific repositories you want to enable — nothing broader than
+              what you authorize.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            2
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Configure file detection rules</h3>
+            <p class="text-stone-600 leading-relaxed mb-4">
+              Specify which files the app should monitor: file paths, file
+              extensions, branch rules. Common configuration:
+            </p>
+            <div
+              class="bg-stone-50 border border-stone-200 rounded-sm p-5 font-mono text-sm text-stone-600 leading-relaxed overflow-x-auto"
+            >
+              <p class="text-stone-400 text-xs mb-3">
+                # Example Flixu GitHub App configuration
+              </p>
+              <p><span class="text-orange-700">source_language</span>: en</p>
+              <p><span class="text-orange-700">target_languages</span>:</p>
+              <p class="pl-4">- de</p>
+              <p class="pl-4">- fr</p>
+              <p class="pl-4">- ja</p>
+              <p class="pl-4">- es</p>
+              <p><span class="text-orange-700">watch_paths</span>:</p>
+              <p class="pl-4">- "src/locales/en/**"</p>
+              <p class="pl-4">- "public/i18n/*.json"</p>
+              <p><span class="text-orange-700">excluded_paths</span>:</p>
+              <p class="pl-4">- "**/*.test.js"</p>
+              <p>
+                <span class="text-orange-700">translation_branch</span>:
+                "localization/automated"
+              </p>
+            </div>
+            <p class="text-stone-500 text-sm mt-3">
+              The app monitors the paths you specify. Changes outside those
+              paths don't trigger the pipeline.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            3
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Connect your workspace context</h3>
+            <p class="text-stone-600 leading-relaxed">
+              In the Flixu workspace, link the repository to a client profile
+              or project. This loads the Glossary, Brand Voice, and Translation
+              Memory that will apply to translations triggered by that
+              repository. The context is set once at the repository level —
+              every push after that applies the same configuration.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            4
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Developer pushes English strings</h3>
+            <p class="text-stone-600 leading-relaxed">
+              When a developer commits changes to monitored files and pushes to
+              the configured branch, the Flixu GitHub App detects the new or
+              changed strings, extracts the translatable text (preserving all
+              structural elements — keys, variables, tags), and queues the
+              translation pipeline.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            5
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">
+              Translation pipeline runs with context applied
+            </h3>
+            <p class="text-stone-600 leading-relaxed">
+              The Pre-Translation Analysis runs: domain detection, formality
+              calibration, Brand Voice injection, Glossary loading. The
+              language model generates translations with all constraints
+              active. LQA scores every segment.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            6
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">
+              Translated files committed to the localization branch
+            </h3>
+            <p class="text-stone-600 leading-relaxed">
+              Translations that score above the LQA threshold (≥ 90/100) or
+              match Translation Memory at ≥ 99% are auto-approved. The
+              translated files — in the original format, with all keys,
+              variables, and structure intact — are committed to the dedicated
+              localization branch. Segments that fall below the threshold
+              appear in the Flixu review queue with the failing dimension
+              flagged. The commit waits for those segments to be reviewed and
+              approved before including them.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 7 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            7
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">
+              Merge localization branch into main
+            </h3>
+            <p class="text-stone-600 leading-relaxed">
+              When translations are ready, merge the localization branch. Your
+              CI/CD pipeline picks up both the English changes and the
+              localized versions — they're already committed and ready.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 04 — FORMAT SUPPORT -->
+  <Section data-chapter="04 — FORMAT SUPPORT" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">What the parser preserves.</h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The translation pipeline extracts only the translatable text.
+        Everything structural — keys, variable names, HTML tags, placeholders,
+        JSON nesting, YAML indentation — is preserved exactly in the output
+        file.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <!-- Source -->
+        <div
+          class="bg-stone-50 border border-stone-200 rounded-sm p-5 font-mono text-sm text-stone-600 leading-relaxed"
+        >
+          <p class="text-stone-400 text-xs uppercase tracking-widest mb-3">
+            Source (English)
+          </p>
+          <p>&#123;</p>
+          <p class="pl-4">
+            "<span class="text-stone-800">checkout</span>": &#123;
+          </p>
+          <p class="pl-8">
+            "<span class="text-stone-800">title</span>": "<span
+              class="text-orange-700">Complete your purchase</span
+            >",
+          </p>
+          <p class="pl-8">
+            "<span class="text-stone-800">cta</span>": "<span
+              class="text-orange-700"
+              >Pay &#123;&#123;amount&#125;&#125; now</span
+            >",
+          </p>
+          <p class="pl-8">
+            "<span class="text-stone-800">error</span>": "<span
+              class="text-orange-700">Payment failed. Try again.</span
+            >"
+          </p>
+          <p class="pl-4">&#125;</p>
+          <p>&#125;</p>
+        </div>
+
+        <!-- Output -->
+        <div
+          class="bg-stone-50 border border-stone-200 rounded-sm p-5 font-mono text-sm text-stone-600 leading-relaxed"
+        >
+          <p class="text-green-700 text-xs uppercase tracking-widest mb-3">
+            Output (German)
+          </p>
+          <p>&#123;</p>
+          <p class="pl-4">
+            "<span class="text-stone-800">checkout</span>": &#123;
+          </p>
+          <p class="pl-8">
+            "<span class="text-stone-800">title</span>": "<span
+              class="text-green-700">Kauf abschließen</span
+            >",
+          </p>
+          <p class="pl-8">
+            "<span class="text-stone-800">cta</span>": "<span
+              class="text-green-700"
+              >&#123;&#123;amount&#125;&#125; jetzt bezahlen</span
+            >",
+          </p>
+          <p class="pl-8">
+            "<span class="text-stone-800">error</span>": "<span
+              class="text-green-700">Zahlung fehlgeschlagen. Erneut versuchen.</span
+            >"
+          </p>
+          <p class="pl-4">&#125;</p>
+          <p>&#125;</p>
+        </div>
+      </div>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Your application code doesn't need to change. The developer doesn't
+        fix broken keys. The CI/CD pipeline picks up a valid, deployable file.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed">
+        <strong>Supported file formats:</strong> JSON, YAML, .po / POT, iOS
+        .strings, XLIFF, Markdown, subtitle files. Android XML is not
+        currently supported — check the
+        <a
+          href={getLocalizedPath("/product/developer-api", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >developer API documentation</a
+        >
+        for the current format list before configuring for Android projects.
+      </p>
+    </div>
+  </Section>
+
+  <!-- 05 — BRANCH SAFETY -->
+  <Section data-chapter="05 — BRANCH SAFETY" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">Why the branch model matters.</h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Teams that have used Crowdin, Lokalise, or Transifex's GitHub
+        integration often run into the same structural problem: the TMS bot
+        creates PRs for translated strings, and those PRs target the same
+        localization files that feature branches are also modifying. When both
+        PRs are open at the same time — which in a high-velocity team is
+        almost always — the merge creates a three-way conflict.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Developer stops. Git history gets tangled. Someone spends 20 minutes
+        resolving a conflict that has nothing to do with the feature they were
+        building.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The Flixu app uses a dedicated localization branch. The feature
+        branches and the localization branch never write to the same files
+        simultaneously. The conflict can't happen because the files are
+        separated at the branch level.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed">
+        For teams that ship weekly or more frequently, eliminating that
+        conflict source typically reduces localization-related sprint overhead
+        from several hours to under 30 minutes.
+      </p>
+
+      <p class="text-stone-500 text-sm mt-4">
+        → B2B SaaS ICP workflows:
+        <a
+          href={getLocalizedPath("/for/saas-teams", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Flixu for SaaS Teams</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- 06 — WHEN THIS MATTERS MOST -->
+  <Section data-chapter="06 — USE CASES" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-10">
+        When Git-native localization changes the release economics.
+      </h2>
+
+      <!-- SaaS teams -->
+      <div class="mb-12">
+        <h3 class="text-xl mb-4">SaaS teams with weekly releases</h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          A weekly release cycle leaves no room for a separate localization
+          cycle. The team that delays international releases by one sprint
+          while translations are prepared is effectively shipping a two-class
+          product: the English version and the international version,
+          permanently offset. Git-native localization makes localization part
+          of the same cycle — translations are committed when the English
+          strings are committed, and the international release ships with the
+          English release.
+        </p>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          According to CSA Research, 76% of software buyers prefer products in
+          their native language. For a product shipping weekly, that preference
+          is only an asset if the localized version ships on the same timeline.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → SaaS localization workflow:
+          <a
+            href={getLocalizedPath("/for/saas-teams", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu for SaaS Teams</a
+          >
+        </p>
+      </div>
+
+      <!-- Mobile apps -->
+      <div class="mb-12">
+        <h3 class="text-xl mb-4">
+          Mobile app teams with CI/CD pipelines
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          Mobile apps with continuous delivery pipelines — new builds triggered
+          by commits, strings bundled at build time — require localization to
+          be ready before the build runs, not after. A Git-native integration
+          commits translated strings to the localization branch before the
+          build picks them up. The translated strings are in the build; no
+          post-build localization patch is required.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → Mobile app localization:
+          <a
+            href={getLocalizedPath("/for/mobile-apps", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu for Mobile Apps</a
+          >
+        </p>
+      </div>
+
+      <!-- Docs-as-code -->
+      <div>
+        <h3 class="text-xl mb-4">
+          Documentation teams using docs-as-code workflows
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          Technical documentation managed in a repository alongside code —
+          Markdown files, MDX, or structured content formats — benefits from
+          the same Git-native approach. When documentation is updated, the
+          translation pipeline runs automatically on the monitored paths. The
+          translated documentation is committed to the localization branch and
+          ready for deployment on the same schedule as the English
+          documentation.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → Software string translation:
+          <a
+            href={getLocalizedPath("/use-cases/software-string-translation", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Software String Translation</a
+          >
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 07 — FAQ -->
+  <Section
+    data-chapter="07 — FAQ"
+    class="content-section bg-stone-50 border-t border-stone-200 mt-24"
+  >
+    <div class="max-w-3xl mx-auto">
+      <FAQSection items={faqs} />
+    </div>
+  </Section>
+
+  <!-- 08 — CTA -->
+  <Section data-chapter="08 — CTA" class="content-section mt-24 mb-16">
+    <div class="max-w-3xl text-center mx-auto">
+      <h2 class="mb-6">
+        Connect your repository and run your first automated translation.
+      </h2>
+      <p class="text-stone-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+        Install the GitHub App, configure your monitored paths, and push a
+        commit. The first translation runs automatically — no dashboard step
+        required.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center justify-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start translating for free →
+        </a>
+        <a
+          href={getLocalizedPath("/product/developer-api", lang)}
+          class="inline-flex items-center justify-center gap-2 border border-stone-300 text-stone-700 px-6 py-3 rounded-sm font-medium hover:bg-stone-50 transition-colors"
+        >
+          Developer API and advanced integration →
+        </a>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 09 — RELATED FEATURES -->
+  <Section
+    data-chapter="09 — RELATED"
+    class="content-section border-t border-stone-200 pt-12 mb-16"
+  >
+    <div class="max-w-3xl">
+      <h3
+        class="text-sm font-mono text-stone-400 uppercase tracking-widest mb-6"
+        >Related Features</h3
+      >
+      <ul class="space-y-3">
+        <li>
+          <a
+            href={getLocalizedPath("/features/auto-approval", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Auto-Approval Workflows</a
+          >
+          <span class="text-stone-500">
+            — LQA-based routing that enables zero-touch deployment</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/lqa", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >LQA & Quality Assurance</a
+          >
+          <span class="text-stone-500">
+            — The quality scoring that governs auto-approval decisions</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/translation-memory", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Translation Memory</a
+          >
+          <span class="text-stone-500">
+            — How TM builds automatically with each approved commit</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/ai-agents", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >AI Agents</a
+          >
+          <span class="text-stone-500">
+            — Trigger translations from inside your AI coding assistant</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/product/developer-api", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Developer API</a
+          >
+          <span class="text-stone-500">
+            — Programmatic access for custom CI/CD integrations</span
+          >
+        </li>
+      </ul>
+    </div>
+  </Section>
+</BaseLayout>

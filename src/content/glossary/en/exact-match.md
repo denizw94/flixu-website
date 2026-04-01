@@ -1,33 +1,67 @@
 ---
 title: "Exact Match"
-description: "A Translation Memory phenomenon occurring when a new source string is 100% mathematically identical to a previously stored database entry, enabling instant, cost-free automatic insertion of the approved historical translation."
-relatedTerms: ["translation-memory", "fuzzy-match"]
+description: "An exact match retrieves a pre-approved translation from your Translation Memory when a new string is character-for-character identical — no retranslation needed."
+relatedTerms: ["translation-memory", "fuzzy-match", "tms", "total-cost-of-ownership", "translation-quality-assurance", "cat-tool", "mtpe"]
 ---
 
-# Defining Exact Match
+# What Is an Exact Match?
 
-In the economics of enterprise localization, an **Exact Match** represents the pinnacle of operational efficiency. It is the core mechanism by which B2B software companies, documentation agencies, and global marketing teams drastically reduce their translation overhead and accelerate their global deployment velocity.
+> An **Exact Match** occurs when a new source string is character-for-character identical to a segment already stored in your [Translation Memory](/topic/glossary/translation-memory). The system retrieves the approved historical translation automatically, with no new translation work required. This is how frequently repeated content — legal disclaimers, UI labels, product names — avoids being retranslated from scratch each time.
 
-The concept of an Exact Match is inherently tied to the architecture of **Translation Memory (TM)**. A Translation Memory is a secure database that permanently stores every single sentence your organization has ever translated, paired perfectly as a bilingual string (e.g., English paired with German).
+## How It Works
 
-When you submit a new 50-page software manual to a modern Translation Management System (TMS) or Contextual Orchestrator (like Flixu), the system does not immediately begin translating the document from scratch. Instead, it executes a rapid database query, mathematically scanning every sentence in the new manual against your historical TM repository.
+Translation Memory works by storing every segment you've translated as a source/target pair. Each time you submit new content, the system scans it against that database before anything else happens.
 
-If the algorithm detects that the new English sentence _"Enter your password to proceed."_ is character-for-character identical to a sentence you already translated and approved three years ago, it triggers an **Exact Match** (frequently designated as a 100% Match).
+If a new segment matches a stored segment exactly — same words, same punctuation, same formatting — the system flags it as an Exact Match, sometimes written as a 100% Match. The stored translation is pulled from the database and inserted automatically. No translator touches it; no new translation is generated.
 
-## The Mechanics of Auto-Propagation
+This matters most for content that recurs across documents or product versions. A standard terms-of-service paragraph, an error message that appears across multiple screens, a product name that appears in every piece of content — each of these, once translated and approved, costs nothing to re-apply to future documents.
 
-When an Exact Match is detected, the localization software executes an immediate auto-propagation protocol. It instantly retrieves the perfect historical German translation from the database and statically locks it into the new document.
+## What Exact Matches Mean in Practice
 
-This mechanism provides three significant enterprise benefits:
+**Cost.** Most [language service providers](/topic/glossary/language-service-provider) price Exact Matches at zero or near-zero — the human translator didn't do the work, so the client isn't billed for it. For projects with high repetition, this changes the [total cost of ownership](/topic/glossary/total-cost-of-ownership) of localization significantly.
 
-1. **Financial Arbitrage:** Human translation agencies operate on a per-word billing model. When a sentence triggers an Exact Match, agencies typically charge zero dollars (or a fractional fraction of a cent) for those specific words, because the human linguist is entirely bypassed.
-2. **Infinite Velocity:** The translation happens algorithmically in milliseconds. If an enterprise pushes an application update where 80% of the UI strings are Exact Matches from the previous software version, the translation turnaround time is compressed by an order of magnitude.
-3. **Ironclad Consistency:** Because the translation is pulled from an historically approved database, there is zero risk of a new freelance linguist accidentally translating "Password" utilizing a slightly different regional synonym, guaranteeing absolute UI consistency across decades of product releases.
+**Speed.** Exact Match retrieval happens in milliseconds. When a product update ships with most strings unchanged from the previous version, those strings resolve instantly. Only the new or changed content requires translation work.
 
-## ICE: In-Context Exact Matches
+**Consistency.** Because the output comes from a previously approved translation rather than a new inference, the terminology stays stable. The same UI label translates the same way across every product version, regardless of which translator or system handles the next update.
 
-While a baseline 100% Exact Match is highly valuable, elite enterprise terminology management utilizes an even stricter mathematical parameter known as the **ICE Match** (In-Context Exact Match), sometimes referred to as a 101% Match.
+## ICE Matches: Adding Context Verification
 
-A baseline Exact Match only verifies that the characters within the specific sentence are identical. However, due to _polysemy_ (where words change meaning based on their surroundings), a rogue Exact Match can occasionally trigger an error. If the isolated string is simply the word "Home," a baseline Exact Match might pull a historical translation referring to a "residential house," when the new software string actually refers to the "Home Page navigation button."
+A standard Exact Match checks whether a segment's text is identical. It doesn't check what's around it.
 
-An ICE Match completely solves this liability. It mandates that not only must the specific sentence match perfectly, but the preceding sentence and the subsequent sentence must also perfectly match historical TM data. By verifying the exact structural and sequential geometry of the paragraph, the software mathematically guarantees that the context is identical, allowing enterprises to blindly deploy ICE matches straight to the production server with absolute, unshakeable confidence, zeroing out human LQA (Linguistic Quality Assurance) costs entirely.
+That gap matters for short or ambiguous strings. The isolated word *Home* could refer to a residential address or a navigation button — two different translation solutions. A standard Exact Match might pull the wrong one if the database contains both.
+
+An In-Context Exact Match (ICE Match) — sometimes called a 101% Match — adds a second verification layer. It requires that the surrounding segments (the segment before and the segment after) also match the stored TM data. When all three conditions are met, the system has confirmed not just that the text is identical, but that its position and context are identical.
+
+ICE Matches carry a higher confidence level than standard Exact Matches. In Flixu, the auto-approval threshold is a 99% TM match combined with an LQA score above 90 — meaning segments meeting that bar can move to production without manual review. ICE Matches, where context is verified on both sides, contribute directly to that automated path.
+
+## Exact Match vs. Fuzzy Match
+
+| | Exact Match (100%) | [Fuzzy Match](/topic/glossary/fuzzy-match) |
+|---|---|---|
+| **Match condition** | Character-for-character identical | Similar but not identical |
+| **Automatic insertion** | Yes | Suggested, requires review |
+| **Human effort required** | None | Editing to confirm or correct |
+| **Typical pricing** | Zero or near-zero | Discounted per-word rate |
+| **Risk of error** | Low (with context verification) | Higher — needs translator judgment |
+
+[Fuzzy matches](/topic/glossary/fuzzy-match) surface segments that are close but not identical — a sentence where one word has changed, or a new product name has been inserted. These need a translator to review and confirm. Exact Matches skip that step entirely.
+
+## Related Terms
+
+- [Translation Memory](/topic/glossary/translation-memory) — the database that makes Exact Matches possible
+- [Fuzzy Match](/topic/glossary/fuzzy-match) — the partial-match counterpart; requires review rather than auto-insertion
+- [TMS](/topic/glossary/tms) — the platform that manages TM, runs match detection, and applies Exact Matches across projects
+- [Total Cost of Ownership](/topic/glossary/total-cost-of-ownership) — how Exact Match rates affect the economics of localization at scale
+- [Translation Quality Assurance](/topic/glossary/translation-quality-assurance) — the review layer that ICE Matches help reduce in scope
+- [CAT Tool](/topic/glossary/cat-tool) — the editing environment where translators see Exact Match suggestions inline
+- [MTPE](/topic/glossary/mtpe) — the post-editing workflow that Exact Matches bypass entirely
+
+## Related Guides
+
+- [Translation Memory: How It Works and Why It Matters](/topic/translation-memory-guide) — the full guide to building and maintaining TM across projects
+- [How Flixu's Translation Memory Works](/features/translation-memory) — semantic retrieval and auto-approval workflows
+- [AI in Translation: What's Actually Changed](/topic/ai-in-translation) — where TM and Exact Match fit in AI-native localization
+
+---
+
+*Last Updated: March 2026 · Author: Deniz, Founder — Flixu AI*

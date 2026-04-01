@@ -2,16 +2,11 @@
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Section from "../../../components/ui/Section.astro";
 import Breadcrumbs from "../../../components/seo/Breadcrumbs.astro";
-import KeyTakeaways from "../../../components/seo/KeyTakeaways.astro";
 import TldrBlock from "../../../components/seo/TldrBlock.astro";
 import FAQSection from "../../../components/seo/FAQSection.astro";
 import SchemaOrg from "../../../components/seo/SchemaOrg.astro";
 import HeroEnterprise from "../../../components/visuals/HeroEnterprise.jsx";
-import {
-  useTranslations,
-  locales,
-  getLocalizedPath,
-} from "../../../i18n/utils";
+import { getLocalizedPath, locales } from "../../../i18n/utils";
 
 export const prerender = true;
 
@@ -25,41 +20,53 @@ export function getStaticPaths() {
 let { lang } = Astro.params;
 if (!lang) lang = "en";
 
-const t = await useTranslations(lang);
-const content = t.forEnterprise;
-const isDE = lang === "de";
+const title =
+  "Flixu for Enterprise — Localization That Fits Your CI/CD Pipeline";
+const description =
+  "Glossary enforcement, department-level brand voice, and auditable LQA in your CI/CD pipeline. No 12-month implementation project, no merge conflicts.";
 
-// Breadcrumbs Setup
-const tNav = t.navigation as any;
 const breadcrumbItems = [
-  { name: tNav?.home?.title || "Home", url: getLocalizedPath("/", lang) },
-  {
-    name: tNav?.who?.title || "Who it's for",
-    url: getLocalizedPath("/for/freelancers", lang),
-  },
-  { name: content.hero.label, url: Astro.url.pathname },
+  { name: "Home", url: getLocalizedPath("/", lang) },
+  { name: "Who it's for", url: getLocalizedPath("/for/freelancers", lang) },
+  { name: "Enterprise", url: Astro.url.pathname },
 ];
 
 const faqs = [
   {
-    question: "How does Flixu integrate with enterprise CI/CD pipelines?",
+    question:
+      "How does Flixu integrate with enterprise CI/CD pipelines?",
     answer:
-      "Flixu is a developer-first linguistic API. Instead of sending files manually, your engineers can push UI strings directly via API or GitHub action, translate them instantly, and pull them back into the build—fully automating continuous localization.",
+      "The GitHub App connects to your repository and monitors specified file paths. When developers push changes to those files, the app detects new or modified strings, runs the translation pipeline with your configured Glossary, Brand Voice, and Translation Memory, and commits translated files to a dedicated localization branch. The integration works with GitHub Actions as well — the Developer API supports webhook-based triggering for custom CI/CD setups.",
   },
   {
-    question: "How does Flixu separate translations by department?",
+    question:
+      "Can Flixu handle multi-tenant enterprise deployments across global subsidiaries?",
     answer:
-      "Flixu uses Digital Brand Voice Profiles. You can enforce a 'casual' tone for the marketing department's API calls and a 'strict' tone for the legal department, ensuring contextual consistency across the entire company.",
+      "Yes. Each subsidiary, department, or client operates in an isolated workspace profile with its own Translation Memory, Glossary, and Brand Voice configuration. Terminology and style from one workspace don't cross into another. Admin users can manage multiple workspace configurations from a single account with appropriate role-based access controls.",
   },
   {
-    question: "Is Flixu secure for enterprise intellectual property?",
+    question:
+      "What file formats does Flixu support for enterprise workflows?",
     answer:
-      "Yes, Flixu features military-grade Role-Based Access Control (RBAC) and utilizes an Ephemeral API Architecture. Your proprietary data is never used to train public LLMs and is securely wiped from inference servers immediately after translation.",
+      "JSON, YAML, XLIFF, iOS .strings, .po / POT, .docx, Markdown, and subtitle files. All structural elements — keys, variables, tags, and code blocks — are preserved exactly in the output file. Android XML and Adobe InDesign IDML are not currently supported; check the documentation for current format support before onboarding content types that depend on these formats.",
   },
   {
-    question: "Does Flixu require a lengthy 12-month implementation project?",
+    question:
+      "How does Flixu separate translations by department with different brand voices?",
     answer:
-      "No. Legacy Translation Management Systems rely on fragmented, heavy human workflows that require months to map. Flixu is an API-first orchestration platform. Most engineering teams can implement continuous localization within a single sprint.",
+      "Create a separate project or client profile for each department. Assign the appropriate Brand Voice configuration to each profile — formal register for legal, casual for marketing, neutral for technical documentation. When a translation request runs under a project, the assigned Brand Voice applies automatically. Switching between departments is a project-level configuration, not a per-request parameter.",
+  },
+  {
+    question:
+      "Is Flixu secure for enterprise intellectual property?",
+    answer:
+      "Flixu processes content ephemerally — your documents and strings are not stored beyond the active session and are not used to train shared or public AI models. Role-based access controls scope workspace access to Admin, Project Manager, and Translator roles, with external contractors limited to their assigned projects. Full data handling and GDPR compliance details: Privacy Policy.",
+  },
+  {
+    question:
+      "Does implementing Flixu require a lengthy implementation project?",
+    answer:
+      "No. The GitHub App connects to a repository in under 15 minutes. Most enterprise engineering teams configure the monitored file paths, link the repository to a workspace project, and run the first automated translation within a single sprint. The Translation Memory and Glossary populate from your existing TMX and CSV files — historical translation assets carry over immediately.",
   },
 ];
 
@@ -68,7 +75,7 @@ const schema = {
   "@graph": [
     {
       "@type": "SoftwareApplication",
-      name: "Flixu for SaaS & Enterprise",
+      name: "Flixu for Enterprise",
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
     },
@@ -87,30 +94,37 @@ const schema = {
 };
 ---
 
-<BaseLayout
-  title={isDE ? "Für Enterprise | Flixu" : "For Enterprise | Flixu"}
-  description={isDE
-    ? "Flixu für Localization Manager: API, TM, Brand Voice und RBAC — ohne 12-Monats-Implementierungsprojekt."
-    : "Flixu for Localization Managers: API, TM, Brand Voice, and RBAC — without the 12-month implementation project."}
->
+<BaseLayout title={title} description={description}>
   <SchemaOrg schema={schema} slot="schema" />
-  <!-- HERO -->
-  <Section
-    data-chapter={`01 — ${t.rail.intro.toUpperCase()}`}
-    class="hero-section"
-  >
+
+  <!-- 01 — HERO -->
+  <Section data-chapter="01 — INTRO" class="hero-section pb-16">
     <div
       class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center max-w-7xl mx-auto px-6"
     >
-      <div class="hero-container !px-0">
+      <div class="max-w-3xl !px-0">
         <Breadcrumbs items={breadcrumbItems} />
-        <span class="badge">{content.hero.label}</span>
-        <h1 class="hero-title">
-          {content.hero.h1}
+        <span
+          class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-6 block"
+          >For Enterprise Teams</span
+        >
+        <h1 class="mb-6">
+          3-week translation cycles were killing our sprint velocity. Every
+          merge meant untangling JSON files.
         </h1>
-        <p class="hero-desc">
-          {content.hero.sub}
+        <p class="max-w-2xl text-xl text-stone-600 mb-8">
+          Localization in an enterprise environment shouldn't require a
+          12-month TMS implementation project, a dedicated agency relationship,
+          and a manual export step that blocks every release. Flixu connects to
+          your CI/CD pipeline, enforces your glossary and brand voice
+          automatically, and routes only the edge cases to human review.
         </p>
+        <a
+          href={getLocalizedPath("/contact", lang)}
+          class="inline-flex items-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors"
+        >
+          Talk to the team →
+        </a>
       </div>
       <div class="relative w-full aspect-[4/3] hidden md:block">
         <HeroEnterprise client:load />
@@ -118,290 +132,532 @@ const schema = {
     </div>
   </Section>
 
+  <!-- 02 — TL;DR -->
   <Section data-chapter="02 — TL;DR" class="tldr-section">
     <div class="max-w-3xl">
       <TldrBlock
-        text="Enterprise localization is routinely bottlenecked by 12-month TMS implementation projects and fragmented language agency deliverables. Flixu functions as a direct, Developer-First Linguistic API that slots natively into your CI/CD pipeline. By programmatically injecting strict Brand Voices and Glossaries, you enable Continuous Localization for your engineering teams while maintaining military-grade Ephemeral Security for your intellectual property."
+        label="What is Flixu for Enterprise?"
+        text="Flixu for enterprise teams replaces manual localization handoffs with an automated pipeline integrated directly into your CI/CD workflow. Your Translation Memory, Glossary, and Brand Voice are configured per client or department. The GitHub App detects new strings on push and commits translations to a dedicated branch — no manual extraction, no merge conflicts, no agency email. LQA scores every segment automatically; segments above threshold are auto-approved and deployed."
       />
     </div>
   </Section>
 
-  <!-- PROBLEM: THREE-WAY COMPARISON -->
-  <Section
-    data-chapter={`03 — ${t.rail.problem.toUpperCase()}`}
-    class="content-section border-b border-stone-100"
-  >
-    <div class="max-w-3xl mb-12">
+  <!-- 03 — EMPATHY / PROBLEM -->
+  <Section data-chapter="03 — PROBLEM" class="content-section mt-12">
+    <div class="max-w-3xl">
       <span
         class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-4 block"
-        >{content.problem.label}</span
+        >The Problem</span
       >
-      <h2 class="font-serif text-4xl text-stone-900 mb-6">
-        {content.problem.h2}
+      <h2 class="mb-8">
+        Localization is still the step that delays your releases.
       </h2>
-      <p class="text-xl text-stone-600 leading-relaxed">
-        {content.problem.body}
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The pattern is the same across most enterprise engineering
+        organizations. A developer writes a new feature in English. Someone
+        extracts the strings. They go into a TMS or an agency workflow.
+        Translations come back one to three weeks later — after the sprint is
+        already closed, after the feature was already shipped in English only,
+        after the international release date has already slipped.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The teams that have integrated MT post-editing into the pipeline are
+        often no faster: the translators spend as long correcting stylistically
+        wrong MT output as they would have spent translating from scratch. The
+        efficiency gain evaporated somewhere between the generic MT engine and
+        the client's brand voice requirements.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        And then there are the merge conflicts. The TMS bot creates a pull
+        request for translated strings. The developer creates a feature branch
+        that touches the same localization file. Both open at the same time.
+        The three-way merge conflict stops the sprint.
+      </p>
+
+      <div class="border-l-2 border-orange-200 pl-6 mb-6">
+        <p class="text-stone-500 italic text-sm leading-relaxed">
+          "We spent six months on Crowdin and our 3-week translation cycles
+          were killing our velocity. Every sprint meant merge conflicts in our
+          JSON files — developers were stopping actual feature work to
+          untangle Git messes. We delayed the German launch of two key
+          features."
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 1 — CI/CD Pipeline -->
+  <Section data-chapter="04 — PAIN POINTS" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        The localization pipeline runs automatically when developers push
+        code.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The Flixu GitHub App watches your repository. When a developer pushes
+        new strings to a monitored file path, the app detects the changes,
+        runs the translation pipeline with your configured Glossary, Brand
+        Voice, and Translation Memory applied, and commits the translated
+        files to a dedicated localization branch.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        That branch is structurally separate from your feature branches. The
+        TMS bot and the development workflow never write to the same files
+        simultaneously. The three-way merge conflicts that stop sprints don't
+        happen here.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For enterprise teams that ship weekly or more frequently, eliminating
+        localization from the critical path means the German version of a
+        feature ships when the English version ships — not two sprints later.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → GitHub App setup and configuration:
+        <a
+          href={getLocalizedPath("/features/github-integration", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >GitHub Integration</a
+        >
       </p>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {
-        content.problem.comparison.map((item) => (
-          <div
-            class={`p-8 rounded-sm border ${item.dim ? "border-stone-200 bg-stone-50/30" : "border-orange-200 bg-orange-50/30"}`}
-          >
-            <div class="font-mono text-[10px] uppercase tracking-widest mb-2 text-stone-400">
-              {item.tool}
-            </div>
-            <div
-              class={`font-serif text-xl mb-3 ${item.dim ? "text-stone-400" : "text-orange-700"}`}
-            >
-              {item.verdict}
-            </div>
-            <p
-              class={`text-sm leading-relaxed ${item.dim ? "text-stone-400" : "text-stone-600"}`}
-            >
-              {item.issue}
-            </p>
-          </div>
-        ))
-      }
+  </Section>
+
+  <!-- PAIN POINT 2 — Glossary -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Your glossary is enforced on every string, not just the ones a
+        reviewer catches.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        An enterprise product with thousands of UI strings, updated across
+        dozens of sprints, accumulates terminology decisions. Without
+        systematic enforcement, "Dashboard" appears as three different German
+        words in different parts of the interface. "Cancellation" appears in
+        two variants in the same user account flow. The inconsistency is
+        visible to users in international markets — and it signals that the
+        product wasn't built for them.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        In Flixu, the glossary is loaded as a payload constraint before the
+        language model generates output. The approved term is specified before
+        inference begins — the model builds the surrounding grammar around the
+        fixed term, not the other way around. For inflected languages like
+        German, Polish, or Japanese, this produces natural constructions rather
+        than awkward insertions.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        When a client's terminology is updated, every subsequent translation
+        for that client applies the updated constraint — no PM email required,
+        no risk that the freelancer who got the update email applied it to some
+        strings but not others.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Teams using pre-translation glossary enforcement typically find
+        terminology inconsistency drops from 15–25% of reviewed strings to
+        under 2%.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Glossary enforcement in detail:
+        <a
+          href={getLocalizedPath("/features/glossary-enforcement", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Glossary Enforcement</a
+        >
+      </p>
     </div>
   </Section>
 
-  <!-- USE CASES GRID -->
-  <Section
-    data-chapter={`04 — ${t.rail.usecases.toUpperCase()}`}
-    class="content-section border-b border-stone-100"
-  >
-    <div class="max-w-3xl mb-12">
-      <span
-        class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-4 block"
-        >{content.usecases.label}</span
-      >
-      <h2 class="font-serif text-4xl text-stone-900">{content.usecases.h2}</h2>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {
-        content.usecases.items.map((item) => (
-          <div class="border-l border-stone-200 pl-6 py-1">
-            <h3 class="font-serif text-lg text-stone-900 mb-2">{item.title}</h3>
-            <p class="text-stone-500 text-sm leading-relaxed">{item.body}</p>
-          </div>
-        ))
-      }
-    </div>
-  </Section>
+  <!-- PAIN POINT 3 — Brand Voice -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Different departments need different brand voices — configured, not
+        briefed.
+      </h2>
 
-  <!-- THREE PILLARS -->
-  <Section
-    data-chapter={`05 — ${t.rail.pillars.toUpperCase()}`}
-    class="content-section border-b border-stone-100 bg-stone-50/50"
-  >
-    <div class="max-w-3xl mb-12">
-      <span
-        class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-4 block"
-        >{content.pillars.label}</span
-      >
-      <h2 class="font-serif text-4xl text-stone-900">{content.pillars.h2}</h2>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {
-        content.pillars.items.map((item) => (
-          <div class="border-l border-stone-200 pl-6">
-            <h3 class="font-serif text-xl text-stone-900 mb-3">{item.title}</h3>
-            <p class="text-stone-600 text-sm leading-relaxed">{item.body}</p>
-          </div>
-        ))
-      }
+      <p class="text-stone-600 leading-relaxed mb-6">
+        An enterprise localization program spans multiple departments:
+        marketing uses a casual, warm register; legal uses formal and precise;
+        technical documentation uses neutral and domain-specific. When all of
+        these run through external agencies or generic MT without configured
+        brand voice, the output is inconsistent across the organization — the
+        same end user encounters different tone as they move from a landing
+        page to a checkout flow to a support article.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The Brand Voice Manager stores tone configuration per project or
+        client profile. When the marketing team's content runs through the
+        pipeline, it applies the marketing brand voice — formality level,
+        stylistic preferences, phrasing constraints. When the legal team's
+        content runs, it applies the legal profile. The configuration is set
+        once; every translation request after that applies it automatically.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        This replaces the briefing document model — where brand voice
+        consistency depends on whether the assigned translator read and applied
+        the PDF this week.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Brand voice configuration:
+        <a
+          href={getLocalizedPath("/features/brand-voice", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Brand Voice Manager</a
+        >
+      </p>
     </div>
   </Section>
 
-  {
-    lang === "en" && (
-      <Section
-        data-chapter="06 — DEEP DIVE"
-        class="content-section border-b border-stone-100"
-      >
-        <div class="max-w-3xl prose prose-stone prose-p:text-stone-600 prose-headings:text-stone-900 prose-headings:font-light">
-          <KeyTakeaways
-            items={[
-              "Legacy TMS platforms block CI/CD agility and require 12-month implementation projects.",
-              "Flixu's API injects Context automatically, allowing continuous localization in milliseconds.",
-              "Military-grade RBAC and Ephemeral API architecture guarantee data sovereignty.",
-              "Digital Brand Voice Profiles dynamically adapt translation tones per department (e.g. Legal vs. Marketing).",
-            ]}
-          />
-          <h2>
-            Why are legacy Translation Management Systems blocking your agility?
-          </h2>
-          <p>
-            For over two decades, the standard playbook for enterprise
-            localization was to procure a monolithic, legacy Translation
-            Management System (TMS) like Smartling, Phrase, or Trados. These
-            platforms were built for a vastly different era of software
-            development—an era of waterfall releases, manual handoffs, and
-            highly linear communication between product managers and external
-            translation agencies.
-          </p>
-          <p>
-            In 2026, high-velocity SaaS and engineering teams operate on
-            two-week agile sprints. They deploy code multiple times a day. When
-            an enterprise attempts to force a Continuous Integration /
-            Continuous Deployment (CI/CD) pipeline through a legacy TMS,
-            friction is often introduced. Engineering velocity can decrease if
-            developers are forced to wait weeks for human translators to return
-            Excel files or XLIFF documents containing localized UI strings. High
-            enterprise licensing fees often accompany software that can slow
-            down your organization's ability to ship global features quickly.
-          </p>
+  <!-- PAIN POINT 4 — LQA -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        LQA scores give you auditable quality data without manual review of
+        every string.
+      </h2>
 
-          <h3>The Hidden Costs of the 12-Month Implementation Project</h3>
-          <p>
-            Beyond the structural friction, traditional TMS vendors often
-            operate on a business model that relies on multi-year contracts.
-            When an organization signs a contract with a legacy provider, they
-            are not simply purchasing API access; they are often signing up for
-            a complex 9-to-12 month implementation project.
-          </p>
-          <p>
-            These implementation phases require significant amounts of internal
-            developer hours to manually configure webhooks, map custom XML
-            parsers, and train agency linguists on the clunky UI. The Total Cost
-            of Ownership (TCO) skyrockets before a single word is successfully
-            translated. By the time the TMS is finally integrated into the
-            codebase, the software architecture has likely already evolved,
-            requiring yet another expensive consulting engagement from the TMS
-            provider.
-          </p>
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Enterprise clients in regulated industries — legal, healthcare,
+        financial services — are asking for QA documentation that manual
+        workflows can't produce: which segments were reviewed, what quality
+        score did they receive, was the glossary consistently applied. Without
+        a structured QA pipeline, the answer is "we reviewed it internally."
+      </p>
 
-          <h2>How does Flixu enable Continuous Localization?</h2>
-          <p>
-            Flixu was engineered from the ground up to solve the friction of
-            enterprise B2B localization. We completely eradicated the 12-month
-            implementation project by replacing heavy, human-centric vendor
-            workflows with lightweight, instantaneous AI Context Orchestration.
-          </p>
-          <p>
-            Flixu is not merely a translation portal; it is a developer-first
-            linguistic API designed to slot natively into your existing CI/CD
-            pipelines. When a frontend developer pushes a new JSON array of UI
-            strings to a GitHub repository, the Flixu API intercepts the commit,
-            instantly translates the strings into 40 languages using your exact
-            corporate brand voice and terminology glossaries, and pushes the
-            localized JSON back into the deployment build. The entire process
-            takes milliseconds, not weeks. Your development team never leaves
-            their command line, and your localization manager never has to send
-            an email. This is true Continuous Localization.
-          </p>
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Flixu's LQA scores every segment across five dimensions — Grammar,
+        Accuracy, Terminology Consistency, Formatting, and Fluency —
+        automatically on every project. Segments above the threshold are
+        auto-approved and logged with their score and the approval timestamp.
+        Segments below are routed to the review queue with the specific
+        failing dimension marked.
+      </p>
 
-          <h3>Role-Based Access Control (RBAC) and Enterprise Security</h3>
-          <p>
-            In heavily regulated enterprise environments—finance, healthcare,
-            legal tech, and defense—data sovereignty and access control are
-            paramount. You cannot blindly grant a freelance translation agency
-            full access to unreleased feature documentation or highly sensitive,
-            pre-launch marketing collateral.
-          </p>
-          <p>
-            Flixu provides granular, military-grade Role-Based Access Control
-            (RBAC). A Director of Localization can assign strict permissions,
-            ensuring that specific linguistic reviewers only have access to
-            their designated target languages, while external agencies are
-            restricted to localized glossary views. Furthermore, because Flixu
-            operates on Ephemeral API Architecture, your proprietary
-            intellectual property is never utilized to train public Large
-            Language Models (LLMs). The data passes through the orchestration
-            engine, generates the localized output, and is immediately and
-            securely wiped from the inference servers.
-          </p>
+      <p class="text-stone-600 leading-relaxed mb-6">
+        That data exists without a manual reporting step. For enterprise teams
+        that need to deliver quality documentation alongside translation
+        deliverables, the audit trail is a byproduct of the pipeline, not a
+        separate effort.
+      </p>
 
-          <h2>How do you democratize terminology across departments?</h2>
-          <p>
-            One of the most complex challenges in enterprise localization is
-            consistently managing Brand Voice across completely disjointed
-            departments. Your marketing team in Berlin might utilize a highly
-            energetic, informal German brand voice ("du"), while your legal team
-            in Frankfurt requires a significantly more conservative, formal tone
-            ("Sie").
-          </p>
-          <p>
-            If your organization relies on disparate human translation agencies,
-            brand voice inevitably fragments. Customers experience jarring tonal
-            whiplash as they move from a fun, engaging marketing landing page
-            into a stiff, robotic, and outdated software checkout process.
-          </p>
-          <p>
-            Flixu solves this fragmentation through programmable Digital Brand
-            Voice Profiles. Localization managers establish baseline emotional
-            tones, formality hierarchies, and strict Domain Rules for specific
-            departments. When the marketing pipeline triggers a translation
-            call, it appends the `marketing_casual` profile to the API payload.
-            When the legal department triggers a translation call, it appends
-            the `corporate_strict` profile. The AI Orchestrator strictly obeys
-            these mathematical parameters, ensuring that the target language
-            perfectly matches the contextual intent of the originating
-            department.
-          </p>
+      <p class="text-stone-500 text-sm">
+        → LQA and quality reporting:
+        <a
+          href={getLocalizedPath("/features/lqa", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >LQA & Quality Assurance</a
+        >
+      </p>
+    </div>
+  </Section>
 
-          <h2>What is the ROI of Contextual AI for Global Expansion?</h2>
-          <p>
-            For decades, enterprise localization was treated as a painful,
-            inescapable operational tax. The objective was simply to minimize
-            the financial damage. In the era of AI Context Orchestration, the
-            fundamental economics of translation invert. Localization is no
-            longer a cost center; it is your most powerful, highly scalable
-            engine for international revenue growth.
-          </p>
-          <p>
-            By removing the high manual overhead of traditional agencies,
-            automating the manual layout fixes of Desktop Publishing (DTP), and
-            physically integrating translation into the rapid deployment cycles
-            of your engineering team, Flixu allows you to launch native
-            experiences in Tier 2 and Tier 3 global markets that were previously
-            deemed too expensive to support.
-          </p>
-          <p>
-            Your Total Addressable Market (TAM) is no longer restricted by the
-            size of your human translation budget. With Flixu, your language
-            infrastructure effortlessly scales alongside your ambition. Welcome
-            to the era of zero-friction global expansion.
+  <!-- 07 — HOW FLIXU FITS -->
+  <Section data-chapter="07 — HOW IT WORKS" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-10">
+        How Flixu fits into an enterprise localization program.
+      </h2>
+
+      <div class="space-y-10">
+        <div class="border-l border-stone-200 pl-6">
+          <h3 class="text-xl mb-3">Infrastructure setup</h3>
+          <p class="text-stone-600 leading-relaxed">
+            The GitHub App connects to your repository once. Configure
+            monitored file paths, target languages, and link the repository to
+            the appropriate workspace project. The first automated translation
+            runs on the next commit that touches the monitored paths. No
+            dedicated implementation project. No agency onboarding. Most
+            enterprise engineering teams are operational within a single
+            sprint.
           </p>
         </div>
-      </Section>
-    )
-  }
 
+        <div class="border-l border-stone-200 pl-6">
+          <h3 class="text-xl mb-3">Department-level configuration</h3>
+          <p class="text-stone-600 leading-relaxed">
+            Create a project or client profile for each department or content
+            type that requires distinct treatment — marketing, legal, product
+            UI, documentation. Assign the appropriate Brand Voice profile and
+            Glossary to each. The configuration is stored in the workspace and
+            applied automatically to every translation request associated with
+            that profile.
+          </p>
+        </div>
+
+        <div class="border-l border-stone-200 pl-6">
+          <h3 class="text-xl mb-3">Team access and roles</h3>
+          <p class="text-stone-600 leading-relaxed">
+            The platform supports three roles — Admin, Project Manager, and
+            Translator — with scoped access appropriate for internal teams and
+            external contractors. Admins configure the workspace and manage
+            users. Project Managers run translations, configure projects, and
+            review output. Translators work within their assigned projects
+            without accessing global configuration. Role assignment determines
+            what each team member or external reviewer can see and modify.
+          </p>
+        </div>
+
+        <div class="border-l border-stone-200 pl-6">
+          <h3 class="text-xl mb-3">Data handling</h3>
+          <p class="text-stone-600 leading-relaxed">
+            Flixu processes content ephemerally. Your documents and strings are
+            not stored beyond the active session and are not used to train
+            public or shared AI models. Full data handling and GDPR compliance
+            documentation:
+            <a
+              href={getLocalizedPath("/legal/privacy", lang)}
+              class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+              >Privacy Policy</a
+            >.
+          </p>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 08 — COMPARISON TABLE -->
+  <Section data-chapter="08 — COMPARISON" class="content-section mt-20">
+    <div class="max-w-4xl">
+      <h2 class="mb-8">How the approach compares.</h2>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm border border-stone-200">
+          <thead>
+            <tr class="bg-stone-50">
+              <th
+                class="text-left px-4 py-3 font-semibold border-b border-stone-200 w-1/4"
+              ></th>
+              <th
+                class="text-left px-4 py-3 font-semibold border-b border-stone-200 text-stone-400"
+                >Legacy TMS</th
+              >
+              <th
+                class="text-left px-4 py-3 font-semibold border-b border-stone-200 text-orange-700"
+                >Flixu</th
+              >
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-stone-100">
+              <td class="px-4 py-3 font-medium">Setup time</td>
+              <td class="px-4 py-3 text-stone-400"
+                >9–12 months for enterprise deployment</td
+              >
+              <td class="px-4 py-3 text-stone-600"
+                >Days to weeks; GitHub App operational in one sprint</td
+              >
+            </tr>
+            <tr class="border-b border-stone-100">
+              <td class="px-4 py-3 font-medium">CI/CD compatibility</td>
+              <td class="px-4 py-3 text-stone-400"
+                >Requires custom connectors and manual workflow
+                configuration</td
+              >
+              <td class="px-4 py-3 text-stone-600"
+                >Git-native; branch-safe; no manual extraction step</td
+              >
+            </tr>
+            <tr class="border-b border-stone-100">
+              <td class="px-4 py-3 font-medium">Glossary enforcement</td>
+              <td class="px-4 py-3 text-stone-400"
+                >Visual highlight for translators; post-generation
+                substitution for MT</td
+              >
+              <td class="px-4 py-3 text-stone-600"
+                >Payload constraint before generation; grammar built around
+                fixed terms</td
+              >
+            </tr>
+            <tr class="border-b border-stone-100">
+              <td class="px-4 py-3 font-medium">Brand voice</td>
+              <td class="px-4 py-3 text-stone-400"
+                >Style guide documents shared with agency contacts</td
+              >
+              <td class="px-4 py-3 text-stone-600"
+                >Configured in workspace; applied to every request
+                automatically</td
+              >
+            </tr>
+            <tr class="border-b border-stone-100">
+              <td class="px-4 py-3 font-medium">Quality scoring</td>
+              <td class="px-4 py-3 text-stone-400"
+                >Manual QA stages; project-level reporting</td
+              >
+              <td class="px-4 py-3 text-stone-600"
+                >Automated LQA per segment; audit trail without manual
+                reporting</td
+              >
+            </tr>
+            <tr class="border-b border-stone-100">
+              <td class="px-4 py-3 font-medium">Data handling</td>
+              <td class="px-4 py-3 text-stone-400"
+                >Content passes through agency infrastructure</td
+              >
+              <td class="px-4 py-3 text-stone-600"
+                >Ephemeral processing; not used for model training</td
+              >
+            </tr>
+            <tr class="border-b border-stone-100">
+              <td class="px-4 py-3 font-medium">Pricing model</td>
+              <td class="px-4 py-3 text-stone-400"
+                >Per-seat licensing + word volume</td
+              >
+              <td class="px-4 py-3 text-stone-600"
+                >Credit-based on words translated</td
+              >
+            </tr>
+            <tr>
+              <td class="px-4 py-3 font-medium">Merge conflicts</td>
+              <td class="px-4 py-3 text-stone-400"
+                >TMS bot PRs compete with feature branches</td
+              >
+              <td class="px-4 py-3 text-stone-600"
+                >Dedicated localization branch; structural separation</td
+              >
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 09 — FAQ -->
   <Section
-    data-chapter="07 — FAQ"
-    class="content-section border-b border-stone-100"
+    data-chapter="09 — FAQ"
+    class="content-section bg-stone-50 border-t border-stone-200 mt-24"
   >
     <div class="max-w-3xl mx-auto">
       <FAQSection items={faqs} />
     </div>
   </Section>
 
-  <!-- CTA -->
-  <Section
-    data-chapter={`08 — ${t.rail.action.toUpperCase()}`}
-    class="content-section"
-  >
-    <div class="max-w-2xl">
-      <h2 class="font-serif text-5xl text-stone-900 mb-6">{content.cta.h2}</h2>
-      <p class="text-xl text-stone-600 mb-10">{content.cta.sub}</p>
-      <div class="flex flex-wrap gap-4">
+  <!-- 10 — CTA -->
+  <Section data-chapter="10 — CTA" class="content-section mt-24 mb-16">
+    <div class="max-w-3xl text-center mx-auto">
+      <h2 class="mb-6">
+        Connect your pipeline and ship localized features on the same release
+        cycle as English.
+      </h2>
+      <p class="text-stone-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+        Set up the GitHub App, configure your department profiles, and run
+        your first automated translation. The implementation takes a sprint,
+        not a year.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <a
-          href="/contact"
-          class="px-8 py-4 bg-orange-700 text-white rounded-sm hover:bg-orange-800 transition-colors"
+          href={getLocalizedPath("/contact", lang)}
+          class="inline-flex items-center justify-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors"
         >
-          {content.cta.primary}
+          Talk to the team →
         </a>
         <a
-          href={`/${lang !== "en" ? lang + "/" : ""}pricing`}
-          class="px-8 py-4 border border-stone-200 text-stone-600 rounded-sm hover:border-stone-400 transition-colors"
+          href={getLocalizedPath("/pricing", lang)}
+          class="inline-flex items-center justify-center gap-2 border border-stone-300 text-stone-700 px-6 py-3 rounded-sm font-medium hover:bg-stone-50 transition-colors"
         >
-          {content.cta.secondary}
+          See pricing →
         </a>
       </div>
+    </div>
+  </Section>
+
+  <!-- 11 — RELATED FEATURES -->
+  <Section
+    data-chapter="11 — RELATED"
+    class="content-section border-t border-stone-200 pt-12 mb-16"
+  >
+    <div class="max-w-3xl">
+      <h3
+        class="text-sm font-mono text-stone-400 uppercase tracking-widest mb-6"
+        >Related Features</h3
+      >
+      <ul class="space-y-3">
+        <li>
+          <a
+            href={getLocalizedPath("/features/github-integration", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >GitHub Integration</a
+          >
+          <span class="text-stone-500">
+            — CI/CD-native localization pipeline</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/glossary-enforcement", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Glossary Enforcement</a
+          >
+          <span class="text-stone-500">
+            — Systematic terminology control without manual enforcement</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/brand-voice", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Brand Voice Manager</a
+          >
+          <span class="text-stone-500">
+            — Department-level brand voice configuration</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/lqa", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >LQA & Quality Assurance</a
+          >
+          <span class="text-stone-500">
+            — Auditable QA for compliance reporting</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/team-collaboration", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Team Collaboration</a
+          >
+          <span class="text-stone-500">
+            — RBAC and roles for enterprise teams</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/product/developer-api", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Developer API</a
+          >
+          <span class="text-stone-500">
+            — Custom CI/CD integration for enterprise pipelines</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/pricing", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Pricing</a
+          >
+          <span class="text-stone-500">
+            — Credit-based pricing for enterprise volume</span
+          >
+        </li>
+      </ul>
     </div>
   </Section>
 </BaseLayout>

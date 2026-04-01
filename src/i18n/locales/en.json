@@ -205,189 +205,93 @@
     },
     "specs": {
       "title": "Detailed Specifications",
-      "headers": {
-        "feature": "Feature",
-        "free": "Free",
-        "ind": "Individual",
-        "team": "Team",
-        "biz": "Business",
-        "ent": "Enterprise"
-      },
       "enterprise": {
         "text": "Need explicit SLAs or On-Premise deployment?",
         "link": "Contact us for Enterprise options ->"
       },
-      "rows": [
-        {
-          "category": "Translation Memory Architecture",
-          "items": [
-            {
-              "label": "TM Engine",
-              "free": "Standard (256-dim)",
-              "ind": "Smart (1024-dim)",
-              "team": "Advanced (1024-dim, Instruct)",
-              "biz": "Precision (2048-dim)",
-              "ent": "Elite (4096-dim)"
-            },
-            {
-              "label": "Secondary Reranker",
-              "free": "-",
-              "ind": "AI-Reranking",
-              "team": "Reranker-4B",
-              "biz": "Reranker-8B",
-              "ent": "Reranker-8B + Cross-lingual"
-            },
-            {
-              "label": "Top-K Candidates",
-              "free": "-",
-              "ind": "Auto",
-              "team": "Auto",
-              "biz": "15",
-              "ent": "20"
-            }
-          ]
+      "dev": {
+        "headers": {
+          "feature": "Feature",
+          "free": "Free (Builder)",
+          "ind": "Pro",
+          "team": "Growth",
+          "biz": "Scale",
+          "ent": "Enterprise"
         },
-        {
-          "category": "Resources & Limits",
-          "items": [
-            {
-              "label": "Monthly Credits",
-              "free": "30,000",
-              "ind": "300,000",
-              "team": "1,000,000",
-              "biz": "3,000,000",
-              "ent": "Custom"
-            },
-            {
-              "label": "Translation Memories",
-              "free": "1",
-              "ind": "5",
-              "team": "15",
-              "biz": "35",
-              "ent": "Unlimited"
-            },
-            {
-              "label": "Glossaries",
-              "free": "1",
-              "ind": "10",
-              "team": "25",
-              "biz": "50",
-              "ent": "Unlimited"
-            },
-            {
-              "label": "Brand Voices",
-              "free": "1",
-              "ind": "3",
-              "team": "8",
-              "biz": "20",
-              "ent": "Unlimited"
-            },
-            {
-              "label": "Client Management",
-              "free": "-",
-              "ind": "Up to 10",
-              "team": "Unlimited",
-              "biz": "Unlimited",
-              "ent": "Unlimited"
-            }
-          ]
+        "rows": [
+          {
+            "category": "Translation Memory Architecture",
+            "items": [
+              { "label": "TM Engine", "free": "Standard (256-dim)", "ind": "Smart (1024-dim)", "team": "Advanced (1024-dim, Instruct)", "biz": "Precision (2048-dim)", "ent": "Elite (4096-dim)" },
+              { "label": "Secondary Reranker", "free": "-", "ind": "AI-Reranking", "team": "Reranker-4B", "biz": "Reranker-8B", "ent": "Reranker-8B + Cross-lingual" },
+              { "label": "Top-K Candidates", "free": "-", "ind": "Auto", "team": "Auto", "biz": "15", "ent": "20" }
+            ]
+          },
+          {
+            "category": "Resources & Limits",
+            "items": [
+              { "label": "Monthly Credits", "free": "30,000", "ind": "300,000", "team": "1,000,000", "biz": "3,000,000", "ent": "Custom" },
+              { "label": "SaaS Projects", "free": "1", "ind": "5", "team": "15", "biz": "Unlimited", "ent": "Unlimited" },
+              { "label": "UI Seats Included", "free": "1", "ind": "1", "team": "5", "biz": "10", "ent": "Custom" }
+            ]
+          },
+          {
+            "category": "Developer Tools",
+            "items": [
+              { "label": "API Access", "free": "Included", "ind": "Included", "team": "Included", "biz": "Included", "ent": "Included" },
+              { "label": "MCP Cursor Server", "free": "Included", "ind": "Included", "team": "Included", "biz": "Included", "ent": "Included" },
+              { "label": "GitHub App", "free": "Included", "ind": "Included", "team": "Included", "biz": "Included", "ent": "Included" },
+              { "label": "SSO & SCIM Provisioning", "free": "-", "ind": "-", "team": "Add-on", "biz": "Add-on", "ent": "Included" }
+            ]
+          }
+        ]
+      },
+      "ui": {
+        "headers": {
+          "feature": "Feature",
+          "free": "Free (Starter)",
+          "ind": "Individual",
+          "team": "Team",
+          "biz": "Business",
+          "ent": "Enterprise"
         },
-        {
-          "category": "Storage & History",
-          "items": [
-            {
-              "label": "Translation History",
-              "free": "7 Days",
-              "ind": "Unlimited",
-              "team": "Unlimited",
-              "biz": "Unlimited",
-              "ent": "Unlimited"
-            },
-            {
-              "label": "Storage Limit",
-              "free": "None",
-              "ind": "10 GB",
-              "team": "50 GB",
-              "biz": "500 GB",
-              "ent": "Unlimited"
-            }
-          ]
-        },
-        {
-          "category": "Workflow & Collaboration",
-          "items": [
-            {
-              "label": "Seats (Users)",
-              "free": "1",
-              "ind": "1",
-              "team": "5 Included",
-              "biz": "10 Included",
-              "ent": "Custom"
-            },
-            {
-              "label": "Shared Resources",
-              "free": "-",
-              "ind": "-",
-              "team": "Yes",
-              "biz": "Yes",
-              "ent": "Yes"
-            },
-            {
-              "label": "Roles & Permissions",
-              "free": "-",
-              "ind": "-",
-              "team": "Yes",
-              "biz": "Yes",
-              "ent": "Yes"
-            },
-            {
-              "label": "Activity Feed",
-              "free": "-",
-              "ind": "-",
-              "team": "Yes",
-              "biz": "Yes",
-              "ent": "Yes"
-            }
-          ]
-        },
-        {
-          "category": "Enterprise & Support",
-          "items": [
-            {
-              "label": "API Access",
-              "free": "-",
-              "ind": "-",
-              "team": "-",
-              "biz": "100 req/min",
-              "ent": "Custom Limits"
-            },
-            {
-              "label": "SSO & Audit Logs",
-              "free": "-",
-              "ind": "-",
-              "team": "Add-on",
-              "biz": "Add-on",
-              "ent": "Included"
-            },
-            {
-              "label": "SLA Guarantee",
-              "free": "-",
-              "ind": "-",
-              "team": "-",
-              "biz": "99.5%",
-              "ent": "Custom SLA"
-            },
-            {
-              "label": "Support",
-              "free": "Community",
-              "ind": "48h",
-              "team": "24h",
-              "biz": "Priority",
-              "ent": "Dedicated"
-            }
-          ]
-        }
-      ]
+        "rows": [
+          {
+            "category": "Translation Memory Architecture",
+            "items": [
+              { "label": "TM Engine", "free": "Standard (256-dim)", "ind": "Smart (1024-dim)", "team": "Advanced (1024-dim, Instruct)", "biz": "Precision (2048-dim)", "ent": "Elite (4096-dim)" },
+              { "label": "Secondary Reranker", "free": "-", "ind": "AI-Reranking", "team": "Reranker-4B", "biz": "Reranker-8B", "ent": "Reranker-8B + Cross-lingual" },
+              { "label": "Top-K Candidates", "free": "-", "ind": "Auto", "team": "Auto", "biz": "15", "ent": "20" }
+            ]
+          },
+          {
+            "category": "Resources & Limits",
+            "items": [
+              { "label": "Monthly Credits", "free": "30,000", "ind": "300,000", "team": "1,000,000", "biz": "3,000,000", "ent": "Custom" },
+              { "label": "Translation Memories", "free": "1", "ind": "5", "team": "15", "biz": "35", "ent": "Unlimited" },
+              { "label": "Glossaries", "free": "1", "ind": "10", "team": "25", "biz": "50", "ent": "Unlimited" },
+              { "label": "Brand Voices", "free": "1", "ind": "3", "team": "8", "biz": "20", "ent": "Unlimited" }
+            ]
+          },
+          {
+            "category": "Workflow & Collaboration",
+            "items": [
+              { "label": "Seats (Users)", "free": "1", "ind": "1", "team": "5 Included", "biz": "10 Included", "ent": "Custom" },
+              { "label": "Client Management", "free": "-", "ind": "Yes", "team": "Unlimited", "biz": "Unlimited", "ent": "Unlimited" },
+              { "label": "Shared Resources", "free": "-", "ind": "-", "team": "Yes", "biz": "Yes", "ent": "Yes" },
+              { "label": "Roles & Permissions", "free": "-", "ind": "-", "team": "Yes", "biz": "Yes", "ent": "Yes" }
+            ]
+          },
+          {
+            "category": "Enterprise & Support",
+            "items": [
+              { "label": "API Access", "free": "-", "ind": "-", "team": "-", "biz": "CMS-Sync", "ent": "Custom Limits" },
+              { "label": "SSO & Audit Logs", "free": "-", "ind": "-", "team": "Add-on", "biz": "Add-on", "ent": "Included" },
+              { "label": "SLA Guarantee", "free": "-", "ind": "-", "team": "-", "biz": "99.5%", "ent": "Custom SLA" }
+            ]
+          }
+        ]
+      }
     },
     "addons": {
       "title": "Add-ons & Credit Top-ups",
@@ -763,74 +667,168 @@
     "demo": "Demo",
     "ecosystem": "Ecosystem"
   },
-  "pricingGrid": [
-    {
-      "name": "Free",
-      "price": "0",
-      "desc": "For testing.",
-      "pool": "30,000 chars / mo",
-      "features": [
-        "Standard TM",
-        "1 Glossary, 1 Brand Voice",
-        "Quick Translate & Projects"
-      ],
-      "cta": "Start Free"
-    },
-    {
-      "name": "Individual",
-      "priceMonthly": "39",
-      "priceYearly": "396",
-      "desc": "For active freelancers.",
-      "billing": {
-        "monthly": "per month",
-        "yearly": "billed yearly"
+  "pricingGrid": {
+    "tabs": [
+      {
+        "id": "dev",
+        "name": "Developer Infrastructure",
+        "activeLabel": "API-First"
       },
-      "pool": "300,000 chars / mo",
-      "features": [
-        "Smart TM & AI-Reranking",
-        "5 TMs, 10 Glossaries",
-        "3 Brand Voices, 1 Seat"
+      {
+        "id": "ui",
+        "name": "Translation Workspace",
+        "activeLabel": "UI-First"
+      }
+    ],
+    "plans": {
+      "ui": [
+        {
+          "name": "Free (Starter)",
+          "price": "0",
+          "desc": "For basic testing & evaluation.",
+          "billing": {
+            "monthly": "per month",
+            "yearly": "billed yearly"
+          },
+          "pool": "30,000 chars / mo",
+          "features": [
+            "1 TM, 1 Glossary",
+            "1 Seat",
+            "Standard TM Engine"
+          ],
+          "cta": "Start Free"
+        },
+        {
+          "name": "Individual",
+          "priceMonthly": "39",
+          "priceYearly": "396",
+          "desc": "For serious translation professionals.",
+          "billing": {
+            "monthly": "per month",
+            "yearly": "billed yearly"
+          },
+          "pool": "300,000 chars / mo",
+          "features": [
+            "5 TMs, 10 Glossaries",
+            "1 Seat",
+            "Smart TM Engine"
+          ],
+          "cta": "Start Trial",
+          "badge": "Most Popular"
+        },
+        {
+          "name": "Team",
+          "priceMonthly": "149",
+          "priceYearly": "1500",
+          "billing": {
+            "monthly": "per month",
+            "yearly": "billed yearly"
+          },
+          "desc": "For teams enforcing consistency.",
+          "pool": "1M chars / mo",
+          "poolNote": "(Shared Pool)",
+          "features": [
+            "15 TMs, 25 Glossaries",
+            "5 Seats included",
+            "Advanced TM Engine"
+          ],
+          "cta": "Create Team"
+        },
+        {
+          "name": "Business",
+          "priceMonthly": "449",
+          "priceYearly": "4500",
+          "billing": {
+            "monthly": "per month",
+            "yearly": "billed yearly"
+          },
+          "desc": "For full translation agencies.",
+          "pool": "3M chars / mo",
+          "poolNote": "(Shared Pool)",
+          "features": [
+            "35 TMs, 50 Glossaries",
+            "10 Seats included, API Access",
+            "Precision TM Engine"
+          ],
+          "cta": "Get Business"
+        }
       ],
-      "cta": "Start Trial",
-      "badge": "Most Popular"
-    },
-    {
-      "name": "Team",
-      "priceMonthly": "149",
-      "priceYearly": "1500",
-      "billing": {
-        "monthly": "per month",
-        "yearly": "billed yearly"
-      },
-      "desc": "For teams & small agencies.",
-      "pool": "1M chars / mo",
-      "poolNote": "(Shared Pool)",
-      "features": [
-        "Advanced TM & Instruct",
-        "Shared Resources",
-        "5 Seats included"
-      ],
-      "cta": "Create Team"
-    },
-    {
-      "name": "Business",
-      "priceMonthly": "449",
-      "priceYearly": "4500",
-      "billing": {
-        "monthly": "per month",
-        "yearly": "billed yearly"
-      },
-      "desc": "For scale & infrastructure.",
-      "pool": "3M chars / mo",
-      "poolNote": "(Shared Pool)",
-      "features": [
-        "Precision TM & 15 Candidates",
-        "API Access & Custom Limits",
-        "10 Seats included"
-      ],
-      "cta": "Get Business"
+      "dev": [
+        {
+          "name": "Free (Builder)",
+          "price": "0",
+          "desc": "For headless L10n & Micro-SaaS testing.",
+          "billing": {
+            "monthly": "per month",
+            "yearly": "billed yearly"
+          },
+          "pool": "30,000 chars / mo",
+          "features": [
+            "API & MCP Server",
+            "1 SaaS Project, 1 UI Seat",
+            "Standard TM Engine"
+          ],
+          "cta": "Start Free"
+        },
+        {
+          "name": "Pro (Indie)",
+          "priceMonthly": "39",
+          "priceYearly": "396",
+          "desc": "For CI/CD workflows & indie portfolios.",
+          "billing": {
+            "monthly": "per month",
+            "yearly": "billed yearly"
+          },
+          "pool": "300,000 chars / mo",
+          "features": [
+            "API Inclusive",
+            "5 SaaS Projects, 1 UI Seat",
+            "Smart TM Engine"
+          ],
+          "cta": "Start Trial",
+          "badge": "Most Popular"
+        },
+        {
+          "name": "Growth",
+          "priceMonthly": "149",
+          "priceYearly": "1500",
+          "billing": {
+            "monthly": "per month",
+            "yearly": "billed yearly"
+          },
+          "desc": "When marketing needs to approve strings.",
+          "pool": "1M chars / mo",
+          "poolNote": "(Shared Pool)",
+          "features": [
+            "API Inclusive",
+            "15 SaaS Projects",
+            "5 UI Seats for PM/Mktg",
+            "Advanced TM Engine"
+          ],
+          "cta": "Create Team"
+        },
+        {
+          "name": "Scale",
+          "priceMonthly": "449",
+          "priceYearly": "4500",
+          "billing": {
+            "monthly": "per month",
+            "yearly": "billed yearly"
+          },
+          "desc": "High limit API for integrated enterprise CI/CD.",
+          "pool": "3M chars / mo",
+          "poolNote": "(Shared Pool)",
+          "features": [
+            "SSO/SCIM Provisioning",
+            "Unlimited SaaS Projects",
+            "10 UI Seats Included",
+            "Precision TM Engine"
+          ],
+          "cta": "Get Scale"
+        }
+      ]
     }
-  ],
+  },
   "enterpriseCard": {
     "title": "Enterprise",
     "badge": "CUSTOM",

@@ -20,9 +20,9 @@ export function getStaticPaths() {
 let { lang } = Astro.params;
 if (!lang) lang = "en";
 
-const title = "Project Management | Flixu";
+const title = "Project Management — Group Files with One Shared Context | Flixu";
 const description =
-  "Streamline your AI localization pipeline with Flixu's built-in project management workspace. Track progress, files, and contextual scopes.";
+  "Group source files, assign a client profile, and track review progress in one workspace. Brand Voice and Glossary apply to every file in the project automatically.";
 
 const breadcrumbItems = [
   { name: "Home", url: getLocalizedPath("/", lang) },
@@ -34,22 +34,33 @@ const faqs = [
   {
     question: "Does Flixu have built-in project management for translation?",
     answer:
-      "Yes, Flixu includes a comprehensive project workspace. You can organize source files via folders, assign clients, track word counts, and monitor translation completion status across multiple target languages.",
+      "Yes. Flixu includes a project workspace where you can group source files, assign client profiles, track translation progress per file and per language, and monitor segment review status. The project structure handles context configuration and review routing — without a separate project management tool alongside it.",
   },
   {
     question: "Can I share translation projects with my team?",
     answer:
-      "Yes, in Team and Business plans, projects can be shared across your workspace. You can utilize role-based access control (Admin, Editor, Viewer) to restrict actions.",
+      "Yes. On Team and Business plans, projects are shared across the workspace with role-based access control. Roles follow the platform's defined permissions: Project Manager, Translator, and Admin. Each role has scoped access — a Translator runs translations and submits segments for review; a Project Manager configures projects and approves output; an Admin manages workspace-level settings including Glossaries and Brand Voice profiles.",
   },
   {
     question: "Can I mix multiple file types in a single project?",
     answer:
-      "Absolutely. You can drop a DOCX whitepaper, a JSON app file, and SRT subtitles into the same project folder. The AI applies the selected Brand Voice consistently across all of them.",
+      "Yes. You can add .docx, XLIFF, .po, .yaml, .strings, JSON, Markdown, and subtitle files to the same project. Each file's structure is handled by the appropriate parser — tags, variables, and formatting are preserved per file type. The Brand Voice and Glossary configured at the project level apply consistently across all files regardless of type.",
   },
   {
-    question: "How does the AI Quality Score assist human reviewers?",
+    question: "How does the LQA review work inside a project?",
     answer:
-      "The Quality Score algorithm mathematically estimates the confidence of the LLM output. It flags potentially problematic segments with low scores so human reviewers know exactly which sentences to focus on, dramatically reducing Q/A time.",
+      "After translation runs, the LQA layer scores every segment. Segments above the configured threshold — or matching Translation Memory at 99% — are auto-approved without appearing in the review queue. Segments below the threshold appear in the review interface with the specific failing dimension marked (Grammar, Accuracy, Terminology Consistency, Formatting, or Fluency). Reviewers work through the flagged segments; the auto-approved ones don't require their time.",
+  },
+  {
+    question:
+      "What happens to activity tracking when multiple team members work on the same project?",
+    answer:
+      "All project interactions are logged in the activity feed: translation runs, segment approvals, string modifications, glossary changes. The feed is visible to all team members with project access. It shows who made each change and when — providing an audit trail without requiring a separate communication channel for status updates.",
+  },
+  {
+    question: "Is there a limit on the number of files or languages per project?",
+    answer:
+      "There's no defined cap on the number of files in a project. Projects support all 22+ languages that Flixu covers — you can target multiple languages simultaneously within the same project. Credit usage for translation is visible at the project level, broken down by target language and file.",
   },
 ];
 
@@ -80,6 +91,7 @@ const schema = {
 <BaseLayout title={title} description={description}>
   <SchemaOrg schema={schema} slot="schema" />
 
+  <!-- 01 — HERO -->
   <Section data-chapter="01 — OVERVIEW" class="hero-section pb-16">
     <div
       class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center max-w-7xl mx-auto px-6"
@@ -90,13 +102,18 @@ const schema = {
           class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-6 block"
           >Feature Spotlight</span
         >
-        <h1 class="mb-6">The Localization Workspace.</h1>
+        <h1 class="mb-6">All your files. One project. One context.</h1>
         <p class="max-w-2xl text-xl text-stone-600 mb-8">
-          Manage source files, assign contexts, and track progress without
-          jumping between spreadsheets and external tools.
+          Group source files, assign a client profile, and track review progress
+          without jumping between spreadsheets and external tools. Every file
+          inside a project inherits the same Brand Voice, Glossary, and
+          Translation Memory — applied consistently across document types.
         </p>
-        <a href={`/${lang !== "en" ? lang + "/" : ""}pricing`} class="hidden">
-          Centralize Your Projects
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start your first project →
         </a>
       </div>
       <div class="relative w-full aspect-[4/3] hidden md:block">
@@ -105,17 +122,126 @@ const schema = {
     </div>
   </Section>
 
+  <!-- 02 — TL;DR -->
   <Section data-chapter="02 — TL;DR" class="tldr-section">
     <div class="max-w-3xl">
       <TldrBlock
-        text="Flixu provides a dedicated Project Dashboard designed for localization teams and freelancers. Group multiple files (DOCX, SRT, PO, XLIFF) into unified projects, instantly apply a specific Client Profile to bind the correct Brand Voice and Glossary, and track character usage precisely across target locales with integrated Quality Scoring summaries."
+        label="What is Flixu Project Management?"
+        text="Projects in Flixu group source files, a client profile, and quality scoring into a single workspace. Assign a Brand Voice and Glossary at the project level, and every file inside inherits those settings automatically. Translation progress, segment review status, and LQA flags are visible without leaving the workspace."
       />
     </div>
   </Section>
 
-  <Section data-chapter="03 — CAPABILITIES" class="content-section mt-12">
+  <!-- 03 — HOW IT WORKS -->
+  <Section data-chapter="03 — HOW IT WORKS" class="content-section mt-12">
     <div class="max-w-3xl">
-      <h2 class="mb-12">How does Flixu streamline localization pipelines?</h2>
+      <h2 class="mb-8">How projects organize your localization workflow.</h2>
+
+      <p class="text-stone-600 leading-relaxed mb-10">
+        A localization project typically involves multiple files, a
+        client-specific context, and a review cycle that distributes across a
+        team. The friction points are predictable: files in different tools,
+        context configured per-file instead of per-project, review status
+        tracked in a separate document, team activity visible only to whoever
+        sent the last email. The project structure addresses each of these as a
+        configuration, not as a workflow management burden.
+      </p>
+
+      <div class="space-y-10">
+        <!-- Step 1 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            1
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">
+              Create a project and assign a client profile
+            </h3>
+            <p class="text-stone-600 leading-relaxed">
+              A project is a named container. When you create it, you assign a
+              client profile — which brings the client's Translation Memory,
+              Glossary, and Brand Voice into scope for the project. That
+              configuration doesn't need to be repeated per file.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            2
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Add files to the project</h3>
+            <p class="text-stone-600 leading-relaxed">
+              Drop in the source files: .docx, XLIFF, .po, .yaml, .strings,
+              Markdown, JSON, subtitle files. Files of different types can live
+              in the same project. The parser handles each format's structure
+              independently — extracting translatable text, preserving tags and
+              variables, and queuing segments for translation.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            3
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">
+              Translation runs with inherited context
+            </h3>
+            <p class="text-stone-600 leading-relaxed">
+              When translation runs on any file in the project, the client's
+              Brand Voice and Glossary are already loaded. The same approved
+              terminology and tone apply to a product description and a UI
+              string file in the same project — without switching configurations
+              between files.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            4
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Review by exception</h3>
+            <p class="text-stone-600 leading-relaxed">
+              After translation, the LQA scores determine what appears in the
+              review queue. Segments above the threshold are auto-approved;
+              segments below appear with the specific failing dimension flagged.
+              The review queue shows only what needs attention — not the full
+              document.
+            </p>
+            <p class="text-stone-500 text-sm mt-3">
+              → How LQA scoring and routing works:
+              <a
+                href={getLocalizedPath("/features/lqa", lang)}
+                class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+                >LQA & Quality Assurance</a
+              >
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 04 — CAPABILITIES GRID -->
+  <Section data-chapter="04 — CAPABILITIES" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-12">What the project workspace includes.</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
         <div class="flex flex-col gap-4">
@@ -140,11 +266,12 @@ const schema = {
                 y2="15"></line></svg
             >
           </div>
-          <h3 class="text-xl">Multi-File Batching</h3>
+          <h3 class="text-xl">Multi-file batching</h3>
           <p class="text-stone-600 leading-relaxed">
-            Drag and drop large localization packages. Flixu parses document
-            structures (XML, PO, Markdown) simultaneously within the project
-            scope.
+            Add multiple files of different types to a single project. A .docx
+            documentation file, a JSON localization file, and a subtitle file
+            can all be added to the same project and translated with the same
+            client context applied to each.
           </p>
         </div>
 
@@ -165,11 +292,12 @@ const schema = {
               ><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"></path></svg
             >
           </div>
-          <h3 class="text-xl">Context Inheritance</h3>
+          <h3 class="text-xl">Project-level context assignment</h3>
           <p class="text-stone-600 leading-relaxed">
-            Assign a client and target formality (e.g., "Formal German") at the
-            project level. Every file within inherits these exact contextual
-            boundaries for the AI.
+            Assign a client profile at the project level — Brand Voice,
+            Glossary, and Translation Memory scope. Every file added to the
+            project inherits those settings. There's no per-file configuration
+            step; the context travels with the project.
           </p>
         </div>
 
@@ -192,11 +320,13 @@ const schema = {
               ></polygon></svg
             >
           </div>
-          <h3 class="text-xl">Approval Workflow</h3>
+          <h3 class="text-xl">Segment review with LQA flags</h3>
           <p class="text-stone-600 leading-relaxed">
-            Track segment-by-segment review status. The built-in AI Quality
-            Score rapidly flags low-confidence translations, saving Reviewers
-            hours of manual Q/A.
+            The review interface shows source and target side by side with the
+            LQA score visible. Flagged segments include the specific dimension
+            that failed — Terminology Consistency, Formatting, Accuracy, Grammar,
+            or Fluency — so reviewers know what to look at rather than reviewing
+            the full segment from scratch.
           </p>
         </div>
 
@@ -218,23 +348,190 @@ const schema = {
               ></path></svg
             >
           </div>
-          <h3 class="text-xl">Activity Feed</h3>
+          <h3 class="text-xl">Activity feed and audit trail</h3>
           <p class="text-stone-600 leading-relaxed">
-            See instantly when a team member modifies a string or accepts a
-            translation. All project interactions are logged in a continuous
-            team activity stream.
+            Every action in a project — translation run, segment approval,
+            string modification, glossary update — is logged in the project
+            activity feed. Team members see what changed, who changed it, and
+            when. The feed provides an audit trail without requiring a separate
+            project management tool.
           </p>
         </div>
       </div>
     </div>
   </Section>
 
+  <!-- 05 — WHEN THIS MATTERS MOST -->
+  <Section data-chapter="05 — USE CASES" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-10">When project structure changes the workflow.</h2>
+
+      <!-- Agencies -->
+      <div class="mb-12">
+        <h3 class="text-xl mb-4">
+          Translation agencies running multiple concurrent client projects
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          An agency managing three active client projects simultaneously needs
+          each project's context — TM, Glossary, Brand Voice — to stay isolated
+          and correctly applied without a manual configuration check at the
+          start of each translation run. Client profile assignment at the
+          project level handles that isolation automatically. Translators open
+          the project and the correct context is already active.
+        </p>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          For agencies where junior translators or freelance reviewers work
+          alongside the full team, role-based access controls scope what each
+          team member can do: Project Managers configure and approve;
+          Translators run translations and submit for review; Admins manage
+          workspace-level settings.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → Agency workflows:
+          <a
+            href={getLocalizedPath("/for/agencies", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu for Agencies</a
+          >
+        </p>
+        <p class="text-stone-500 text-sm mt-1">
+          → Team roles and permissions:
+          <a
+            href={getLocalizedPath("/features/team-collaboration", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Team Collaboration</a
+          >
+        </p>
+      </div>
+
+      <!-- Marketing teams -->
+      <div>
+        <h3 class="text-xl mb-4">
+          Marketing teams localizing campaign packages
+        </h3>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          A campaign launch typically involves multiple file types: landing page
+          copy (Markdown or HTML), email sequences (.docx), social copy (JSON or
+          YAML), and sometimes subtitle files for video. Running these through
+          separate tools means configuring Brand Voice separately for each, with
+          inconsistency risk at every handoff.
+        </p>
+        <p class="text-stone-600 leading-relaxed mb-4">
+          Grouping the campaign into a single project means one Brand Voice
+          configuration applies to every file. The German landing page, the
+          German email sequence, and the German social posts all come out with
+          the same tone — because they were all translated with the same
+          configuration active.
+        </p>
+        <p class="text-stone-500 text-sm">
+          → Marketing team workflows:
+          <a
+            href={getLocalizedPath("/for/global-marketing", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu for Global Marketing Teams</a
+          >
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 06 — FAQ -->
   <Section
-    data-chapter="04 — FAQ"
+    data-chapter="06 — FAQ"
     class="content-section bg-stone-50 border-t border-stone-200 mt-24"
   >
     <div class="max-w-3xl mx-auto">
       <FAQSection items={faqs} />
+    </div>
+  </Section>
+
+  <!-- 07 — CTA -->
+  <Section data-chapter="07 — CTA" class="content-section mt-24 mb-16">
+    <div class="max-w-3xl text-center mx-auto">
+      <h2 class="mb-6">Start your first project.</h2>
+      <p class="text-stone-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+        Add your files, assign a client profile, and run your first translation.
+        The Brand Voice and Glossary apply to every file from the first string.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center justify-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start translating for free →
+        </a>
+        <a
+          href={getLocalizedPath("/features/lqa", lang)}
+          class="inline-flex items-center justify-center gap-2 border border-stone-300 text-stone-700 px-6 py-3 rounded-sm font-medium hover:bg-stone-50 transition-colors"
+        >
+          See how LQA scoring works →
+        </a>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 08 — RELATED FEATURES -->
+  <Section
+    data-chapter="08 — RELATED"
+    class="content-section border-t border-stone-200 pt-12 mb-16"
+  >
+    <div class="max-w-3xl">
+      <h3
+        class="text-sm font-mono text-stone-400 uppercase tracking-widest mb-6"
+        >Related Features</h3
+      >
+      <ul class="space-y-3">
+        <li>
+          <a
+            href={getLocalizedPath("/features/lqa", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >LQA & Quality Assurance</a
+          >
+          <span class="text-stone-500">
+            — Scoring and review routing within projects</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/client-management", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Client Management</a
+          >
+          <span class="text-stone-500">
+            — Isolated client profiles assigned to projects</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/team-collaboration", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Team Collaboration</a
+          >
+          <span class="text-stone-500">
+            — Roles and permissions across the project workspace</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/product/documents", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Document Translation</a
+          >
+          <span class="text-stone-500">
+            — File format support and parsing details</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/brand-voice", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Brand Voice</a
+          >
+          <span class="text-stone-500">
+            — Tone and style enforcement inherited at the project level</span
+          >
+        </li>
+      </ul>
     </div>
   </Section>
 </BaseLayout>

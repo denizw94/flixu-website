@@ -3,15 +3,10 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import Section from "../../../components/ui/Section.astro";
 import Breadcrumbs from "../../../components/seo/Breadcrumbs.astro";
 import TldrBlock from "../../../components/seo/TldrBlock.astro";
-import KeyTakeaways from "../../../components/seo/KeyTakeaways.astro";
 import FAQSection from "../../../components/seo/FAQSection.astro";
 import SchemaOrg from "../../../components/seo/SchemaOrg.astro";
 import HeroAgencies from "../../../components/visuals/HeroAgencies.jsx";
-import {
-  useTranslations,
-  locales,
-  getLocalizedPath,
-} from "../../../i18n/utils";
+import { getLocalizedPath, locales } from "../../../i18n/utils";
 
 export const prerender = true;
 
@@ -25,51 +20,57 @@ export function getStaticPaths() {
 let { lang } = Astro.params;
 if (!lang) lang = "en";
 
-const t = await useTranslations(lang);
-const content = t.forAgencies;
-const isDE = lang === "de";
+const title =
+  "Flixu for Translation Agencies — AI-Augmented Localization for LSPs";
+const description =
+  "Client-specific Brand Voice, Glossary Enforcement, and auditable LQA for every project. Shared Translation Memory across your freelance network — no post-editing overhead.";
 
-const isDev = import.meta.env.DEV;
-const appUrl = isDev ? "http://localhost:3000" : "https://app.flixu.ai";
-
-// Breadcrumbs Setup
-const tNav = t.navigation as any;
 const breadcrumbItems = [
-  { name: tNav?.home?.title || "Home", url: getLocalizedPath("/", lang) },
-  {
-    name: tNav?.who?.title || "Who it's for",
-    url: getLocalizedPath("/for/freelancers", lang),
-  }, // Since there is no hub file yet, link to first item.
-  { name: content.hero.label, url: Astro.url.pathname },
+  { name: "Home", url: getLocalizedPath("/", lang) },
+  { name: "Who it's for", url: getLocalizedPath("/for/freelancers", lang) },
+  { name: "Agencies", url: Astro.url.pathname },
 ];
 
 const faqs = [
   {
-    question: "Why should a translation agency use Contextual AI?",
+    question:
+      "We integrated DeepL two years ago and our post-editing time hasn't decreased. Why would Flixu be different?",
     answer:
-      "Contextual AI allows agencies to scale their processing volume without linearly scaling their headcount. By utilizing an AI Orchestrator with mathematically enforced glossaries and shared TM, freelancer throughput triples while manual Project Manager oversight (LQA) is drastically reduced.",
+      "The most common reason post-editing stays high with generic MT is that the output is stylistically wrong for the specific client — technically accurate, wrong tone, wrong register, wrong terminology. Flixu loads client-specific Brand Voice, Glossary, and Translation Memory before the model generates anything. The first draft reflects the client's approved style, not the statistical average of the language. That's what reduces the post-editing load — not a better model, but the right context loaded before generation.",
   },
   {
     question:
-      "How does Flixu eliminate the Desktop Publishing (DTP) tax for agencies?",
+      "How does Flixu keep client Translation Memories and glossaries isolated from each other?",
     answer:
-      "When agencies translate complex formats like IDML or DOCX, text expansion traditionally breaks the layout, requiring expensive DTP specialists to manually fix it. Flixu uses Structural Geometric Parsing to mathematically separate text, translate it, and reconstruct the perfectly formatted document automatically.",
+      "Each client operates in an isolated workspace profile with their own Translation Memory, Glossary, and Brand Voice configuration. The Semantic Reranker only searches within the assigned client's TM — a term approved for Client A is not retrievable in Client B's translation context. There's no cross-contamination by design.",
   },
   {
     question:
-      "Can multiple freelance translators share a Translation Memory in real-time?",
+      "Can multiple freelancers share a Translation Memory in real time?",
     answer:
-      "Yes, Flixu democratizes Translation Memory across your entire freelance network instantaneously. When one translator translates a clause, it becomes immediately available to the entire active project team, ensuring absolute terminology consistency.",
+      "Yes. When any team member confirms a translation in a client workspace, the approved phrasing is immediately added to the shared Translation Memory. The next translator working on the same client's content benefits from that approval — whether it was confirmed five minutes ago or five months ago.",
   },
   {
-    question: "How does the pricing model work for agencies?",
+    question:
+      "Can we import our existing Translation Memory from Trados, memoQ, or Phrase?",
     answer:
-      "Flixu offers an aggressive output-only pricing model that effectively removes per-word cost constraints. Agencies can translate large volumes at a fraction of traditional software licensing costs, drastically widening profit margins.",
+      "Yes. Export your TM as a .tmx file from any TMX-compatible platform and import it directly into the client profile in Flixu. Your historical approved translations are available as semantic style references from the first translation run. Glossaries import via CSV.",
   },
   {
-    question: "Are our client glossaries kept secure and isolated?",
+    question: "How does the LQA reporting work for client deliverables?",
     answer:
-      "Absolutely. Each client operates within an isolated workspace. Glossaries and translation memories are strictly partitioned, ensuring zero cross-contamination of proprietary corporate terminology or brand voice parameters.",
+      "Every segment receives an LQA score across five dimensions automatically. The scores are logged with the segment, the decision trail (auto-approved via threshold or reviewed by a human), and the timestamp. For clients who require quality documentation — compliance contexts, regulated industries — that data is accessible from the workspace without a separate reporting step.",
+  },
+  {
+    question:
+      "What file formats does Flixu support for agency workflows?",
+    answer:
+      ".docx, XLIFF, .po, .yaml, iOS .strings, JSON, Markdown, and subtitle files. All structural elements — keys, variables, tags, formatting — are preserved exactly in the output file. For agencies working with Adobe InDesign IDML files specifically, IDML is not currently in Flixu's supported format list — check the documentation for the current format support before onboarding clients whose primary deliverable format is IDML.",
+  },
+  {
+    question: "How does pricing work for agencies managing multiple clients?",
+    answer:
+      "Flixu prices on translation volume — words translated. There's no per-seat licensing that increases as you add translators or PMs to the workspace. Adding a reviewer, a project manager, or a regional marketer doesn't change the invoice. The bill reflects how much you translated, not how many people touched the project.",
   },
 ];
 
@@ -97,30 +98,36 @@ const schema = {
 };
 ---
 
-<BaseLayout
-  title={isDE ? "Für Agenturen | Flixu" : "For Agencies | Flixu"}
-  description={isDE
-    ? "Flixu für Übersetzungsagenturen: geteiltes TM, Glossar und Brand Voice für konsistente Qualität im Team."
-    : "Flixu for translation agencies: shared TM, glossary, and brand voice for consistent quality across your team."}
->
+<BaseLayout title={title} description={description}>
   <SchemaOrg schema={schema} slot="schema" />
-  <!-- HERO -->
-  <Section
-    data-chapter={`01 — ${t.rail.intro.toUpperCase()}`}
-    class="hero-section"
-  >
+
+  <!-- 01 — HERO -->
+  <Section data-chapter="01 — INTRO" class="hero-section pb-16">
     <div
       class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center max-w-7xl mx-auto px-6"
     >
-      <div class="hero-container !px-0">
+      <div class="max-w-3xl !px-0">
         <Breadcrumbs items={breadcrumbItems} />
-        <span class="badge">{content.hero.label}</span>
-        <h1 class="hero-title">
-          {content.hero.h1}
+        <span
+          class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-6 block"
+          >For Translation Agencies & LSPs</span
+        >
+        <h1 class="mb-6">
+          Your translators are spending just as long post-editing bad MT as
+          they would translating from scratch.
         </h1>
-        <p class="hero-desc">
-          {content.hero.sub}
+        <p class="max-w-2xl text-xl text-stone-600 mb-8">
+          Client-specific brand voice. Shared Translation Memory across your
+          whole freelance network. LQA scores you can put in a client report.
+          Flixu is built for agencies that need AI to actually reduce the
+          review load — not add a new one.
         </p>
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start translating for free →
+        </a>
       </div>
       <div class="relative w-full aspect-[4/3] hidden md:block">
         <HeroAgencies client:load />
@@ -128,289 +135,465 @@ const schema = {
     </div>
   </Section>
 
+  <!-- 02 — TL;DR -->
   <Section data-chapter="02 — TL;DR" class="tldr-section">
     <div class="max-w-3xl">
       <TldrBlock
-        text="Traditional translation agencies face shrinking margins due to non-linguistic friction like DTP layout fixing and fragmented terminology management. Flixu provides algorithmic leverage, enabling agencies to scale volume asyncronously. With shared Translation Memory, strict Glossary enforcement, and automated file reconstruction (IDML/DOCX), agencies can triple their throughput and slash operational overhead."
+        label="What is Flixu for Agencies?"
+        text="Flixu gives translation agencies a workspace where each client has their own Translation Memory, Glossary, and Brand Voice configuration — isolated from every other client. AI translation runs with those constraints already loaded, so the output your translators review reflects the client's voice and approved terminology from the first draft. LQA scores every segment automatically, giving you auditable quality data you can deliver alongside the translation."
       />
     </div>
   </Section>
 
-  <!-- PROBLEM / BEFORE & AFTER -->
-  <Section
-    data-chapter={`03 — ${t.rail.problem.toUpperCase()}`}
-    class="content-section border-b border-stone-100"
-  >
-    <div class="max-w-3xl mb-12">
+  <!-- 03 — EMPATHY / PROBLEM -->
+  <Section data-chapter="03 — PROBLEM" class="content-section mt-12">
+    <div class="max-w-3xl">
       <span
         class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-4 block"
-        >{content.problem.label}</span
+        >The Problem</span
       >
-      <h2 class="mb-6">
-        {content.problem.h2}
+      <h2 class="mb-8">
+        The post-editing math doesn't work when the MT output is stylistically
+        wrong.
       </h2>
-      <p class="text-xl">
-        {content.problem.body}
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Two years into adding an AI translation layer, a lot of agencies are
+        looking at the same result: their translators are spending just as long
+        on post-editing as they used to spend on first drafts. The AI is
+        technically correct and stylistically wrong — and fixing stylistically
+        wrong output for a specific client, with a specific brand voice, turns
+        out to be almost as slow as translating from the beginning.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The issue isn't the AI model. It's that generic MT doesn't know Client
+        A's voice versus Client B's voice. It doesn't know that Client A's
+        technical documentation always uses formal register, or that Client B's
+        marketing copy uses a specific set of approved brand terms that must
+        appear verbatim. Without that context loaded before translation, the
+        output needs to be corrected after — and that correction is what's
+        eating the efficiency gain.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        This is the pattern that shows up in the community:
+      </p>
+
+      <div class="space-y-4 mb-8">
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "Post-editing MT takes just as long as translating from scratch if
+            the output is bad."
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "We need client-specific brand voice, not a one-size-fits-all AI
+            engine."
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "Our translators are frustrated because MT output is syntactically
+            correct but stylistically wrong."
+          </p>
+        </div>
+      </div>
+
+      <p class="text-stone-600 leading-relaxed">
+        The answer isn't a better AI model in isolation. It's loading the right
+        context before the model generates anything.
       </p>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {
-        content.problem.items.map((item) => (
+  </Section>
+
+  <!-- PAIN POINT 1 — Terminology -->
+  <Section data-chapter="04 — PAIN POINTS" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Terminology consistency across multiple freelancers is an operational
+        problem without a systematic solution.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        When a client updates their terminology — a product name changes, a
+        legal term gets refined, a new approved phrase is added to the style
+        guide — the update needs to propagate to every freelancer working on
+        every active project for that client, across every language. Today,
+        that means an email and a hope.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The freelancer on page 40 of a dense technical manual who got the email
+        update on Thursday afternoon may or may not have applied it to the work
+        they submitted Friday morning. The PM finds out when the client flags
+        it in delivery review. By that point, the correction is a revision
+        cycle rather than a prevention.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Glossary Enforcement in Flixu loads approved terms as constraints
+        before the translation request reaches the language model. The term
+        isn't a suggestion the model can override when the context gets
+        ambiguous — it's specified in the payload. When the glossary is
+        updated, every subsequent translation for that client applies the
+        updated constraint. The PM doesn't chase translators by email; the
+        system applies the change.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → How glossary constraints work:
+        <a
+          href={getLocalizedPath("/features/glossary-enforcement", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Glossary Enforcement</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 2 — QA -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Client QA reports require data that manual workflows don't produce.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Clients in legal, medical, and compliance verticals are asking
+        questions that agencies running generic MT post-editing workflows can't
+        answer: What quality score did this translation receive? Which segments
+        were reviewed and approved by a human? Was the glossary consistently
+        applied? Can you show me a record of that?
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Without a structured QA pipeline, the answer is "we reviewed it
+        internally" — which is not an answer that wins enterprise procurement
+        pitches or satisfies regulated-industry compliance requirements. The
+        agencies losing those pitches to competitors aren't losing on
+        translation quality; they're losing on the inability to demonstrate it.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Flixu's LQA scores every segment across five dimensions — Grammar,
+        Accuracy, Terminology Consistency, Formatting, and Fluency —
+        automatically, on every project. The scores are logged alongside each
+        segment with the decision trail. That data exists without a PM manually
+        generating a QA report. For clients who need it, it's a deliverable.
+      </p>
+
+      <div class="border-l-2 border-orange-200 pl-6 mb-6">
+        <p class="text-stone-500 italic text-sm leading-relaxed">
+          "We lost a pitch because we couldn't demonstrate auditability in our
+          QA process."
+        </p>
+      </div>
+
+      <p class="text-stone-500 text-sm">
+        → LQA and quality reporting:
+        <a
+          href={getLocalizedPath("/features/lqa", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >LQA & Quality Assurance</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 3 — Brand Voice -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        When client context lives in a PDF briefing, it doesn't survive team
+        changes.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The brand voice for Client A exists as a 12-page PDF that was written
+        eighteen months ago, delivered to the three translators who were
+        onboarded at the time, and has not been consistently applied to every
+        new project since. When one of those translators leaves and a new one
+        joins, the briefing happens informally — or not at all.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The result is that the client's translation quality is a function of
+        institutional knowledge that doesn't transfer reliably. The agency
+        looks inconsistent. The client notices over time even if they don't
+        articulate it directly.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Brand Voice Manager in Flixu stores the client's tone configuration
+        in their workspace profile. Every translation request for that client
+        applies the same configuration automatically — regardless of which
+        translator is running the project, regardless of when the project
+        started. New translators don't need a briefing session to produce
+        brand-consistent output; the configuration does it.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Brand voice configuration:
+        <a
+          href={getLocalizedPath("/features/brand-voice", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Brand Voice Manager</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- 06 — HOW FLIXU FITS YOUR WORKFLOW -->
+  <Section data-chapter="06 — HOW IT WORKS" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">How Flixu fits an agency workflow.</h2>
+
+      <p class="text-stone-600 leading-relaxed mb-10">
+        The operational model doesn't require replacing your existing
+        translator relationships or your project management process. Flixu sits
+        between the client context and the translation output.
+      </p>
+
+      <div class="space-y-10">
+        <!-- Step 1 -->
+        <div class="flex gap-6">
           <div
-            class={`p-8 rounded-sm border ${item.dim ? "border-stone-200 bg-stone-50/50" : "border-orange-200 bg-orange-50/30"}`}
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
           >
-            <div class="font-mono text-[10px] uppercase tracking-widest mb-3 text-stone-400">
-              {item.num}
-            </div>
-            <h3
-              class={`mb-3 ${item.dim ? "text-stone-500" : "text-stone-900"}`}
-            >
-              {item.label}
-            </h3>
-            <p
-              class={`text-sm leading-relaxed ${item.dim ? "text-stone-400" : "text-stone-600"}`}
-            >
-              {item.body}
+            1
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Set up a client profile</h3>
+            <p class="text-stone-600 leading-relaxed">
+              When a new client is onboarded, create a workspace profile for
+              them: upload their Translation Memory as a TMX file (from any
+              TMS — Trados, memoQ, Phrase, Crowdin), upload their glossary as a
+              CSV, and configure their brand voice. From that point, every
+              translation for that client applies those settings automatically.
             </p>
           </div>
-        ))
-      }
-    </div>
-  </Section>
+        </div>
 
-  <!-- TEAM FEATURES GRID -->
-  <Section
-    data-chapter={`04 — ${t.rail.features.toUpperCase()}`}
-    class="content-section border-b border-stone-100"
-  >
-    <div class="max-w-3xl mb-12">
-      <span
-        class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-4 block"
-        >{content.features.label}</span
-      >
-      <h2>{content.features.h2}</h2>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {
-        content.features.items.map((item) => (
-          <div class="border-l border-stone-200 pl-6 py-1">
-            <h3 class="mb-2">{item.title}</h3>
-            <p class="text-stone-500 text-sm leading-relaxed">{item.body}</p>
+        <!-- Step 2 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            2
           </div>
-        ))
-      }
-    </div>
-  </Section>
+          <div>
+            <h3 class="text-xl mb-3">
+              Run AI translation with client context loaded
+            </h3>
+            <p class="text-stone-600 leading-relaxed">
+              When a project file is uploaded — .docx, XLIFF, .po, .yaml,
+              .strings, Markdown — the translation runs with the client's
+              Glossary, Brand Voice, and Translation Memory already active. The
+              output your translators receive reflects the client's approved
+              terminology and voice from the first sentence.
+            </p>
+          </div>
+        </div>
 
-  <!-- UPGRADE PATH -->
-  <Section
-    data-chapter={`05 — ${t.rail.plans.toUpperCase()}`}
-    class="content-section border-b border-stone-100 bg-stone-50/30"
-  >
-    <div class="max-w-2xl">
-      <span
-        class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-4 block"
-        >{content.plans.label}</span
-      >
-      <h2 class="mb-4">
-        {content.plans.h2}
-      </h2>
-      <p class="mb-8 text-xl">
-        {content.plans.sub}
-      </p>
-      <div class="border-l-2 border-orange-200 pl-6">
-        <p class="text-stone-500 italic text-sm leading-relaxed">
-          {content.plans.trigger}
-        </p>
+        <!-- Step 3 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            3
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">Review by exception</h3>
+            <p class="text-stone-600 leading-relaxed">
+              LQA scores every segment. Segments above 90 are auto-approved;
+              segments below appear in the review queue with the specific
+              failing dimension flagged. Translators spend their time on the
+              work that genuinely needs human judgment — not on confirming that
+              correctly translated segments are correct.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="flex gap-6">
+          <div
+            class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-orange-50 text-orange-700 rounded-sm font-mono font-bold text-sm"
+          >
+            4
+          </div>
+          <div>
+            <h3 class="text-xl mb-3">
+              Client corrections improve the system
+            </h3>
+            <p class="text-stone-600 leading-relaxed">
+              When translators correct an output segment and approve the
+              revision, the correction feeds back into the client's Translation
+              Memory through the Post-Edit Learning Loop. Flixu gets better for
+              that client with each project — the quality of first-draft output
+              improves, and the post-editing time decreases over time.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </Section>
 
-  {
-    lang === "en" && (
-      <Section
-        data-chapter="06 — DEEP DIVE"
-        class="content-section border-b border-stone-100"
-      >
-        <div class="max-w-3xl prose prose-stone prose-p:text-stone-600 prose-headings:text-stone-900 prose-headings:font-light">
-          <KeyTakeaways
-            items={[
-              "Legacy agency margins are shrinking due to non-linguistic friction (DTP, TM management, LQA).",
-              "Flixu's Context Orchestration enforces glossaries at the API level, preventing vocabulary errors before they reach the draft.",
-              "Structural parsing dynamically handles IDML and DOCX layouts, dropping DTP costs to zero.",
-              "Freelancers transition into 'Context Engineers', processing 3x the volume per day.",
-            ]}
-          />
-          <h2>
-            Why are traditional translation agencies losing to Contextual AI?
-          </h2>
-          <p>
-            For the past two decades, the operational model of a translation
-            agency has remained largely unchanged. Agencies acquired clients,
-            managed complex project files, extracted text, and outsourced the
-            manual translation work to a vast network of freelance linguists.
-            While Computer-Assisted Translation (CAT) tools and basic Machine
-            Translation Post-Editing (MTPE) offered marginal gains in speed, the
-            core bottleneck remained human translation speed: a skilled
-            translator typically processes roughly 2,000 to 2,500 words per day.
-          </p>
-          <p>
-            In 2026, the localization landscape has fundamentally shifted.
-            Enterprise clients are demanding faster turnaround times,
-            significantly lower per-word costs, and continuous integration
-            directly into their software repositories. Agencies relying on
-            legacy, disjointed workflows and static translation memories are
-            experiencing a brutal margin squeeze. The solution is no longer
-            hiring more freelancers or negotiating lower per-word rates; the
-            solution is algorithmic leverage through AI Orchestration.
-          </p>
+  <!-- 07 — WHAT'S DIFFERENT -->
+  <Section data-chapter="07 — DIFFERENTIATION" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        What's different about how Flixu handles agency workflows.
+      </h2>
 
-          <h3>The Margin Squeeze: The Cost of Manual Workflows</h3>
-          <p>
-            The primary hidden cost crippling modern translation agencies is
-            non-linguistic administrative friction. When an enterprise client
-            sends a highly formatted, 100-page Adobe InDesign (IDML) brochure,
-            the raw translation is only half the battle. Because translated text
-            often expands—German text is typically 30% longer than English—the
-            meticulously designed layout breaks.
-          </p>
-          <p>
-            Agencies are forced to hire highly expensive Desktop Publishing
-            (DTP) specialists to manually resize fonts, expand bounding boxes,
-            and fix formatting structures before returning the document to the
-            client. Similarly, managing fragmented Translation Memories (TMX
-            files) and static Excel glossaries across 40 different freelance
-            translators working on the same project leads to critical
-            terminology inconsistencies. The Project Manager spends countless
-            hours executing manual Linguistic Quality Assurance (LQA), hunting
-            down incorrect jargon with basic "Find and Replace" tools. This
-            manual friction degrades agency profitability.
-          </p>
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Most MT tools offer a glossary feature. The operational difference is
+        <em>when</em> and <em>how</em> the glossary is applied.
+      </p>
 
-          <h2>How does AI Orchestration transform agency throughput?</h2>
-          <p>
-            Flixu is engineered to serve as the technological backbone for
-            modern, high-velocity language service providers (LSPs). By
-            transitioning from legacy CAT tools to a centralized Context
-            Orchestrator, translation agencies can radically increase their
-            daily throughput, eliminate formatting costs entirely, and guarantee
-            absolute structural terminology consistency across their entire
-            decentralized freelance roster.
-          </p>
+      <p class="text-stone-600 leading-relaxed mb-6">
+        <strong>Standard MT with a glossary:</strong> the model translates the
+        string, then a find-and-replace script substitutes the approved term.
+        The grammar was built around a different word; the substitution
+        produces an awkward construction in inflected languages.
+      </p>
 
-          <h3>Centralized, Mathematically Enforced Glossaries</h3>
-          <p>
-            When you onboard a new enterprise client, managing their specific
-            terminology is the hardest challenge. If a medical tech company
-            insists that the English word "Screen" is translated as "Monitor"
-            rather than "Bildschirm", relying on a freelancer to remember that
-            rule on page 40 of a dense manual is an operational liability.
-          </p>
-          <p>
-            Flixu eliminates human error through{" "}
-            <strong>Context Injection</strong>. Agencies upload the client's
-            proprietary glossary into an isolated Flixu Workspace. When a
-            freelance translator processes a document, the Flixu engine
-            explicitly instructs the underlying Large Language Model to obey the
-            glossary. The AI is mathematically constrained; it cannot
-            hallucinate a synonym for "Screen." It builds the entire foreign
-            grammatical structure natively around the locked client terminology.
-            Your freelancers are no longer fixing bad terminology; they are
-            simply reviewing a perfect operational draft.
-          </p>
+      <p class="text-stone-600 leading-relaxed mb-6">
+        <strong>Flixu:</strong> the glossary term is loaded as a payload
+        constraint before the model generates text. The model builds the
+        surrounding grammar around the fixed term from the start. The output
+        reads naturally because the constraint was present before generation,
+        not applied after.
+      </p>
 
-          <h3>Shared Translation Memory in Real-Time</h3>
-          <p>
-            Flixu democratizes Translation Memory across your entire freelance
-            network instantaneously. If Translator A translates a specific
-            boilerplate legal clause on Monday, that exact phrasing is saved to
-            the client's isolated TM database. On Thursday, when Translator B
-            encounters a nearly identical clause in a different document, Flixu
-            instantly provides a 100% Exact Match or an 85% Fuzzy Match. By
-            utilizing Semantic Vector Retrieval (RAG), the system even surfaces
-            conceptually similar past translations to teach the AI the correct
-            corporate tone. Your agency stops paying to translate the same
-            sentence twice, unlocking significant operational arbitrage.
-          </p>
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The same logic applies to Translation Memory. Standard TM retrieves
+        character-similar strings and substitutes them. Flixu's Semantic
+        Reranker identifies conceptually similar past translations and uses
+        them as style references — the model generates output that reflects
+        your approved style, rather than copying text that happened to look
+        similar.
+      </p>
 
-          <h2>How does Flixu eradicate the Desktop Publishing (DTP) Tax?</h2>
-          <p>
-            Perhaps the most transformative capability of Flixu for agencies is
-            the total elimination of the Desktop Publishing bottleneck. When
-            your agency translates complex business documents—PDFs, PPTX, DOCX,
-            or software JSON—Flixu utilizes Structural Geometric Parsing.
-          </p>
-          <p>
-            Our ingestion engine perfectly maps the spatial boundaries, font
-            sizes, kerning, and positional coordinates of every text box. We
-            separate the content from the geometry, translate the text using the
-            localized Glossary via LLM, and then reconstruct the document using
-            algorithmic spatial micro-adjustments to handle the inevitable text
-            expansion. A complex English presentation deck is returned as a
-            flawless German presentation deck, fully localized, without a single
-            human designer ever opening Adobe Illustrator. This allows agencies
-            to offer zero-friction Document Translation at a high markup, with
-            effectively 100% software margins.
-          </p>
+      <p class="text-stone-600 leading-relaxed">
+        The combination is what makes post-editing time go down instead of stay
+        the same: the output is stylistically correct before the translator
+        sees it, not just technically correct.
+      </p>
+    </div>
+  </Section>
 
-          <h2>What are the economics of an AI-First agency?</h2>
-          <p>
-            By adopting Contextual AI, the economics of running a translation
-            agency completely invert. Historically, as an agency scaled, its
-            operational headcount (Project Managers, LQA specialists, DTP
-            designers) had to scale linearly with the volume of words processed.
-          </p>
-          <p>
-            With Flixu, your infrastructure scales asynchronously from your word
-            count. Your freelancers transition from manual typists to elite
-            "Context Engineers," capable of processing 6,000 to 8,000 words per
-            day by curating high-fidelity AI drafts rather than writing from
-            scratch. Your agency can process three times the volume, deliver
-            projects to clients in a fraction of the traditional turnaround
-            time, and maintain significantly higher quality—all while
-            aggressively widening your profit margins.
-          </p>
-          <p>
-            In the era of AI, clients are not paying you to type words. They are
-            paying you to manage complexity, ensure compliance, and safeguard
-            their global brand voice. Flixu provides the exact architectural
-            infrastructure necessary to deliver that promise at scale.
-          </p>
-        </div>
-      </Section>
-    )
-  }
-
+  <!-- 08 — FAQ -->
   <Section
-    data-chapter="07 — FAQ"
-    class="content-section border-b border-stone-100"
+    data-chapter="08 — FAQ"
+    class="content-section bg-stone-50 border-t border-stone-200 mt-24"
   >
     <div class="max-w-3xl mx-auto">
       <FAQSection items={faqs} />
     </div>
   </Section>
 
-  <!-- CTA -->
-  <Section
-    data-chapter={`08 — ${t.rail.action.toUpperCase()}`}
-    class="content-section"
-  >
-    <div class="max-w-2xl">
-      <h2 class="mb-6">{content.cta.h2}</h2>
-      <p class="mb-10 text-xl">{content.cta.sub}</p>
-      <div class="flex flex-wrap gap-4">
+  <!-- 09 — CTA -->
+  <Section data-chapter="09 — CTA" class="content-section mt-24 mb-16">
+    <div class="max-w-3xl text-center mx-auto">
+      <h2 class="mb-6">
+        Set up your first client profile and run a test project.
+      </h2>
+      <p class="text-stone-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+        Upload your TM, configure the glossary, and translate a sample
+        document. Compare the output with what your current MT pipeline
+        produces on the same content.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <a
-          href={`${appUrl}/sign-up?plan=team&intent=business&interval=month`}
-          class="hidden"
-          >{content.cta.primary}
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center justify-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start translating for free →
         </a>
         <a
-          href={`/${lang !== "en" ? lang + "/" : ""}pricing`}
-          class="px-8 py-4 border border-stone-200 text-stone-600 rounded-sm hover:border-stone-400 transition-colors"
+          href={getLocalizedPath("/pricing", lang)}
+          class="inline-flex items-center justify-center gap-2 border border-stone-300 text-stone-700 px-6 py-3 rounded-sm font-medium hover:bg-stone-50 transition-colors"
         >
-          {content.cta.secondary}
+          See pricing for agencies →
         </a>
       </div>
+    </div>
+  </Section>
+
+  <!-- 10 — RELATED FEATURES -->
+  <Section
+    data-chapter="10 — RELATED"
+    class="content-section border-t border-stone-200 pt-12 mb-16"
+  >
+    <div class="max-w-3xl">
+      <h3
+        class="text-sm font-mono text-stone-400 uppercase tracking-widest mb-6"
+        >Related Features</h3
+      >
+      <ul class="space-y-3">
+        <li>
+          <a
+            href={getLocalizedPath("/features/glossary-enforcement", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Glossary Enforcement</a
+          >
+          <span class="text-stone-500">
+            — Terminology consistency across your entire freelance network</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/lqa", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >LQA & Quality Assurance</a
+          >
+          <span class="text-stone-500">
+            — Auditable QA scores as a client deliverable</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/brand-voice", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Brand Voice Manager</a
+          >
+          <span class="text-stone-500">
+            — Client-specific tone that survives team changes</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/client-management", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Client Management</a
+          >
+          <span class="text-stone-500">
+            — Isolated client workspaces with separate TM and glossary</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/team-collaboration", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Team Collaboration</a
+          >
+          <span class="text-stone-500">
+            — Shared TM and role-based access in the agency context</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/translation-memory", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Translation Memory</a
+          >
+          <span class="text-stone-500">
+            — Semantic Reranker for style-aware TM retrieval</span
+          >
+        </li>
+      </ul>
     </div>
   </Section>
 </BaseLayout>

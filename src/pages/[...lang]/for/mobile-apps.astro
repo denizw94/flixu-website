@@ -1,0 +1,670 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Section from "../../../components/ui/Section.astro";
+import Breadcrumbs from "../../../components/seo/Breadcrumbs.astro";
+import TldrBlock from "../../../components/seo/TldrBlock.astro";
+import FAQSection from "../../../components/seo/FAQSection.astro";
+import SchemaOrg from "../../../components/seo/SchemaOrg.astro";
+import HeroMobileApps from "../../../components/visuals/HeroMobileApps.jsx";
+import { getLocalizedPath, locales } from "../../../i18n/utils";
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: undefined } },
+    ...locales.map((lang) => ({ params: { lang } })),
+  ];
+}
+
+let { lang } = Astro.params;
+if (!lang) lang = "en";
+
+const title =
+  "Mobile App Localization — Brand Voice at Scale | Flixu";
+const description =
+  "Auto-approve high-confidence translations. Brand voice enforced before generation. Flash sales go live same-day — no 48-hour review queue.";
+
+const breadcrumbItems = [
+  { name: "Home", url: getLocalizedPath("/", lang) },
+  { name: "Who it's for", url: getLocalizedPath("/for/freelancers", lang) },
+  { name: "Mobile Apps", url: Astro.url.pathname },
+];
+
+const faqs = [
+  {
+    question:
+      "How does same-day turnaround actually work for flash sale content?",
+    answer:
+      "High-confidence translations — LQA score above 90, or matching Translation Memory at 99% — auto-approve and are deployable without a review step. For promotional content where your Brand Voice and Glossary are already configured, the majority of standard strings will reach this threshold on the first pass. The review queue contains only the segments that scored below threshold. The practical result is that a 500-string flash sale update can complete translation and approval in hours rather than the 48–72 hours a manual handoff requires.",
+  },
+  {
+    question:
+      "How does brand voice stay consistent across markets without manual review of every string?",
+    answer:
+      "The Brand Voice Manager stores your consumer persona as a workspace configuration — register, energy, specific vocabulary preferences. It's applied to every translation request as a payload parameter, before the language model generates text. The configuration doesn't drift between campaign batches or change when a new team member runs a translation. The output reflects the brand voice definition, not the statistical average of the target language.",
+  },
+  {
+    question:
+      "Does Flixu support iOS .strings and Android strings.xml?",
+    answer:
+      "iOS .strings files are fully supported. Android XML (strings.xml) is not currently supported. For Android-primary projects, the Developer API can accept content through programmatic calls where format conversion is handled externally. Check the documentation for the current Android support status before planning a full integration.",
+  },
+  {
+    question:
+      "How does the GitHub App handle App Store listing localization?",
+    answer:
+      "App Store listing content — descriptions, keywords, release notes — is typically stored in plain text or Markdown files in your localization directory. If those files are in your monitored file paths, the GitHub App processes them alongside your in-app strings. The same Brand Voice and Glossary apply. For keyword optimization specific to each market's App Store search behavior (ASO), that's a separate layer that requires market-specific research beyond translation.",
+  },
+  {
+    question:
+      "We're currently using Lokalise. What would migration look like?",
+    answer:
+      "Your existing Translation Memory exports from Lokalise as a TMX file — that imports directly into Flixu's workspace and is available as a semantic style reference from the first translation run. Your glossary terms export from Lokalise as a CSV. The GitHub App setup replaces the Lokalise GitHub integration. If your workflow depends on Lokalise's OTA capabilities or native SDK, that infrastructure doesn't transfer — Flixu doesn't currently have equivalent OTA delivery. The comparison worth running before committing: test both on the same content batch and compare brand voice consistency and review throughput.",
+  },
+  {
+    question:
+      "How does cultural adaptation work for consumer promotions — humor, idioms, cultural references?",
+    answer:
+      "The Cultural Adaptation Engine handles format-level adaptation automatically: date formats, currency context, measurement units. For cultural references, humor, and idioms — the content types where literal translation consistently fails — the LQA Fluency dimension flags segments that score below threshold for natural reading quality in the target language. These surface in the review queue for a human reviewer who knows the market. The automated pipeline handles the routine content; genuinely culturally sensitive content routes to review.",
+  },
+];
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      name: "Flixu for Mobile Apps",
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Web",
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout title={title} description={description}>
+  <SchemaOrg schema={schema} slot="schema" />
+
+  <!-- 01 — HERO -->
+  <Section data-chapter="01 — INTRO" class="hero-section pb-16">
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-center max-w-7xl mx-auto px-6"
+    >
+      <div class="max-w-3xl !px-0">
+        <Breadcrumbs items={breadcrumbItems} />
+        <span
+          class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-6 block"
+          >For B2C Mobile App Teams</span
+        >
+        <h1 class="mb-6">
+          Our localization is always on the critical path to launch. Flash
+          sales go live in English and reach Germany 48 hours later.
+        </h1>
+        <p class="max-w-2xl text-xl text-stone-600 mb-8">
+          When translations need to be ready the same day content is written,
+          a 48-hour TMS handoff isn't a process — it's a structural launch
+          blocker. Auto-Approval routes high-confidence translations directly
+          to production. Brand Voice applies your consumer persona
+          consistently across every market. Your German flash sale sounds
+          like your brand, not like Generic MT.
+        </p>
+      </div>
+      <div class="relative w-full aspect-[4/3] hidden md:block">
+        <HeroMobileApps client:load />
+      </div>
+    </div>
+  </Section>
+
+  <!-- 02 — TL;DR -->
+  <Section data-chapter="02 — TL;DR" class="tldr-section">
+    <div class="max-w-3xl">
+      <TldrBlock
+        label="What is Flixu for Mobile Apps?"
+        text="For B2C mobile teams, Flixu combines two things that typically require different tools: context-aware translation that enforces brand voice and approved terminology before the language model generates output, and LQA-based Auto-Approval that routes high-confidence translations directly to production without a manual review step. Flash sale copy, push notification text, and in-app promotions can translate and deploy on the same day they're written in English — without a 48-hour TMS queue."
+      />
+    </div>
+  </Section>
+
+  <!-- 03 — EMPATHY / PROBLEM -->
+  <Section data-chapter="03 — PROBLEM" class="content-section mt-12">
+    <div class="max-w-3xl">
+      <span
+        class="font-mono text-xs text-orange-700 uppercase tracking-widest mb-4 block"
+        >The Problem</span
+      >
+      <h2 class="mb-8">
+        Generic MT doesn't know your brand voice. You spend more time fixing
+        than translating.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        A consumer app has a voice. It's warm, or energetic, or
+        direct — specific enough that users in your primary market feel it in
+        every push notification and every in-app message. Generic MT
+        translates that voice into the statistical average of your target
+        language. The Brazilian Portuguese version of a Gen-Z loyalty
+        campaign comes back formal. The German flash sale sounds like a
+        corporate announcement. The fix is manual, and it takes as long as
+        the translation did.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        Meanwhile, the 48-hour TMS turnaround for a flash sale update with
+        500 strings means the English campaign is live, converting, and
+        building social proof before the localized version even starts
+        review. For time-sensitive promotions, that gap is direct revenue
+        lost.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">From the community:</p>
+
+      <div class="space-y-4 mb-8">
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "Generic MT doesn't know our brand voice — we spend more time
+            fixing than translating."
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "We need same-day turnaround for flash sales but our TMS takes 48
+            hours minimum."
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "Our localization is always on the critical path to launch."
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "Cultural adaptation is not just translation — our humor doesn't
+            land in Japan."
+          </p>
+        </div>
+        <div class="border-l-2 border-orange-200 pl-6">
+          <p class="text-stone-500 italic text-sm leading-relaxed">
+            "We missed Q4 in Spain because of localization QA bottlenecks."
+          </p>
+        </div>
+      </div>
+
+      <p class="text-stone-600 leading-relaxed">
+        The fix has two parts: brand voice loaded before generation, and
+        quality scoring that lets you approve without reading every string.
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 1 — Auto-Approval -->
+  <Section data-chapter="04 — PAIN POINTS" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Auto-Approval means high-confidence translations ship without a
+        manual review step.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The review bottleneck in a high-volume mobile localization workflow
+        isn't caused by bad translations. It's caused by routing every
+        translation through human review regardless of quality. A push
+        notification with a 97 LQA score and a 99% Translation Memory match
+        doesn't need a reviewer — but it still sits in the queue alongside
+        the three strings that do.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        LQA scores every segment automatically across five dimensions:
+        Grammar, Accuracy, Terminology Consistency, Formatting, and Fluency.
+        Segments that score above 90, or match Translation Memory at 99%,
+        are auto-approved and deployable immediately. Only the segments below
+        threshold appear in the review queue — with the specific failing
+        dimension flagged.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For a team translating flash sale content daily, this changes the
+        economics: the review effort concentrates on the edge cases. Standard
+        promotional copy, push notification text, and UI strings with
+        established patterns auto-approve. Localization stops being a blocker
+        for same-day campaigns.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        According to CSA Research, 76% of consumers prefer to buy in their
+        native language — but only if the localized version is available when
+        the campaign runs.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Auto-approval workflow details:
+        <a
+          href={getLocalizedPath("/features/auto-approval", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Auto-Approval Workflows</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 2 — Brand Voice -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Your brand voice is in the configuration — it doesn't depend on which
+        translator read your style guide.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        A consumer app brand voice is usually documented somewhere: a tone
+        guide, a Figma annotation, a Notion doc that got written eighteen
+        months ago. Whether that guide is being applied to every translated
+        string today depends on who last read it and how carefully they
+        remembered it under deadline pressure.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The Brand Voice Manager stores your consumer persona as a workspace
+        configuration. Casual register, energetic phrasing, specific
+        vocabulary preferences, formality level — defined once, applied to
+        every translation request automatically. The Gen-Z loyalty campaign
+        in Brazilian Portuguese gets the same enthusiastic, casual register
+        as the English original because the configuration was present before
+        the language model generated the first word.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For consumer apps where brand drift across markets reduces conversion
+        rates measurably — industry patterns show brand-inconsistent
+        localizations generating 20–30% lower click-through rates than
+        properly calibrated ones — the consistency is a business metric, not
+        just a quality preference.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Consumer brand voice configuration:
+        <a
+          href={getLocalizedPath("/features/brand-voice", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Brand Voice Manager</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 3 — Cultural Adaptation -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        Cultural adaptation runs automatically — currencies, formats, and
+        regional conventions.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        "Save 20%" doesn't localize by translating the words. The percentage
+        format, the currency symbol, the date format in a "Limited offer
+        until 05/06" — all of these mean different things in different
+        markets. A German user reading a US-formatted date will pause. An
+        Austrian user seeing an incorrect currency context will notice.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The Cultural Adaptation Engine handles format-level adaptation
+        automatically alongside translation. Date formats convert to the
+        target market's convention. Currency context adapts to regional
+        expectations. Measurement units convert where applicable. No manual
+        configuration per market, no post-translation review pass for format
+        errors.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For consumer apps launching into multiple markets simultaneously,
+        this eliminates a category of review corrections that currently
+        consume QA time without adding translation value.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → Cultural adaptation scope:
+        <a
+          href={getLocalizedPath("/features/cultural-adaptation", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >Cultural Adaptation Engine</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- PAIN POINT 4 — GitHub App / CI/CD -->
+  <Section class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">
+        New app strings translate and commit to your repository when
+        developers push them.
+      </h2>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        A new feature ships in English. The localization cycle starts: string
+        extraction, TMS upload, translation queue, QA, engineering
+        re-integration. By the time the German version is live, the feature
+        has already been in production for a week in English-speaking
+        markets. International users get a delayed, sometimes outdated
+        version.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        The Flixu GitHub App monitors your repository's localization file
+        paths. When a developer pushes new or changed strings, the app
+        detects them, runs the translation pipeline with your Brand Voice and
+        Glossary applied, and commits the translated files to a dedicated
+        localization branch — structurally separate from your feature
+        branches to prevent the merge conflicts that stop sprints.
+      </p>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        High-confidence strings auto-approve. Flagged strings appear in the
+        review queue. The localized version of a feature can ship the same
+        day as the English version, not a sprint later.
+      </p>
+
+      <p class="text-stone-500 text-sm">
+        → GitHub App for mobile CI/CD:
+        <a
+          href={getLocalizedPath("/features/github-integration", lang)}
+          class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+          >GitHub Integration</a
+        >
+      </p>
+    </div>
+  </Section>
+
+  <!-- 07 — FORMAT SUPPORT -->
+  <Section data-chapter="07 — FORMATS" class="content-section mt-20">
+    <div class="max-w-3xl">
+      <h2 class="mb-8">Mobile format support.</h2>
+
+      <div class="space-y-6 mb-6">
+        <div>
+          <h3 class="text-lg mb-2">iOS</h3>
+          <p class="text-stone-600 leading-relaxed">
+            <code class="text-sm bg-stone-100 px-1.5 py-0.5 rounded"
+              >.strings</code
+            > files (standard iOS localization format) are fully supported.
+            Keys, format specifiers (<code
+              class="text-sm bg-stone-100 px-1.5 py-0.5 rounded">%@</code
+            >,
+            <code class="text-sm bg-stone-100 px-1.5 py-0.5 rounded">%d</code
+            >), and comment annotations are preserved exactly.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-lg mb-2">Cross-platform</h3>
+          <p class="text-stone-600 leading-relaxed">
+            JSON, YAML, XLIFF, and .po files are all supported — these cover
+            the majority of React Native, Flutter, and cross-platform
+            localization workflows.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-lg mb-2">Android</h3>
+          <div
+            class="bg-amber-50 border border-amber-200 rounded-sm p-4 text-sm text-amber-800"
+          >
+            Android XML (<code
+              class="text-sm bg-amber-100 px-1.5 py-0.5 rounded"
+              >strings.xml</code
+            >) is <strong>not currently supported</strong>. For
+            Android-first or Android-primary projects, check the
+            documentation for the current format support status before
+            planning your pipeline. The Developer API provides programmatic
+            access to the translation pipeline that can be integrated into
+            custom Android localization workflows where format conversion is
+            handled externally.
+          </div>
+        </div>
+      </div>
+
+      <p class="text-stone-600 leading-relaxed mb-6">
+        For App Store and Google Play listing content — descriptions,
+        keywords, release notes — these are typically stored as plain text or
+        Markdown in a localization directory and work with the standard file
+        format support.
+      </p>
+
+      <div class="flex gap-4 text-stone-500 text-sm">
+        <p>
+          →
+          <a
+            href={getLocalizedPath("/product/documents", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Document Translation</a
+          >
+        </p>
+        <p>
+          →
+          <a
+            href={getLocalizedPath("/product/developer-api", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Developer API</a
+          >
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 08 — HONEST COMPARISON -->
+  <Section
+    data-chapter="08 — DIFFERENTIATION"
+    class="content-section mt-20"
+  >
+    <div class="max-w-3xl">
+      <h2 class="mb-8">Where Flixu fits — and where it doesn't.</h2>
+
+      <div class="space-y-8">
+        <div>
+          <h3 class="text-lg mb-3">Where Flixu takes a different path:</h3>
+          <p class="text-stone-600 leading-relaxed">
+            Brand voice consistency and LQA-based Auto-Approval are where
+            Flixu handles volume without proportionally growing review
+            overhead. A consumer app translating hundreds of promotional
+            strings weekly benefits from a pipeline that approves the routine
+            ones automatically and routes only the exceptions to review.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-lg mb-3">Where Lokalise is strong:</h3>
+          <p class="text-stone-600 leading-relaxed mb-4">
+            Lokalise has mature Over-the-Air (OTA) update capabilities and
+            native mobile SDKs that allow app content to update without a new
+            app store release. Flixu doesn't currently have OTA update
+            infrastructure or native mobile SDKs — if your localization
+            strategy depends on pushing translated content to
+            already-installed apps without a new release, Lokalise's OTA
+            capability is a genuine advantage Flixu doesn't yet match.
+          </p>
+          <p class="text-stone-600 leading-relaxed">
+            For teams whose primary bottleneck is translation quality and
+            review volume — rather than OTA distribution — Flixu's approach
+            is designed for that problem. For teams where OTA delivery is the
+            primary requirement, Lokalise is the honest recommendation.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex gap-4 text-stone-500 text-sm mt-6">
+        <p>
+          →
+          <a
+            href={getLocalizedPath("/compare/lokalise-alternative", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu vs. Lokalise</a
+          >
+        </p>
+        <p>
+          →
+          <a
+            href={getLocalizedPath("/compare/crowdin-alternative", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu vs. Crowdin</a
+          >
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 09 — FAQ -->
+  <Section
+    data-chapter="09 — FAQ"
+    class="content-section bg-stone-50 border-t border-stone-200 mt-24"
+  >
+    <div class="max-w-3xl mx-auto">
+      <FAQSection items={faqs} />
+    </div>
+  </Section>
+
+  <!-- 10 — CTA -->
+  <Section data-chapter="10 — CTA" class="content-section mt-24 mb-16">
+    <div class="max-w-3xl text-center mx-auto">
+      <h2 class="mb-6">
+        Test same-day localization on your next campaign batch.
+      </h2>
+      <p class="text-stone-600 leading-relaxed mb-8 max-w-2xl mx-auto">
+        Configure your brand voice, upload a batch of flash sale strings, and
+        check what percentage auto-approve on the first pass. That percentage
+        is your practical turnaround for time-sensitive content going
+        forward.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={getLocalizedPath("/signup", lang)}
+          class="inline-flex items-center justify-center gap-2 bg-orange-600 text-white px-6 py-3 rounded-sm font-medium hover:bg-orange-700 transition-colors hidden"
+        >
+          Start translating for free →
+        </a>
+        <a
+          href={getLocalizedPath("/features/auto-approval", lang)}
+          class="inline-flex items-center justify-center gap-2 border border-stone-300 text-stone-700 px-6 py-3 rounded-sm font-medium hover:bg-stone-50 transition-colors"
+        >
+          See how auto-approval works →
+        </a>
+      </div>
+    </div>
+  </Section>
+
+  <!-- 11 — RELATED FEATURES -->
+  <Section
+    data-chapter="11 — RELATED"
+    class="content-section border-t border-stone-200 pt-12 mb-16"
+  >
+    <div class="max-w-3xl">
+      <h3
+        class="text-sm font-mono text-stone-400 uppercase tracking-widest mb-6"
+        >Related Features</h3
+      >
+      <ul class="space-y-3">
+        <li>
+          <a
+            href={getLocalizedPath("/features/auto-approval", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Auto-Approval Workflows</a
+          >
+          <span class="text-stone-500">
+            — Same-day turnaround for high-confidence translations</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/brand-voice", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Brand Voice Manager</a
+          >
+          <span class="text-stone-500">
+            — Consumer persona consistency across every market</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/cultural-adaptation", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Cultural Adaptation Engine</a
+          >
+          <span class="text-stone-500">
+            — Format-level adaptation for currencies, dates, and units</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/features/github-integration", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >GitHub Integration</a
+          >
+          <span class="text-stone-500">
+            — CI/CD pipeline for daily app updates</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/compare/lokalise-alternative", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu vs. Lokalise</a
+          >
+          <span class="text-stone-500">
+            — Honest comparison including OTA capabilities</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/compare/crowdin-alternative", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Flixu vs. Crowdin</a
+          >
+          <span class="text-stone-500"> — CI/CD-focused comparison</span>
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/product/documents", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Document Translation</a
+          >
+          <span class="text-stone-500">
+            — Format support documentation</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/product/developer-api", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Developer API</a
+          >
+          <span class="text-stone-500">
+            — Custom workflow for Android projects</span
+          >
+        </li>
+        <li>
+          <a
+            href={getLocalizedPath("/pricing", lang)}
+            class="text-orange-700 underline decoration-orange-300 hover:decoration-orange-500"
+            >Pricing</a
+          >
+          <span class="text-stone-500">
+            — Credit-based pricing for high-volume teams</span
+          >
+        </li>
+      </ul>
+    </div>
+  </Section>
+</BaseLayout>

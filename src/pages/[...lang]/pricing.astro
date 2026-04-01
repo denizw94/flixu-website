@@ -215,94 +215,95 @@ const schema = {
   >
     <h2 class="mb-12">{t.pricing.specs.title}</h2>
 
-    <div class="overflow-x-auto">
-      <table class="w-full text-left border-collapse min-w-[1000px]">
-        <thead>
-          <tr class="border-b-2 border-stone-100">
-            <th
-              class="py-4 pl-4 w-1/5 font-mono text-xs uppercase tracking-widest text-stone-400"
-              >{t.pricing.specs.headers.feature}</th
-            >
-            <th class="py-4 w-[16%] font-serif text-lg text-stone-900"
-              >{t.pricing.specs.headers.free}</th
-            >
-            <th class="py-4 w-[16%] font-serif text-lg text-orange-700"
-              >{t.pricing.specs.headers.ind}</th
-            >
-            <th class="py-4 w-[16%] font-serif text-lg text-stone-900"
-              >{t.pricing.specs.headers.team}</th
-            >
-            <th class="py-4 w-[16%] font-serif text-lg text-stone-900"
-              >{t.pricing.specs.headers.biz}</th
-            >
-            <th class="py-4 w-[16%] font-serif text-lg text-stone-900"
-              >{t.pricing.specs.headers.ent}</th
-            >
-          </tr>
-        </thead>
-        <tbody>
-          {
-            t.pricing.specs.rows.map((section: any) => (
-              <>
-                {/* Category Header */}
-                <tr class="bg-stone-50/50">
-                  <td
-                    colspan="6"
-                    class="py-3 pl-4 font-mono text-xs font-bold text-stone-500 uppercase tracking-widest border-b border-stone-100 mt-8"
-                  >
-                    {section.category}
-                  </td>
-                </tr>
-
-                {/* Rows */}
-                {section.items.map((row: any) => (
-                  <tr class="border-b border-stone-100 hover:bg-stone-50 transition-colors group">
-                    <td class="py-4 pl-4 font-medium text-stone-700 group-hover:text-stone-900">
-                      {row.label}
-                    </td>
-                    <td class="py-4 text-stone-500 text-sm">
-                      {row.free === "-" ? (
-                        <span class="opacity-20">—</span>
-                      ) : (
-                        row.free
-                      )}
-                    </td>
-                    <td class="py-4 text-stone-900 text-sm font-medium bg-orange-50/30 border-x border-orange-100/50">
-                      {row.ind === "-" ? (
-                        <span class="opacity-20">—</span>
-                      ) : (
-                        row.ind
-                      )}
-                    </td>
-                    <td class="py-4 text-stone-600 text-sm">
-                      {row.team === "-" ? (
-                        <span class="opacity-20">—</span>
-                      ) : (
-                        row.team
-                      )}
-                    </td>
-                    <td class="py-4 text-stone-900 text-sm">
-                      {row.biz === "-" ? (
-                        <span class="opacity-20">—</span>
-                      ) : (
-                        row.biz
-                      )}
-                    </td>
-                    <td class="py-4 text-stone-900 text-sm">
-                      {row.ent === "-" ? (
-                        <span class="opacity-20">—</span>
-                      ) : (
-                        row.ent
-                      )}
+    {
+      [{id: 'dev', data: t.pricing.specs.dev}, {id: 'ui', data: t.pricing.specs.ui}].map((tabSpec, i) => (
+        <div class={`overflow-x-auto specs-table-container ${i !== 0 ? 'hidden' : ''}`} data-specs-tab={tabSpec.id}>
+          <table class="w-full text-left border-collapse min-w-[1000px]">
+            <thead>
+              <tr class="border-b-2 border-stone-100">
+                <th class="py-4 pl-4 w-1/5 font-mono text-xs uppercase tracking-widest text-stone-400">
+                  {tabSpec.data.headers.feature}
+                </th>
+                <th class="py-4 w-[16%] font-serif text-lg text-stone-900">
+                  {tabSpec.data.headers.free}
+                </th>
+                <th class="py-4 w-[16%] font-serif text-lg text-orange-700">
+                  {tabSpec.data.headers.ind}
+                </th>
+                <th class="py-4 w-[16%] font-serif text-lg text-stone-900">
+                  {tabSpec.data.headers.team}
+                </th>
+                <th class="py-4 w-[16%] font-serif text-lg text-stone-900">
+                  {tabSpec.data.headers.biz}
+                </th>
+                <th class="py-4 w-[16%] font-serif text-lg text-stone-900">
+                  {tabSpec.data.headers.ent}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {tabSpec.data.rows.map((section: any) => (
+                <>
+                  {/* Category Header */}
+                  <tr class="bg-stone-50/50">
+                    <td
+                      colspan="6"
+                      class="py-3 pl-4 font-mono text-xs font-bold text-stone-500 uppercase tracking-widest border-b border-stone-100 mt-8"
+                    >
+                      {section.category}
                     </td>
                   </tr>
-                ))}
-              </>
-            ))
-          }
-        </tbody>
-      </table>
-    </div>
+
+                  {/* Rows */}
+                  {section.items.map((row: any) => (
+                    <tr class="border-b border-stone-100 hover:bg-stone-50 transition-colors group">
+                      <td class="py-4 pl-4 font-medium text-stone-700 group-hover:text-stone-900">
+                        {row.label}
+                      </td>
+                      <td class="py-4 text-stone-500 text-sm">
+                        {row.free === "-" ? (
+                          <span class="opacity-20">—</span>
+                        ) : (
+                          row.free
+                        )}
+                      </td>
+                      <td class="py-4 text-stone-900 text-sm font-medium bg-orange-50/30 border-x border-orange-100/50">
+                        {row.ind === "-" ? (
+                          <span class="opacity-20">—</span>
+                        ) : (
+                          row.ind
+                        )}
+                      </td>
+                      <td class="py-4 text-stone-600 text-sm">
+                        {row.team === "-" ? (
+                          <span class="opacity-20">—</span>
+                        ) : (
+                          row.team
+                        )}
+                      </td>
+                      <td class="py-4 text-stone-900 text-sm">
+                        {row.biz === "-" ? (
+                          <span class="opacity-20">—</span>
+                        ) : (
+                          row.biz
+                        )}
+                      </td>
+                      <td class="py-4 text-stone-900 text-sm">
+                        {row.ent === "-" ? (
+                          <span class="opacity-20">—</span>
+                        ) : (
+                          row.ent
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ))
+    }
 
     <div class="mt-12 text-center">
       <p class="text-stone-500 mb-4">
@@ -315,6 +316,19 @@ const schema = {
       >
     </div>
   </Section>
+
+  <script>
+    window.addEventListener('pricing-tab-change', (e: any) => {
+      const tabId = e.detail;
+      document.querySelectorAll('.specs-table-container').forEach((el: any) => {
+        if (el.dataset.specsTab === tabId) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      });
+    });
+  </script>
 
   <Section data-chapter="06 — TL;DR" class="tldr-section">
     <div class="max-w-3xl mx-auto">
