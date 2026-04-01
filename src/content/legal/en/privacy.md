@@ -22,7 +22,15 @@ To provide our service, we utilize enterprise-grade cloud providers with high se
 - Vercel Inc.
 - Groq Inc.
 
-## 4. Your Rights (GDPR)
+## 4. Analytics
+
+To understand how visitors use our website and improve our service, we use **Plausible Analytics**. This is a privacy-first web analytics tool:
+
+- **No Cookies:** Plausible does not use cookies and does not track you across devices or other websites.
+- **Anonymized Data:** All visitor data is fully anonymized. No personal data (such as raw IP addresses) is persistently stored.
+- **GDPR Compliant:** Plausible operates securely in the European Union, complying fully with GDPR, CCPA, and PECR.
+
+## 5. Your Rights (GDPR)
 
 You have the right to access, correct, or delete your data at any time.  
 If you wish to exercise these rights, please contact us at [legal@flixu.ai](mailto:legal@flixu.ai).
